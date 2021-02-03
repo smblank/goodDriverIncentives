@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html lang = "en-US">
+<meta charset = "UTF-8">
+
+<head>
+
+    <!-- Line 8 source: https://www.w3schools.com/html/html_responsive.asp -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- PUT IN EVERY HTML FILE -->
+
+    <title> Apply </title>
+
+    <!-- Links the .css file -->
+    <link rel="stylesheet" type="text/css" href="apply.css">
+
+</head>
+
+<body>
+    <div id = "header">
+        <p id = "title"> Good Driver Incentive Program Application </p>
+    </div>
+
+    <h2 class = "sectionheader" style = "top: 5%; left: 38%;"> Name </h2>
+    <input type = "text" style = "top: 10%; left: 38%;" class = "fields" id = "firstname" maxlength = "100" placeholder = "First Name">
+    <input type = "text" style = "top: 16%; left: 38%;" class = "fields" id = "lastname" maxlength = "100" placeholder = "Last Name">
+
+    <h2 class = "sectionheader" style = "top: 20%; left: 38%;"> Contact Information </h2>
+    <input type = "text" style = "top: 25%; left: 38%;" class = "fields" id = "phone" maxlength = "100" placeholder = "Phone Number">
+    <input type = "text" style = "top: 31%; left: 38%;" class = "fields" id = "email" maxlength = "100" placeholder = "Email">
+
+    <h2 class = "sectionheader" style = "top: 35%; left: 38%;"> Home Address </h2>
+    <input type = "text" style = "top: 40%; left: 38%;" class = "fields" id = "address1" maxlength = "100" placeholder = "Address Line 1">
+    <input type = "text" style = "top: 46%; left: 38%;" class = "fields" id = "address2" maxlength = "100" placeholder = "Address Line 2">
+    <input type = "text" style = "top: 52%; left: 38%;" class = "fields" id = "city" maxlength = "100" placeholder = "City">
+    <input type = "text" style = "top: 58%; left: 38%;" class = "fields" id = "state" maxlength = "100" placeholder = "State">
+    <input type = "text" style = "top: 64%; left: 38%;" class = "fields" id = "zip" maxlength = "5" placeholder = "Zip">
+
+    <h2 class = "sectionheader" style = "top: 68%; left: 38%;"> Organization Information </h2>
+    <input type = "text" style = "top: 74%; left: 38%;" class = "fields" id = "orgname" maxlength = "100" placeholder = "Organization Name">
+    <input type = "text" style = "top: 80%; left: 38%;" class = "fields" id = "sponsorname" maxlength = "100" placeholder = "Sponsor Name">
+
+    <button id = "sumbitapplication" onclick = "submitApplication()"> Submit </button>
+    <!-- Linking another html document to a button source: https://www.w3schools.com/html/html_links.asp -->
+    <button id = "cancelapplication" onclick = "document.location = 'index.html'"> Cancel </button>
+
+</body>
+
+</html>

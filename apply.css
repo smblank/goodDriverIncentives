@@ -1,0 +1,64 @@
+#header{
+    height: 5%;
+    width: 99%;
+    margin: 0%;
+    position: absolute;
+    background-color: #ACEFFF;
+    overflow: hidden;
+}
+
+#title{
+    font-size: 150%;
+    font-family: Arial, Helvetica, sans-serif;
+    position: relative;
+    left: 38%;
+    margin-top: .5%;
+    padding-right: 0%;
+}
+
+.sectionheader{
+    font-family: Arial, Helvetica, sans-serif;
+    position: absolute;
+}
+
+.fields{
+    font-family: Arial, Helvetica, sans-serif;
+    position: absolute;
+    font-size: 200%;
+    width: 25%;
+    height: 4%;
+}
+
+#sumbitapplication{
+    width: 16%;
+    height: 6%;
+    border-radius: 30px;
+    border-color: #A1EDA7;
+    border: none;
+    box-shadow: 1px 1px #B6B6B6;
+    background-color: #A1EDA7;
+    font-size: 220%;
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+    cursor: pointer;
+    position: absolute;
+    top: 86%;
+    left: 47.5%;
+}
+
+#cancelapplication{
+    width: 16%;
+    height: 6%;
+    border-radius: 30px;
+    border-color: #EDA1A1;
+    border: none;
+    box-shadow: 1px 1px #B6B6B6;
+    background-color: #EDA1A1;
+    font-size: 220%;
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+    cursor: pointer;
+    position: absolute;
+    top: 93%;
+    left: 47.5%;
+}
