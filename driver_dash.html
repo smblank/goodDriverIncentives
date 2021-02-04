@@ -11,13 +11,50 @@
     <title> My Dashboard </title>
 
     <!-- Links the .css file -->
-    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="stylesheet" type="text/css" href="driver_dash.css">
+
+    <script>
+        function openMenu(){
+            document.getElementById('menu').style.visibility = "visible";
+        }
+
+        function closeMenu(){
+            document.getElementById('menu').style.visibility = "hidden"
+        }
+    </script>
 
 </head>
 
 <body>
     
-    <h1> This is going to be the driver's dashboard! </h1>
+    <div id = "header">
+        <p id = "title"> Good Driver Incentive Program </p>
+        <button id = "menubutton" onclick = "openMenu()">
+            <div class = "menudesign" style = "top: 25%;"> </div>
+            <div class = "menudesign" style = "top: 45%;"> </div>
+            <div class = "menudesign" style = "top: 65%;"> </div>
+        </button>
+        <button id = "profile">
+            <!-- Image source: https://www.pngkey.com/detail/u2q8e6w7e6i1u2q8_kathrine-vangen-profile-pic-empty-png/-->
+            <img id = "pfp" src = "Defaultpfp.png">
+        </button>
+    </div>
+
+    <div id = "menu"> 
+        <button id = "close" onclick = "closeMenu()"> X </button>
+        <button class = "navigation" style = "top: 15%; left: 28%;"> Catalog </button>
+        <button class = "navigation" style = "top: 28%; left: 28%;"> Wishlist </button>
+        <button class = "navigation" style = "top: 41%; left: 20%;"> Order History </button>
+        <button class = "navigation" style = "top: 54%; left: 22%;"> Notifications </button>
+        <button class = "navigation" style = "top: 67%; left: 15%;"> Submit an Issue </button>
+        <!-- Linking another html document to a button source: https://www.w3schools.com/html/html_links.asp -->
+        <button class = "navigation" style = "top: 80%; left: 28%;" onclick = "document.location = 'index.html'"> Log Out </button>
+    </div>
+
+    <p id = "pagename"> My Dashboard </p>
+
+    <div class = "dashinfo" style = "top: 20%; left: 22%"> New Notifications: </div>
+    <div class = "dashinfo" style = "top: 20%; left: 50%"> Recent Orders: </div>
 
 </body>
 

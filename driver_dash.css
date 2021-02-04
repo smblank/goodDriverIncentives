@@ -1,0 +1,107 @@
+body{
+    margin: 0;
+}
+
+#header{
+    height: 5%;
+    width: 100%;
+    position: absolute;
+    background-color: #ACEFFF;
+    overflow: hidden;
+    text-align: center;
+}
+
+#title{
+    font-size: 150%;
+    font-family: Arial, Helvetica, sans-serif;
+    position: relative;
+    top: 20%;
+    margin: 0%;
+}
+
+#menubutton{
+    width: 3%;
+    height: 80%;
+    top: 10%;
+    left: 1%;
+    position: absolute;
+    background-color: white;
+    border: none;
+    box-shadow: 1px 1px #B6B6B6;
+    cursor: pointer
+}
+
+.menudesign{
+    width: 70%;
+    height: 5%;
+    position: absolute;
+    background-color: black;
+}
+
+#menu{
+    width: 15%;
+    height: 40%;
+    border-style: solid;
+    background: white;
+    position: absolute;
+    top: 0%;
+    visibility: hidden;
+}
+
+#close{
+    width: 15%;
+    height: 15%;
+    position: relative;
+    border-style: none;
+    background-color: white;
+    font-size: 250%;
+    text-align: left;
+    cursor: pointer;
+}
+
+.navigation{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 150%;
+    position: absolute;
+    background-color: white;
+    border-style: none;
+    cursor: pointer;
+}
+
+#profile{
+    border-radius: 50%;
+    left: 97%;
+    top: 10%;
+    width: 2%;
+    height: 80%;
+    border-style: none;
+    background-color: black;
+    position: absolute;
+    cursor: pointer;
+}
+
+#pfp{
+    border-radius: 50%;
+    width: 170%;
+    height: 100%;
+    left: -35.5%;
+    position: relative;
+}
+
+#pagename{
+    font-family: Arial, Helvetica, sans-serif;
+    top: 3%;
+    left: 45%;
+    font-size: 170%;
+    position: absolute;
+}
+
+.dashinfo{
+    width: 25%;
+    height: 65%;
+    border-style: solid;
+    border-color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 150%;
+    position: absolute;
+}
