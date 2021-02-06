@@ -40,7 +40,6 @@ body{
 
 #menu{
     width: 15%;
-    height: 40%;
     border-style: solid;
     background: white;
     position: absolute;
@@ -97,7 +96,6 @@ body{
 }
 
 .dashinfo{
-    width: 25%;
     height: 65%;
     border-style: solid;
     border-color: black;

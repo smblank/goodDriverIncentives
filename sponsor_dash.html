@@ -11,13 +11,51 @@
     <title> My Dashboard </title>
 
     <!-- Links the .css file -->
-    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="stylesheet" type="text/css" href="driver_dash.css">
+
+    <script>
+        function openMenu(){
+            document.getElementById('menu').style.visibility = "visible";
+        }
+
+        function closeMenu(){
+            document.getElementById('menu').style.visibility = "hidden"
+        }
+    </script>
 
 </head>
 
 <body>
     
-    <h1> This is going to be the sponsor's dashboard! </h1>
+    <div id = "header">
+        <p id = "title"> Good Driver Incentive Program </p>
+        <button id = "menubutton" onclick = "openMenu()">
+            <div class = "menudesign" style = "top: 25%;"> </div>
+            <div class = "menudesign" style = "top: 45%;"> </div>
+            <div class = "menudesign" style = "top: 65%;"> </div>
+        </button>
+        <button id = "profile">
+            <!-- Image source: https://www.pngkey.com/detail/u2q8e6w7e6i1u2q8_kathrine-vangen-profile-pic-empty-png/-->
+            <img id = "pfp" src = "Defaultpfp.png">
+        </button>
+    </div>
+
+    <div id = "menu" style = "height: 40%;"> 
+        <button id = "close" onclick = "closeMenu()"> X </button>
+        <button class = "navigation" style = "top: 17%; left: 10%;"> Organization Page </button>
+        <button class = "navigation" style = "top: 27%; left: 28%;"> Catalog </button>
+        <button class = "navigation" style = "top: 37%; left: 20%;"> Notifications </button>
+        <button class = "navigation" style = "top: 47%; left: 13%;"> Generate Report </button>
+        <button class = "navigation" style = "top: 57%; left: 15%;"> Submit an Issue </button>
+        <button class = "navigation" style = "top: 67%; left: 28%;"> Issues </button>
+        <!-- Linking another html document to a button source: https://www.w3schools.com/html/html_links.asp -->
+        <button class = "navigation" style = "top: 77%; left: 27%;" onclick = "document.location = 'index.html'"> Log Out </button>
+    </div>
+
+    <p id = "pagename"> My Dashboard </p>
+
+    <div class = "dashinfo" style = "top: 20%; left: 22%; width: 25%;"> New Notifications: </div>
+    <div class = "dashinfo" style = "top: 20%; left: 50%; width: 25%;"> Pending Applications: </div>
 
 </body>
 
