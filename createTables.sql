@@ -8,7 +8,7 @@ CREATE TABLE USER
     (UserID        INT             NOT NULL,
     Name           VARCHAR(100)    NOT NULL,
     Email          VARCHAR(15)     NOT NULL,
-    HashedPassword VARCHAR(20)     NOT NULL,
+    HashedPassword BINARY(64)     NOT NULL,
     ChangeNo    INT     NOT NULL,
     PRIMARY KEY (UserID),
     FOREIGN KEY (ChangeNo) REFERENCES PASSWORD_CHANGE (ChangeNo));
