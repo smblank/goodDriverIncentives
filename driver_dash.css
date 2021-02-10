@@ -90,7 +90,7 @@ body{
 #pagename{
     font-family: Arial, Helvetica, sans-serif;
     top: 3%;
-    left: 45%;
+    left: 44.5%;
     font-size: 170%;
     position: absolute;
 }
@@ -101,5 +101,13 @@ body{
     border-color: black;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 150%;
+    position: absolute;
+}
+
+#displaypoints{
+    top: 8%;
+    left: 47%;
+    font-size: 180%;
+    font-family: Arial, Helvetica, sans-serif;
     position: absolute;
 }

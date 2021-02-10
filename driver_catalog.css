@@ -12,11 +12,14 @@ body{
 }
 
 #title{
+    background-color: #ACEFFF;
+    border: none;
     font-size: 150%;
     font-family: Arial, Helvetica, sans-serif;
     position: relative;
     top: 20%;
     margin: 0%;
+    cursor: pointer;
 }
 
 #menubutton{
