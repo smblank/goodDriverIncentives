@@ -100,7 +100,7 @@ body{
 }
 
 #sidebar{
-    position: absolute;
+    position: fixed;
     width: 25%;
     height: 95%;
     top: 4%;

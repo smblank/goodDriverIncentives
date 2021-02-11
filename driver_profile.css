@@ -1,0 +1,17 @@
+.sectionheader{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 150%;
+    position: absolute;
+    left: 2%;
+}
+
+.settingname{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 110%;
+    position: absolute;
+    text-decoration: underline;
+    left: 10%;
+    background-color: white;
+    border-style: none;
+    cursor: pointer;
+}

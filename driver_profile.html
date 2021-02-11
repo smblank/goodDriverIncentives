@@ -8,10 +8,11 @@
     <!-- Line 8 source: https://www.w3schools.com/html/html_responsive.asp -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- PUT IN EVERY HTML FILE -->
 
-    <title> My Dashboard </title>
+    <title> My Profile </title>
 
     <!-- Links the .css file -->
-    <link rel="stylesheet" type="text/css" href="driver_dash.css">
+    <link rel="stylesheet" type="text/css" href="driver_catalog.css">
+    <link rel="stylesheet" type="text/css" href="driver_profile.css">
 
     <script>
         function openMenu(){
@@ -28,7 +29,7 @@
 <body>
     
     <div id = "header">
-        <p id = "title"> Good Driver Incentive Program </p>
+        <button id = "title" onclick = "document.location = 'driver_dash.html'"> Good Driver Incentive Program </button>
         <button id = "menubutton" onclick = "openMenu()">
             <div class = "menudesign" style = "top: 25%;"> </div>
             <div class = "menudesign" style = "top: 45%;"> </div>
@@ -51,12 +52,25 @@
         <button class = "navigation" style = "top: 80%; left: 28%;" onclick = "document.location = 'index.html'"> Log Out </button>
     </div>
 
-    <p id = "pagename"> My Dashboard </p>
+    <div id = "sidebar" style = "width: 20%;">
+        <p id = "pagename"> My Profile </p>
 
-    <p id = "displaypoints"> 0 points </p>
+        <p class = "sectionheader" style = "top: 6%;"> Account Information </p>
+        <button class = "settingname" style = "top: 12%;"> Change Profile Picture </button>
+        <button class = "settingname" style = "top: 16%;"> Change Email </button>
+        <button class = "settingname" style = "top: 20%;"> Change Password</button>
 
-    <div class = "dashinfo" style = "top: 20%; left: 23%; width: 25%;"> New Notifications: </div>
-    <div class = "dashinfo" style = "top: 20%; left: 51%; width: 25%;"> Recent Orders: </div>
+        <p class = "sectionheader" style = "top: 25%;"> Personal Information </p>
+        <button class = "settingname" style = "top: 31%;"> Change Home Address </button>
+        <button class = "settingname" style = "top: 35%;"> Change Phone Number </button>
+
+        <p class = "sectionheader" style = "top: 40%;"> Account Settings </p>
+        <button class = "settingname" style = "top: 46%;"> Two-Factor Authenitcation </button>
+        <button class = "settingname" style = "top: 50%;"> Email Notifications </button>
+        <button class = "settingname" style = "top: 54%;"> Notifications </button>
+        <button class = "settingname" style = "top: 58%;"> Night Mode </button>
+
+    </div>
 
 </body>
 
