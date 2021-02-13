@@ -5,10 +5,11 @@ body{
 #header{
     height: 5%;
     width: 100%;
-    position: absolute;
+    position: fixed;
     background-color: #ACEFFF;
     overflow: hidden;
     text-align: center;
+    z-index: 5;
 }
 
 #title{
@@ -45,10 +46,10 @@ body{
     width: 15%;
     border-style: solid;
     background: white;
-    position: absolute;
+    position: fixed;
     top: 0%;
     visibility: hidden;
-    z-index: 3;
+    z-index: 6;
 }
 
 #close{
