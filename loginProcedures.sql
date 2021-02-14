@@ -1,6 +1,6 @@
-/*HASHBYTES('SHA2_512', userPass)*/
-
 DELIMITER $$
+
+DROP FUNCTION IF EXISTS emailExists;
 
 CREATE FUNCTION emailExists(userEmail VARCHAR(50))
 RETURNS BOOLEAN
@@ -8,11 +8,50 @@ READS SQL DATA
     BEGIN
         DECLARE doesExist BOOLEAN;
         SELECT EXISTS (
-            SELECT EMAIL 
+            SELECT Email 
             FROM USER
             WHERE Email = userEmail) INTO doesExist;
 
         RETURN doesExist;
+    END$$
+
+DROP FUNCTION IF EXISTS checkPassword;
+
+CREATE FUNCTION checkPassword(userEmail VARCHAR(50), userPassword VARCHAR(20))
+RETURNS BOOLEAN
+READS SQL DATA
+    BEGIN
+        DECLARE isCorrect BOOLEAN;
+        DECLARE hashedPass BINARY(64);
+        DECLARE correctPass BINARY(64);
+
+        SELECT HashedPassword INTO correctPass
+        FROM USER
+        WHERE Email = userEmail;
+
+        SET hashedPass = SHA(userPassword);
+
+        IF hashedPass = correctPass THEN
+            SET isCorrect = TRUE;
+        ELSE
+            SET isCorrect = FALSE;
+        END IF;
+
+        RETURN isCorrect;
+    END$$
+
+
+DROP FUNCTION IF EXISTS updatePassword;
+
+CREATE FUNCTION updatePassword(userEmail VARCHAR(50), newPass VARCHAR(20))
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        UPDATE USER
+            SET HashedPassword = SHA(newPass)
+        WHERE Email = userEmail;
+
+        RETURN 1;
     END$$
 
 DELIMITER ;
