@@ -22,6 +22,10 @@
         function closeMenu(){
             document.getElementById('menu').style.visibility = "hidden"
         }
+
+        function submitAddress(){
+
+        }
     </script>
 
 </head>
@@ -55,22 +59,84 @@
     <div id = "sidebar" style = "width: 20%;">
         <p id = "pagename"> My Profile </p>
 
+        <!-- https://stackoverflow.com/questions/16349490/html-css-buttons-that-scroll-down-to-different-div-sections-on-a-webpage -->
         <p class = "sectionheader" style = "top: 6%;"> Account Information </p>
-        <button class = "settingname" style = "top: 12%;"> Change Profile Picture </button>
-        <button class = "settingname" style = "top: 16%;"> Change Email </button>
-        <button class = "settingname" style = "top: 20%;"> Change Password</button>
+        <a class = "settingname" style = "top: 12%;" href = "#changepfp"> Change Profile Picture </a>
+        <a class = "settingname" style = "top: 16%;" href = "#changeemail"> Change Email </a>
+        <a class = "settingname" style = "top: 20%;" href = "#changepassword"> Change Password</a>
 
         <p class = "sectionheader" style = "top: 25%;"> Personal Information </p>
-        <button class = "settingname" style = "top: 31%;"> Change Home Address </button>
-        <button class = "settingname" style = "top: 35%;"> Change Phone Number </button>
+        <a class = "settingname" style = "top: 31%;" href = "#manageadresses"> Manage Addresses</a>
+        <a class = "settingname" style = "top: 35%;" href = "#changedefaultaddress"> Change Default Home Address  </a>
+        <a class = "settingname" style = "top: 39%;" href = "#changephonenumber"> Change Phone Number </a>
 
-        <p class = "sectionheader" style = "top: 40%;"> Account Settings </p>
-        <button class = "settingname" style = "top: 46%;"> Two-Factor Authenitcation </button>
-        <button class = "settingname" style = "top: 50%;"> Email Notifications </button>
-        <button class = "settingname" style = "top: 54%;"> Notifications </button>
-        <button class = "settingname" style = "top: 58%;"> Night Mode </button>
+        <p class = "sectionheader" style = "top: 44%;"> Account Settings </p>
+        <a class = "settingname" style = "top: 50%;" href = "#2fa"> Two-Factor Authentication </a>
+        <a class = "settingname" style = "top: 54%;" href = "#emailnotifications"> Email Notifications </a>
+        <a class = "settingname" style = "top: 58%;" href = "#notifications"> Notifications </a>
+        <a class = "settingname" style = "top: 62%;" href = "#nightmode"> Night Mode </a>
 
     </div>
+
+    <!-- NEED TO KNOW WHERE TO SEND DATA -->
+    <form>
+        <p class = "setting" style = "top: 3%;"> Change Profile Picture </p>
+        <img id = "pfpsetting" src = "Defaultpfp.png">
+        <button id = "upload"> Upload Image </button>
+
+        <p class = "setting" id = "changeemail" style = "top: 30%;"> Change Email </p>
+        <input class = "settingtext" type = "text" id = "emailsetting" style = "top: 37%;" maxlength = "100" placeholder = "Email">
+
+        <p class = "setting" id = "changepassword" style = "top: 41%;"> Change Password </p>
+        <input class = "settingtext" type = "password" id = "changepassword1" style = "top: 48%;" maxlength = "100" placeholder = "Password">
+        <input class = "settingtext" type = "password" id = "changepassword2" style = "top: 54%;" maxlength = "100" placeholder = "Confirm Password">
+
+        <p class = "setting" id = "manageaddresses" style = "top: 59%;"> Manage Addresses </p>
+        <select id = "addresses">
+            <option value = "new"> New Address </option>
+        </select>
+        <button id = "submit" onclick = "submitAddress()"> Submit </button>
+
+        <p class = "setting" id = "changedefaultaddress" style = "top: 72%;"> Change Default Address </p>
+        <select id = "default">
+            <option value = "none"> Choose an Address </option>
+        </select>
+        <button id = "changedefault" onclick = "changeDefault()"> Submit </button>
+
+        <p class = "setting" id = "changephonenumber" style = "top: 85%;"> Change Phone Number </p>
+        <input class = "settingtext" type = "text" id = "phonesetting" style = "top: 92%;" maxlength = "100" placeholder = "Phone Number">
+
+        <p class = "setting" id = "2fa" style = "top: 96%;"> Two-Factor Authentication </p>
+        <!-- Switch Credit: https://www.w3schools.com/howto/howto_css_switch.asp -->
+        <label class = "switch" style = "top: 103%; left: 21%">
+            <input type = "checkbox">
+            <span class = "slider round"></span>
+          </label>
+
+        <p class = "setting" id = "emailnotifications" style = "top: 105%;"> Email Notifications </p>
+        <!-- Switch Credit: https://www.w3schools.com/howto/howto_css_switch.asp -->
+        <label class = "switch" style = "top: 112%; left: 21%">
+            <input type = "checkbox">
+            <span class = "slider round"></span>
+          </label>
+
+        <p class = "setting" id = "notifications" style = "top: 114%;"> Notifications </p>
+        <!-- Switch Credit: https://www.w3schools.com/howto/howto_css_switch.asp -->
+        <label class = "switch" style = "top: 121%; left: 21%">
+            <input type = "checkbox" checked>
+            <span class = "slider round"></span>
+          </label>
+
+        <p class = "setting" id = "nightmode" style = "top: 123%;"> Night Mode </p>
+        <!-- Switch Credit: https://www.w3schools.com/howto/howto_css_switch.asp -->
+        <label class = "switch" style = "top: 130%; left: 21%">
+            <input type = "checkbox">
+            <span class = "slider round"></span>
+        </label>
+
+          <input id = "savechanges" type = "submit" value = "Save Changes">
+          
+    </form>
 
 </body>
 
