@@ -16,16 +16,44 @@
 
     <script>
         function openMenu(){
-            document.getElementById('menu').style.visibility = "visible";
+            document.getElementById("menu").style.visibility = "visible";
         }
 
         function closeMenu(){
-            document.getElementById('menu').style.visibility = "hidden"
+            document.getElementById("menu").style.visibility = "hidden"
         }
 
         function submitAddress(){
-
+            if(document.getElementById("addresses").value == "new"){
+                document.getElementById("addaddress").style.visibility = "visible";
+            }
+            else{
+                document.getElementById("addaddress").style.visibility = "hidden";
+                document.getElementById("confirmdeleteaddress").style.visibility = "visible";
+            }
         }
+
+        function cancelNewAddress(){
+            document.getElementById("addaddress").style.visibility = "hidden";
+        }
+
+        function addNewAddress(){
+            document.getElementById("addaddress").style.visibility = "hidden";
+
+            //Add new address to DB
+        }
+
+        function deleteAddress(){
+            document.getElementById("confirmdeleteaddress").style.visibility = "hidden";
+
+            //Delete address from DB
+        }  
+
+        function keepAddress(){
+            document.getElementById("confirmdeleteaddress").style.visibility = "hidden";
+        }
+
+
     </script>
 
 </head>
@@ -78,8 +106,7 @@
 
     </div>
 
-    <!-- NEED TO KNOW WHERE TO SEND DATA -->
-    <form>
+
         <p class = "setting" style = "top: 3%;"> Change Profile Picture </p>
         <img id = "pfpsetting" src = "Defaultpfp.png">
         <button id = "upload"> Upload Image </button>
@@ -97,6 +124,23 @@
         </select>
         <button id = "submit" onclick = "submitAddress()"> Submit </button>
 
+        <div id = "addaddress">
+            <input type = "text" class = "adding" id = "addressline1" style = "top: 2%; left: 2%;" maxlength = "100" placeholder = "Address Line 1">
+            <input type = "text" class = "adding" id = "addressline2" style = "top: 22%; left: 2%;" maxlength = "100" placeholder = "Address Line 2">
+            <input type = "text" class = "adding" id = "city" style = "top: 42%; left: 2%;" maxlength = "100" placeholder = "City">
+            <input type = "text" class = "adding" id = "city" style = "top: 62%; left: 2%;" maxlength = "100" placeholder = "State">
+            <input type = "text" class = "adding" id = "city" style = "top: 82%; left: 2%;" maxlength = "100" placeholder = "Zip">
+
+            <button id = "submitaddress" onclick = "addNewAddress()"> Submit </button>
+            <button id = "canceladdress" onclick = "cancelNewAddress()"> Cancel </button> 
+        </div>
+
+        <div id = "confirmdeleteaddress">
+            <p id = "confirmationmessage"> Are you sure you want to delete this address?</p>
+            <button id = "deleteaddress" onclick = "deleteAddress()"> No </button>
+            <button id = "keepaddress" onclick = "keepAddress()"> Yes </button> 
+        </div>
+
         <p class = "setting" id = "changedefaultaddress" style = "top: 72%;"> Change Default Address </p>
         <select id = "default">
             <option value = "none"> Choose an Address </option>
@@ -111,33 +155,46 @@
         <label class = "switch" style = "top: 103%; left: 21%">
             <input type = "checkbox">
             <span class = "slider round"></span>
-          </label>
+            </label>
 
         <p class = "setting" id = "emailnotifications" style = "top: 105%;"> Email Notifications </p>
         <!-- Switch Credit: https://www.w3schools.com/howto/howto_css_switch.asp -->
         <label class = "switch" style = "top: 112%; left: 21%">
             <input type = "checkbox">
             <span class = "slider round"></span>
-          </label>
+        </label>
+        <input class = "checkboxes" type = "checkbox" id = "emailnotification1" style = "left: 22%; top: 117%">
+        <label class = "checkboxlabels" for = "emailnotification1" style = "left: 25%; top: 118%"> Shipping confirmation </label>
+        <input class = "checkboxes" type = "checkbox" id = "emailnotification2" style = "left: 22%; top: 120%">
+        <label class = "checkboxlabels" for = "emailnotification2" style = "left: 25%; top: 121%"> Delivery Confirmation </label>
+        <input class = "checkboxes" type = "checkbox" id = "emailnotification2" style = "left: 22%; top: 120%">
+        <label class = "checkboxlabels" for = "emailnotification2" style = "left: 25%; top: 121%"> Delivery Confirmation </label>
 
-        <p class = "setting" id = "notifications" style = "top: 114%;"> Notifications </p>
+        <p class = "setting" id = "notifications" style = "top: 122%;"> Notifications </p>
         <!-- Switch Credit: https://www.w3schools.com/howto/howto_css_switch.asp -->
-        <label class = "switch" style = "top: 121%; left: 21%">
+        <label class = "switch" style = "top: 129%; left: 21%">
             <input type = "checkbox" checked>
             <span class = "slider round"></span>
-          </label>
+        </label>
+        <input class = "checkboxes" type = "checkbox" id = "notification1" style = "left: 22%; top: 134%" checked>
+        <label class = "checkboxlabels" for = "notification1" style = "left: 25%; top: 135%"> Points Added to Account </label>
+        <input class = "checkboxes" type = "checkbox" id = "notification1" style = "left: 22%; top: 137%" checked>
+        <label class = "checkboxlabels" for = "notification1" style = "left: 25%; top: 138%"> Points Removed from Account </label>
+        <input class = "checkboxes" type = "checkbox" id = "notification1" style = "left: 22%; top: 140%" checked>
+        <label class = "checkboxlabels" for = "notification1" style = "left: 25%; top: 141%"> Shipping Confirmation </label>
+        <input class = "checkboxes" type = "checkbox" id = "notification1" style = "left: 22%; top: 143%" checked>
+        <label class = "checkboxlabels" for = "notification1" style = "left: 25%; top: 144%"> Delivery Confirmation </label>
+        <input class = "checkboxes" type = "checkbox" id = "notification1" style = "left: 22%; top: 146%" checked>
+        <label class = "checkboxlabels" for = "notification1" style = "left: 25%; top: 147%"> Issues </label>
 
-        <p class = "setting" id = "nightmode" style = "top: 123%;"> Night Mode </p>
+        <p class = "setting" id = "nightmode" style = "top: 148%;"> Night Mode </p>
         <!-- Switch Credit: https://www.w3schools.com/howto/howto_css_switch.asp -->
-        <label class = "switch" style = "top: 130%; left: 21%">
+        <label class = "switch" style = "top: 155%; left: 21%">
             <input type = "checkbox">
             <span class = "slider round"></span>
         </label>
 
-          <input id = "savechanges" type = "submit" value = "Save Changes">
-          
-    </form>
-
+        <input id = "savechanges" type = "submit" value = "Save Changes">
 </body>
 
 </html>
