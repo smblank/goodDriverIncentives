@@ -1,4 +1,4 @@
-DELIMITER $$
+DELIMITER ;;
 
 DROP FUNCTION IF EXISTS emailExists;
 
@@ -13,7 +13,7 @@ READS SQL DATA
             WHERE Email = userEmail) INTO doesExist;
 
         RETURN doesExist;
-    END$$
+    END;;
 
 DROP FUNCTION IF EXISTS checkPassword;
 
@@ -38,7 +38,7 @@ READS SQL DATA
         END IF;
 
         RETURN isCorrect;
-    END$$
+    END;;
 
 
 DROP FUNCTION IF EXISTS updatePassword;
@@ -52,6 +52,6 @@ MODIFIES SQL DATA
         WHERE Email = userEmail;
 
         RETURN 1;
-    END$$
+    END;;
 
 DELIMITER ;
