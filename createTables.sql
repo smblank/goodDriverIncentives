@@ -1,11 +1,11 @@
 CREATE TABLE PASSWORD_CHANGE
-    (ChangeNo   INT             NOT NULL,
+    (ChangeNo   INT             NOT NULL    AUTO_INCREMENT,
     ChangeDate  DATE            NOT NULL,
     ChangeType  VARCHAR(35)     NOT NULL,
     PRIMARY KEY (ChangeNo));
 
 CREATE TABLE USER
-    (UserID             INT             NOT NULL,
+    (UserID             INT             NOT NULL    AUTO_INCREMENT,
     Name                VARCHAR(100)    NOT NULL,
     Email               VARCHAR(50)     NOT NULL,
     HashedPassword      BINARY(64)      NOT NULL,
@@ -13,17 +13,17 @@ CREATE TABLE USER
     PRIMARY KEY (UserID),
     FOREIGN KEY (ChangeNo) REFERENCES PASSWORD_CHANGE (ChangeNo));
 
-CREATE TABLE ADMINSTRATOR
+CREATE TABLE ADMINISTRATOR
     (UserID     INT      NOT NULL,
     PRIMARY KEY (UserID),
     FOREIGN KEY (UserID) REFERENCES USER (UserID));
 
 CREATE TABLE ORG_CATALOG
-    (CatalogID      INT     NOT NULL,
+    (CatalogID      INT     NOT NULL    AUTO_INCREMENT,
     PRIMARY KEY (CatalogID));
 
 CREATE TABLE ORGANIZATION
-    (OrgID              INT                 NOT NULL,
+    (OrgID              INT                 NOT NULL    AUTO_INCREMENT,
     Logo                VARBINARY(256),
     PointConversion     FLOAT               NOT NULL,
     CatalogID           INT                 NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE DRIVER
     FOREIGN KEY (OrgID) REFERENCES ORGANIZATION (OrgID));
 
 CREATE TABLE LOGIN_ATTEMPT
-    (AttemptNo      INT     NOT NULL,
+    (AttemptNo      INT     NOT NULL    AUTO_INCREMENT,
     AttemptDate     DATE    NOT NULL,
     Suceeded        BOOL    NOT NULL,
     UserID          INT     NOT NULL,
@@ -60,12 +60,12 @@ CREATE TABLE LOGIN_ATTEMPT
     FOREIGN KEY (UserID) REFERENCES USER (UserID));
 
 CREATE TABLE POINT_CHANGE_REASON
-    (ReasonID       INT     NOT NULL,
+    (ReasonID       INT     NOT NULL    AUTO_INCREMENT,
     ReasonDescription   VARCHAR(50)     NOT NULL,
     PRIMARY KEY (ReasonID));
 
 CREATE TABLE POINT_CHANGE
-    (ChangeID       INT     NOT NULL,
+    (ChangeID       INT     NOT NULL    AUTO_INCREMENT,
     ChangeDate      DATE    NOT NULL,
     ReasonID        INT     NOT NULL,
     NumPoints       INT     NOT NULL,
@@ -77,7 +77,7 @@ CREATE TABLE POINT_CHANGE
     FOREIGN KEY (SponsorID) REFERENCES USER (USERID));
 
 CREATE TABLE PRODUCT
-    (ProductID              INT                 NOT NULL,
+    (ProductID              INT                 NOT NULL    AUTO_INCREMENT,
     ProductName             VARCHAR(45)         NOT NULL,
     ProductImage            VARBINARY(256)      NOT NULL,
     ProductDescription      VARCHAR(150)        NOT NULL,
@@ -93,7 +93,7 @@ CREATE TABLE IS_IN_CATALOG
     FOREIGN KEY (ProductID) REFERENCES PRODUCT (ProductID));
 
 CREATE TABLE DRIVER_ORDER
-    (OrderID      INT     NOT NULL,
+    (OrderID      INT     NOT NULL    AUTO_INCREMENT,
     OrderDate     DATE    NOT NULL,
     PRIMARY KEY (OrderID));
 
@@ -113,7 +113,7 @@ CREATE TABLE BELONGS_TO
     FOREIGN KEY (OrderID) REFERENCES DRIVER_ORDER (OrderID));
 
 CREATE TABLE WISHLIST
-    (ListID       INT     NOT NULL,
+    (ListID       INT     NOT NULL    AUTO_INCREMENT,
     UserID        INT     NOT NULL,
     PRIMARY KEY (ListID),
     FOREIGN KEY (UserID) REFERENCES USER (UserID));
@@ -126,7 +126,7 @@ CREATE TABLE IS_IN_WISHLIST
     FOREIGN KEY (ListID) REFERENCES WISHLIST (ListID));
 
 CREATE TABLE APPLICANT
-    (ApplicantID    INT             NOT NULL,
+    (ApplicantID    INT             NOT NULL    AUTO_INCREMENT,
     ApplicantDate   DATE            NOT NULL,
     IsAccepted      BOOL            NOT NULL,
     Reason          VARCHAR(150)    NOT NULL,
