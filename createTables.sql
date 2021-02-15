@@ -24,6 +24,7 @@ CREATE TABLE ORG_CATALOG
 
 CREATE TABLE ORGANIZATION
     (OrgID              INT                 NOT NULL    AUTO_INCREMENT,
+    Name                VARCHAR(50)         NOT NULL,
     Logo                VARBINARY(256),
     PointConversion     FLOAT               NOT NULL,
     CatalogID           INT                 NOT NULL,
@@ -60,9 +61,11 @@ CREATE TABLE LOGIN_ATTEMPT
     FOREIGN KEY (UserID) REFERENCES USER (UserID));
 
 CREATE TABLE POINT_CHANGE_REASON
-    (ReasonID       INT     NOT NULL    AUTO_INCREMENT,
+    (ReasonID           INT             NOT NULL    AUTO_INCREMENT,
     ReasonDescription   VARCHAR(50)     NOT NULL,
-    PRIMARY KEY (ReasonID));
+    OrgID               INT             NOT NULL,
+    PRIMARY KEY (ReasonID),
+    FOREIGN KEY (OrgID) REFERENCES ORGANIZATION (OrgID));
 
 CREATE TABLE POINT_CHANGE
     (ChangeID       INT     NOT NULL    AUTO_INCREMENT,

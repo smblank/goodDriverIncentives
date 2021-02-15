@@ -41,7 +41,7 @@ MODIFIES SQL DATA
         DECLARE validEmail BOOLEAN;
         DECLARE newID INT;
         DECLARE wishID INT;
-        /*Check unique email*/
+
         SELECT emailExists (userEmail) INTO validEmail FROM USER;
 
         IF validEmail = TRUE THEN
@@ -128,6 +128,43 @@ MODIFIES SQL DATA
         IF newID > -1 THEN
             INSERT INTO DRIVER (UserID, Address, PhoneNo, Points, OrgID) VALUES (newID, addr, phone, 0, organization);
         END IF;
+
+        RETURN newID;
+    END;;
+
+DROP FUNCTION IF EXISTS createCatalog;
+
+CREATE FUNCTION createCatalog ()
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        DECLARE newID INT;
+
+        INSERT INTO ORG_CATALOG () VALUES ();
+
+        SELECT CatalogID INTO newID
+        FROM ORG_CATALOG
+        WHERE CatalogID = @@Identity;
+
+        RETURN newID;
+    END;;
+
+DROP FUNCTION IF EXISTS createOrg;
+
+CREATE FUNCTION createOrg (orgName VARCHAR(50), pointRate FLOAT)
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        DECLARE newID INT;
+        DECLARE catalogue INT;
+
+        SELECT createCatalog() INTO catalogue;
+
+        INSERT INTO ORGANIZATION (Name, PointConversion, CatalogID) VALUES (orgName, pointRate, catalogue);
+
+        SELECT OrgID INTO newID
+        FROM ORGANIZATION
+        WHERE OrgID = @@Identity;
 
         RETURN newID;
     END;;
