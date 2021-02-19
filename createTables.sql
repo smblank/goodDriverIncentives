@@ -43,14 +43,19 @@ CREATE TABLE SPONSOR
     FOREIGN KEY (OrgID) REFERENCES ORGANIZATION (OrgID));
 
 CREATE TABLE DRIVER
-    (UserID     INT             NOT NULL,
-    Address     VARCHAR(100),
+    (UserID     INT         NOT NULL,
     PhoneNo     CHAR(12),
-    Points      INT             NOT NULL,
-    OrgID       INT             NOT NULL,
+    Points      INT         NOT NULL,
+    OrgID       INT         NOT NULL,
     PRIMARY KEY (UserID),
     FOREIGN KEY (UserID) REFERENCES USER (UserID),
     FOREIGN KEY (OrgID) REFERENCES ORGANIZATION (OrgID));
+
+CREATE TABLE DRIVER_ADDRESSES
+    (UserID     INT             NOT NULL,
+    Address     VARCHAR(100),
+    PRIMARY KEY (UserID, Address),
+    FOREIGN KEY (UserID) REFERENCES USER (UserID));
 
 CREATE TABLE LOGIN_ATTEMPT
     (AttemptNo      INT     NOT NULL    AUTO_INCREMENT,
