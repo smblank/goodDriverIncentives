@@ -1,3 +1,6 @@
+
+/* Source for box shadows: https://www.w3schools.com/css/tryit.asp?filename=tryresponsive_styles */
+
 html{
   scroll-behavior: smooth;
 }
@@ -36,6 +39,7 @@ html{
 
 #upload{
   position: absolute;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   left: 21%;
   top: 27%;
   height: 3%;
@@ -50,6 +54,7 @@ html{
 }
 
 .settingtext{
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   width: 20%;
   height: 4%;
   font-size: 200%;
@@ -69,6 +74,7 @@ html{
 }
 
 #submit{
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   position: absolute;
   left: 21%;
   top: 69%;
@@ -94,6 +100,7 @@ html{
 }
 
 #changedefault{
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   position: absolute;
   left: 21%;
   top: 82%;
@@ -109,6 +116,7 @@ html{
 }
 
 #savechanges{
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   position: fixed;
   left: 65%;
   top: 92%;
@@ -233,6 +241,7 @@ input:checked + .slider:before {
 }
 
 #canceladdress{
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   position: absolute;
   left: 75%;
   top: 82%;
@@ -268,6 +277,7 @@ input:checked + .slider:before {
 }
 
 #keepaddress{
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   position: absolute;
   left: 40%;
   top: 50%;
@@ -283,6 +293,7 @@ input:checked + .slider:before {
 }
 
 #deleteaddress{
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   position: absolute;
   left: 40%;
   top: 70%;

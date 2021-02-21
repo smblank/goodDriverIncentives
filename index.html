@@ -17,17 +17,28 @@
 
 <body>
     
-    <p id = "websitename"> Good Driver Incentive Program </p>
+    <div class = "row">
+        <div class = "col-3">
+            <p id = "websitename"> Good Driver Incentive Program </p>
+        </div>
 
-    <input type = "text" id = "emaillogin" maxlength = "100" placeholder = "Email">
-    <input type = "password" id = "passwordlogin" maxlength = "100" placeholder = "Password">
+        <div class = "col-3">
+            <input type = "text" id = "emaillogin" maxlength = "100" placeholder = "Email">
+            <input type = "password" id = "passwordlogin" maxlength = "100" placeholder = "Password">
+        </div>
 
-    <button id = "forgotemail"> Forgot Email? </button>
-    <button id = "forgotpassword"> Forgot Password? </button>
+        <div class = "col-3">
+            <button id = "forgotemail"> Forgot Email? </button>
+            <button id = "forgotpassword"> Forgot Password? </button>
+        </div>
 
-    <button id = "loginbutton" onclick = "login()"> Log in </button>
-    <!-- Linking another html document to a button source: https://www.w3schools.com/html/html_links.asp -->
-    <button id = "applybutton" onclick = "document.location = 'apply.html'"> Apply </button>
+        <div class = "col-3"></div>
+            <button id = "loginbutton" onclick = "login()"> Log in </button>
+            <!-- Linking another html document to a button source: https://www.w3schools.com/html/html_links.asp -->
+            <button id = "applybutton" onclick = "document.location = 'apply.html'"> Apply </button>
+        </div>
+        
+    </div>
 
 </body>
 
