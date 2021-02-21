@@ -59,26 +59,19 @@ MODIFIES SQL DATA
         RETURN newID;
     END;;
 
-DROP FUNCTION IF EXISTS updateUser;
+DROP FUNCTION IF EXISTS getUserID;
 
-CREATE FUNCTION updateUser (user INT, userName VARCHAR(100), userEmail VARCHAR(50))
-RETURNS BOOLEAN
-MODIFIES SQL DATA
+CREATE FUNCTION getUserID (userEmail VARCHAR(50))
+RETURNS INT
+READS SQL DATA
     BEGIN
-        DECLARE userExists BOOLEAN;
+        DECLARE id INT;
 
-        SELECT EXISTS (
-            SELECT userID
-            FROM USER
-        ) INTO userExists;
+        SELECT userID INTO id
+        FROM USER
+        WHERE Email = userEmail;
 
-        UPDATE USER
-            SET 
-                Name = userName,
-                Email = userEmail
-        WHERE userID = user;
-
-        RETURN userExists;
+        RETURN id;
     END;;
 
 DROP FUNCTION IF EXISTS createAdmin;
@@ -167,6 +160,110 @@ MODIFIES SQL DATA
         WHERE OrgID = @@Identity;
 
         RETURN newID;
+    END;;
+
+DROP FUNCTION IF EXISTS updateEmail;
+
+CREATE FUNCTION updateEmail (oldEmail VARCHAR(50), newEmail VARCHAR(50))
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        DECLARE user INT;
+
+        SELECT UserID INTO user
+        FROM USER
+        WHERE Email = oldEmail;
+
+        UPDATE USER
+            SET 
+                Email = newEmail
+        WHERE userID = user;
+
+        RETURN user;
+    END;;
+
+DROP FUNCTION IF EXISTS updatePassword;
+
+CREATE FUNCTION updatePassword (userEmail VARCHAR(50), newPass VARCHAR(20))
+RETURNS BOOLEAN
+MODIFIES SQL DATA
+    BEGIN
+        DECLARE emailExists BOOLEAN;
+
+        SELECT EXISTS (
+            SELECT Email
+            FROM USER
+            WHERE Email = userEmail
+        ) INTO emailExists;
+
+        UPDATE USER
+            SET HashedPassword = SHA(newPass)
+        WHERE Email = userEmail;
+
+        RETURN emailExists;
+    END;;
+
+DROP FUNCTION IF EXISTS addPassChange;
+
+CREATE FUNCTION addPassChange (userEmail VARCHAR(50), changeType VARCHAR(10), currDate DATE)
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        DECLARE newChange INT;
+        DECLARE user INT;
+
+        SELECT getUserID(userEmail) INTO user;
+        
+        INSERT INTO PASSWORD_CHANGE (ChangeDate, ChangeType, UserID) VALUES (currDate, changeType, user);
+
+        SELECT ChangeNo INTO newChange
+        FROM PASSWORD_CHANGE
+        WHERE ChangeNo = @@Identity;
+
+        RETURN newChange;
+    END;;
+
+DROP FUNCTION IF EXISTS addAddress;
+
+CREATE FUNCTION addAddress (userEmail VARCHAR(50), newAddress VARCHAR(100))
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        DECLARE newAddressId INT;
+        DECLARE user INT;
+
+        SELECT getUserID(userEmail) INTO user;
+        
+        INSERT INTO DRIVER_ADDRESSES (UserID, Address) VALUES (user, newAddress);
+
+        SELECT AddressID INTO newAddressId
+        FROM DRIVER_ADDRESSES
+        WHERE AddressID = @@Identity;
+
+        RETURN newAddressId;
+    END;;
+    
+DROP FUNCTION IF EXISTS updateAddress;
+
+CREATE FUNCTION updateAddress (userEmail VARCHAR(50), newAddress VARCHAR(100), oldAddress VARCHAR(100))
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        DECLARE user INT;
+        DECLARE addressNo INT;
+
+        SELECT getUserID(userEmail) INTO user;
+
+        SELECT AddressId INTO addressNo
+        FROM DRIVER_ADDRESSES
+        WHERE Address = oldAddress;
+
+        UPDATE DRIVER_ADDRESSES
+            SET
+                Address = newAddress
+            WHERE AddressID = addressNo;
+        
+        RETURN 0;
     END;;
 
 DELIMITER ;

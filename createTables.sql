@@ -1,17 +1,17 @@
-CREATE TABLE PASSWORD_CHANGE
-    (ChangeNo   INT             NOT NULL    AUTO_INCREMENT,
-    ChangeDate  DATE            NOT NULL,
-    ChangeType  VARCHAR(35)     NOT NULL,
-    PRIMARY KEY (ChangeNo));
-
 CREATE TABLE USER
     (UserID             INT             NOT NULL    AUTO_INCREMENT,
     Name                VARCHAR(100)    NOT NULL,
     Email               VARCHAR(50)     NOT NULL,
     HashedPassword      BINARY(64)      NOT NULL,
-    ChangeNo            INT,
-    PRIMARY KEY (UserID),
-    FOREIGN KEY (ChangeNo) REFERENCES PASSWORD_CHANGE (ChangeNo));
+    PRIMARY KEY (UserID));
+
+CREATE TABLE PASSWORD_CHANGE
+    (ChangeNo   INT             NOT NULL    AUTO_INCREMENT,
+    ChangeDate  DATE            NOT NULL,
+    ChangeType  VARCHAR(35)     NOT NULL,
+    UserID      INT             NOT NULL,
+    PRIMARY KEY (ChangeNo),
+    FOREIGN KEY (UserID) REFERENCES USER (UserID));
 
 CREATE TABLE ADMINISTRATOR
     (UserID     INT      NOT NULL,
@@ -52,9 +52,10 @@ CREATE TABLE DRIVER
     FOREIGN KEY (OrgID) REFERENCES ORGANIZATION (OrgID));
 
 CREATE TABLE DRIVER_ADDRESSES
-    (UserID     INT             NOT NULL,
-    Address     VARCHAR(100),
-    PRIMARY KEY (UserID, Address),
+    (AddressID  INT             NOT NULL    AUTO_INCREMENT,
+    UserID      INT             NOT NULL,
+    Address     VARCHAR(100)    NOT NULL,
+    PRIMARY KEY (AddressID),
     FOREIGN KEY (UserID) REFERENCES USER (UserID));
 
 CREATE TABLE LOGIN_ATTEMPT
