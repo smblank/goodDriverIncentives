@@ -5,9 +5,12 @@
 
 <head>
 
-    <!-- Line 8 source: https://www.w3schools.com/html/html_responsive.asp -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- PUT IN EVERY HTML FILE -->
-
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <title> Good Driver Incentive Program </title>
 
     <!-- Links the .css file -->
@@ -17,27 +20,82 @@
 
 <body>
     
-    <div class = "row">
-        <div class = "col-3">
-            <p id = "websitename"> Good Driver Incentive Program </p>
+    <div class = "container-fluid">
+        <div class = "row">
+
+                <div class = "col-md-12 text-center">
+
+                    <p id = "websitename"> Good Driver Incentive Program </p>
+
+                </div>
+
+
         </div>
 
-        <div class = "col-3">
-            <input type = "text" id = "emaillogin" maxlength = "100" placeholder = "Email">
-            <input type = "password" id = "passwordlogin" maxlength = "100" placeholder = "Password">
+        <div class = "row text-center">
+
+            <div class = "col-md-12">
+
+                <input type = "text" class = "login" id = "emaillogin" maxlength = "100" placeholder = "Email">
+
+            </div>
+
         </div>
 
-        <div class = "col-3">
-            <button id = "forgotemail"> Forgot Email? </button>
-            <button id = "forgotpassword"> Forgot Password? </button>
+        <div class = "row">
+
+            <div class = "col-md-12">
+
+                <button class = "forgot" id = "forgotemail"> Forgot Email? </button>
+
+            </div>
+
         </div>
 
-        <div class = "col-3"></div>
-            <button id = "loginbutton" onclick = "login()"> Log in </button>
-            <!-- Linking another html document to a button source: https://www.w3schools.com/html/html_links.asp -->
-            <button id = "applybutton" onclick = "document.location = 'apply.html'"> Apply </button>
+        <div class = "row text-center">
+
+            <div class = "col-md-12">
+
+                <input type = "password" class = "login" id = "passwordlogin" maxlength = "100" placeholder = "Password">
+
+            </div>
+            
         </div>
+
+        <div class = "row">
+
+            <div class = "col-md-12">
+
+                <button class = "forgot" id = "forgotpassword"> Forgot Password? </button>
+
+            </div>
+
+        </div>
+
+        <div class = "row text-center">
+
+            <div class = "col-md-12">
+
+                <button id = "loginbutton" onclick = "login()"> Log in </button>
+
+            </div>
+
+        </div>
+
+        <div class = "row text-center">
+
+            <div class = "col-md-12">
         
+                 <!-- Linking another html document to a button source: https://www.w3schools.com/html/html_links.asp -->
+                <button id = "applybutton" onclick = "document.location = 'apply.html'"> Apply </button>
+        
+            </div>
+        
+        </div>
+
+           
+
+
     </div>
 
 </body>

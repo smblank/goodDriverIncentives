@@ -1,37 +1,24 @@
 /* Source for box shadows: https://www.w3schools.com/css/tryit.asp?filename=tryresponsive_styles */
-
-#emaillogin{
-    width: 28.5%;
-    height: 6%;
-    font-size: 200%;
-    font-family: Arial, Helvetica, sans-serif;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-    position: absolute;
-    top: 33%;
-    left: 35%;
+html, body{
+    height: 100%;
 }
-
-#passwordlogin{
-    width: 28.5%;
-    height: 6%;
+.login{
+    width: 26%;
+    height: 50%;
     font-size: 200%;
     font-family: Arial, Helvetica, sans-serif;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-    position: absolute;
-    top: 43%;
-    left: 35%;
+    margin-bottom: .5%;
 }
 
 #websitename{
     font-size: 250%;
     font-family: Arial, Helvetica, sans-serif;
     color: black;
-    position: absolute;
-    top: 23%;
-    left: 35%;
+    margin-top: 15%;
 }
 
-#forgotemail{
+.forgot{
     background-color: white;
     border: none;
     font-size: 95%;
@@ -39,39 +26,24 @@
     font-family: Arial, Helvetica, sans-serif;
     color: black;
     cursor: pointer;
-    position: absolute;
-    top: 40%;
-    left: 35%;
-}
-#forgotpassword{
-    background-color: white;
-    border: none;
-    font-size: 95%;
-    text-decoration: underline;
-    font-family: Arial, Helvetica, sans-serif;
-    color: black;
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    left: 35%;
+    margin-left: 36.5%;
+    margin-bottom: .5%;
 }
 
 #loginbutton{
     width: 16%;
-    height: 6%;
+    height: 61%;
     border-radius: 30px;
-    border: none;
     background-color: #A1EDA7;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     font-size: 220%;
     font-family: Arial, Helvetica, sans-serif;
     color: black;
     cursor: pointer;
-    position: absolute;
-    top: 53%;
-    left: 41%;
-    padding: 8px;
-    margin-bottom: 7px;
+    border-style: solid;
+    border-color: black;
+    margin-top: 1%;
+    margin-bottom: 1%;
 }
 
 #applybutton{
@@ -79,14 +51,12 @@
     height: 6%;
     border-radius: 30px;
     border-color: #EDA1A1;
-    border: none;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     background-color: #EDA1A1;
     font-size: 220%;
     font-family: Arial, Helvetica, sans-serif;
     color: black;
+    border-style: solid;
+    border-color: black;
     cursor: pointer;
-    position: absolute;
-    top: 61%;
-    left: 41%;
 }
