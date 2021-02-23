@@ -237,4 +237,107 @@ READS SQL DATA
         RETURN inWishlist;
     END;;
 
+DROP FUNCTION IF EXISTS updatePrice;
+
+CREATE FUNCTION updatePrice(product INT, newPrice FLOAT)
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        UPDATE PRODUCT
+            SET
+                Price = newPrice
+            WHERE ProductID = product;
+        
+        RETURN 0;
+    END;;
+
+DROP FUNCTION IF EXISTS updateAvailability;
+
+CREATE FUNCTION updateAvailability (product INT, newAvailability VARCHAR(15))
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        UPDATE PRODUCT
+            SET
+                ProductAvailability = newAvailability
+            WHERE ProductID = product;
+
+        RETURN 0;
+    END;;
+
+DROP FUNCTION IF EXISTS getProductName;
+
+CREATE FUNCTION getProductName (product INT)
+RETURNS VARCHAR(45)
+READS SQL DATA
+    BEGIN
+        DECLARE productName VARCHAR(45);
+
+        SELECT ProductName INTO productName
+        FROM PRODUCT
+        WHERE ProductID = product;
+
+        RETURN productName;
+    END;;
+
+DROP FUNCTION IF EXISTS getProductImage;
+
+CREATE FUNCTION getProductImage (product INT)
+RETURNS VARBINARY(256)
+READS SQL DATA
+    BEGIN
+        DECLARE productImage VARBINARY(256);
+
+        SELECT ProductImage INTO productImage
+        FROM PRODUCT
+        WHERE ProductID = product;
+
+        RETURN productImage;
+    END;;
+
+DROP FUNCTION IF EXISTS getProductDescription;
+
+CREATE FUNCTION getProductDescription (product INT)
+RETURNS VARCHAR(150)
+READS SQL DATA
+    BEGIN
+        DECLARE productDesc VARCHAR(150);
+
+        SELECT ProductDescription INTO productDesc
+        FROM PRODUCT
+        WHERE ProductID = product;
+
+        RETURN productDesc;
+    END;;
+
+DROP FUNCTION IF EXISTS getProductAvailability;
+
+CREATE FUNCTION getProductAvailability (product INT)
+RETURNS VARCHAR(15)
+READS SQL DATA
+    BEGIN
+        DECLARE productAvailability VARCHAR(15);
+
+        SELECT ProductAvailability INTO productAvailability
+        FROM PRODUCT
+        WHERE ProductID = product;
+
+        RETURN productAvailability;
+    END;;
+
+DROP FUNCTION IF EXISTS getProductPrice;
+
+CREATE FUNCTION getProductPrice (product INT)
+RETURNS FLOAT
+READS SQL DATA
+    BEGIN
+        DECLARE productPrice FLOAT;
+
+        SELECT Price INTO productPrice
+        FROM PRODUCT
+        WHERE ProductID = product;
+
+        RETURN productPrice;
+    END;;
+
 DELIMITER ;

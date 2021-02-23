@@ -91,7 +91,7 @@ CREATE TABLE PRODUCT
     ProductImage            VARBINARY(256)      NOT NULL,
     ProductDescription      VARCHAR(150)        NOT NULL,
     ProductAvailability     VARCHAR(15)         NOT NULL,
-    Price                   INT                 NOT NULL,
+    Price                   FLOAT               NOT NULL,
     PRIMARY KEY (ProductID));
 
 CREATE TABLE IS_IN_CATALOG
@@ -140,9 +140,9 @@ CREATE TABLE APPLICANT
     IsAccepted      BOOL            NOT NULL,
     Reason          VARCHAR(150)    NOT NULL,
     ApplicantName   VARCHAR(100)    NOT NULL,
+    Email           VARCHAR(50)     NOT NULL,
     PhoneNo         CHAR(12)        NOT NULL,
     HomeAddress     VARCHAR(100)    NOT NULL,
-    EmployeeID      INT             NOT NULL,
     OrgID           INT             NOT NULL,
     PRIMARY KEY (ApplicantID),
     FOREIGN KEY (OrgID) REFERENCES ORGANIZATION (OrgID));

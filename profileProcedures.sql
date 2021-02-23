@@ -125,6 +125,65 @@ MODIFIES SQL DATA
         RETURN newID;
     END;;
 
+DROP FUNCTION IF EXISTS createApplicant;
+
+CREATE FUNCTION createApplicant (currDate DATE, userName VARCHAR(100), email VARCHAR(50), phone CHAR(12), address VARCHAR(100), orgID INT)
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        DECLARE newApplicant INT;
+
+        INSERT INTO APPLICANT (ApplicantDate, IsAccepted, Reason, ApplicantName, Email, PhoneNo, HomeAddress, OrgID) VALUES (currDate, false, "Just applied", userName, email, phone, address, orgID);
+
+        SELECT ApplicantID INTO newApplicant
+        FROM APPLICANT
+        WHERE ApplicantID = @@Identity;
+
+        RETURN newApplicant;
+    END;;
+
+DROP FUNCTION IF EXISTS acceptApplicant;
+
+CREATE FUNCTION acceptApplicant (userEmail VARCHAR(50), reasoning VARCHAR(150), randomPassword VARCHAR(20))
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        DECLARE driverName VARCHAR(100);
+        DECLARE phone CHAR(12);
+        DECLARE address VARCHAR(100);
+        DECLARE org INT;
+        DECLARE newDriver INT;
+
+        UPDATE APPLICANT
+            SET
+                IsAccepted = true,
+                Reason = reasoning
+            WHERE Email = userEmail;
+
+        SELECT ApplicantName, PhoneNo, HomeAddress, OrgID
+        INTO driverName, phone, address, org
+        FROM APPLICANT
+        WHERE Email = userEmail;
+
+        SELECT CreateDriver(driverName, userEmail, randomPassword, address, phone, org) INTO newDriver;
+
+        RETURN newDriver;
+    END;;
+
+DROP FUNCTION IF EXISTS rejectApplicant;
+
+CREATE FUNCTION rejectApplicant (userEmail VARCHAR(50), reasoning VARCHAR(150))
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        UPDATE APPLICANT
+            SET
+                Reason = reasoning
+            WHERE Email = userEmail;
+
+        RETURN 0;
+    END;;
+
 DROP FUNCTION IF EXISTS createCatalog;
 
 CREATE FUNCTION createCatalog ()
