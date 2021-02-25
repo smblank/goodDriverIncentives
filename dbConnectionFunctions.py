@@ -90,7 +90,6 @@ def firstPassword(connection, cursor, email, newPassword):
     except Error as err:
         print(err)
         
-#FIXME
 def updateAddress(connection, cursor, email, newUserAddress, oldUserAddress):
     try:
         query = "SELECT emailExists(%s)"
@@ -124,6 +123,19 @@ def addAddress(connection, cursor, email, newAddress):
                 return "Address successfully added."
             else:
                 return "Error updating address (Email not found)"
+    
+    except Error as err:
+        print(err)
+
+def addAddress(connection, cursor, email):
+    try:
+        query = "SELECT getUserType(%s)"
+
+        cursor.execute(query, (email,))
+        result = cursor.fetchone()
+
+        for userType in result:
+            return userType
     
     except Error as err:
         print(err)
