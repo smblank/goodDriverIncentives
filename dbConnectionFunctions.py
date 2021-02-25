@@ -127,7 +127,7 @@ def addAddress(connection, cursor, email, newAddress):
     except Error as err:
         print(err)
 
-def addAddress(connection, cursor, email):
+def getUserType(connection, cursor, email):
     try:
         query = "SELECT getUserType(%s)"
 
