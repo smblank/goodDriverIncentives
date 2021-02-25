@@ -66,7 +66,7 @@ def loginpg(request):
             
 
 
-            return moveout()
+            return moveout(request)
         else:
             messages.info(request, 'Incorrect login')
     context={}
@@ -74,7 +74,7 @@ def loginpg(request):
 
 
 #need to check vs role 
-def moveout():
+def moveout(request):
     if 'loggedin' in session:
         if request.session.get('role') == Driver
             return redirect('/driver_dash.html/')
