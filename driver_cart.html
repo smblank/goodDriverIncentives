@@ -33,18 +33,20 @@
     
     <div class = "container-fluid">
 
-        <div class = "row">
+        <div class = "row" style = "height: 50px;">
 
             <div class = "col-md-12" style = "height: 50px;">
 
                 <div id = "header">
 
                     <p id = "title"> Good Driver Incentive Program </p>
+
                     <button id = "menubutton" onclick = "openMenu()">
                         <div class = "menudesign" style = "top: 25%;"> </div>
                         <div class = "menudesign" style = "top: 45%;"> </div>
                         <div class = "menudesign" style = "top: 65%;"> </div>
                     </button>
+
                     <button id = "profile" onclick = "document.location = 'driver_profile.html'">
                         <!-- Image source: https://www.pngkey.com/detail/u2q8e6w7e6i1u2q8_kathrine-vangen-profile-pic-empty-png/-->
                         <img id = "pfp" src = "Defaultpfp.png">
@@ -52,22 +54,25 @@
 
                 </div>
 
-                <div id = "menu" style = "height: 40%;"> 
+            </div>
 
-                    <button id = "close" onclick = "closeMenu()"> X </button>
-                    <button class = "navigation" style = "top: 15%; left: 28%;" onclick = "document.location = 'driver_catalog.html'"> Catalog </button>
-                    <button class = "navigation" style = "top: 28%; left: 28%;"> Wishlist </button>
-                    <button class = "navigation" style = "top: 41%; left: 20%;"> Order History </button>
-                    <button class = "navigation" style = "top: 54%; left: 22%;"> Notifications </button>
-                    <button class = "navigation" style = "top: 67%; left: 15%;"> Submit an Issue </button>
-                    <!-- Linking another html document to a button source: https://www.w3schools.com/html/html_links.asp -->
-                    <button class = "navigation" style = "top: 80%; left: 28%;" onclick = "document.location = 'index.html'"> Log Out </button>
+        </div>
 
-                </div>
+        <div class = "row">
+            
+            <div id = "menu" style = "height: 40%;">
+
+                <button id = "close" onclick = "closeMenu()"> X </button>
+                <button class = "navigation" style = "top: 15%; left: 28%;" onclick = "document.location = 'driver_catalog.html'"> Catalog </button>
+                <button class = "navigation" style = "top: 28%; left: 28%;"> Wishlist </button>
+                <button class = "navigation" style = "top: 41%; left: 20%;"> Order History </button>
+                <button class = "navigation" style = "top: 54%; left: 22%;"> Notifications </button>
+                <button class = "navigation" style = "top: 67%; left: 15%;"> Submit an Issue </button>
+                <!-- Linking another html document to a button source: https://www.w3schools.com/html/html_links.asp -->
+                <button class = "navigation" style = "top: 80%; left: 28%;" onclick = "document.location = 'index.html'"> Log Out </button>
 
             </div>
 
-            <div class = "row"></div>
 
         </div>
 
