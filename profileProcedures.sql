@@ -110,6 +110,7 @@ MODIFIES SQL DATA
 
 DROP FUNCTION IF EXISTS createDriver;
 
+/*Create driver address*/
 CREATE FUNCTION createDriver (userName VARCHAR(100), userEmail VARCHAR(50), userPassword VARCHAR(20), addr VARCHAR(100), phone CHAR(12), organization INT)
 RETURNS INT
 MODIFIES SQL DATA
@@ -119,7 +120,7 @@ MODIFIES SQL DATA
         SELECT createUser(userName, userEmail, userPassword) INTO newID;
 
         IF newID > -1 THEN
-            INSERT INTO DRIVER (UserID, Address, PhoneNo, Points, OrgID) VALUES (newID, addr, phone, 0, organization);
+            INSERT INTO DRIVER (UserID, PhoneNo, Points, OrgID) VALUES (newID, phone, 0, organization);
         END IF;
 
         RETURN newID;
@@ -323,6 +324,57 @@ MODIFIES SQL DATA
             WHERE AddressID = addressNo;
         
         RETURN 0;
+    END;;
+
+DROP FUNCTION IF EXISTS getUserName;
+
+CREATE FUNCTION getUserName (userEmail VARCHAR(50))
+RETURNS VARCHAR(100)
+READS SQL DATA
+    BEGIN
+        DECLARE userName VARCHAR(100);
+
+        SELECT Name INTO userName
+        FROM USER
+        WHERE Email = userEmail;
+
+        RETURN userName;
+    END;;
+
+DROP FUNCTION IF EXISTS getDriverAddress;
+
+CREATE FUNCTION getDriverAddress (userEmail VARCHAR(50))
+RETURNS VARCHAR(100)
+READS SQL DATA
+    BEGIN
+        DECLARE address VARCHAR(100);
+        DECLARE user INT;
+
+        SELECT getUserID(userEmail) INTO user;
+
+        SELECT Address INTO address
+        FROM DRIVER_ADDRESSES
+        WHERE UserID = user;
+
+        RETURN address;
+    END;;
+
+DROP FUNCTION IF EXISTS getDriverPhone;
+
+CREATE FUNCTION getDriverPhone (userEmail VARCHAR(50))
+RETURNS CHAR(12)
+READS SQL DATA
+    BEGIN
+        DECLARE phone CHAR(12);
+        DECLARE user INT;
+
+        SELECT getUserID(userEmail) INTO user;
+
+        SELECT PhoneNo INTO phone
+        FROM DRIVER
+        WHERE UserID = user;
+
+        RETURN phone;
     END;;
 
 DELIMITER ;

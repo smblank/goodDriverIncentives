@@ -54,4 +54,46 @@ MODIFIES SQL DATA
         RETURN 1;
     END;;
 
+DROP FUNCTION IF EXISTS getUserType;
+
+CREATE FUNCTION getUserType(userEmail VARCHAR(50))
+RETURNS VARCHAR(20)
+READS SQL DATA
+    BEGIN
+        DECLARE user INT;
+        DECLARE isDriver BOOLEAN;
+        DECLARE isSponsor BOOLEAN;
+        DECLARE isAdmin BOOLEAN;
+
+        SELECT UserID INTO user
+        FROM USER
+        WHERE Email = userEmail;
+
+        SELECT EXISTS(
+            SELECT UserID
+            FROM DRIVERS
+            WHERE UserID = user
+        ) INTO isDriver;
+
+        SELECT EXISTS(
+            SELECT UserID
+            FROM SPONSORS
+            WHERE UserID = user
+        ) INTO isSponsor;
+
+        SELECT EXISTS(
+            SELECT UserID
+            FROM ADMINS
+            WHERE UserID = user
+        ) INTO isAdmin;
+
+        IF isDriver = 1 THEN
+            RETURN "Driver";
+        ELSEIF isSponsor = 1 THEN
+            RETURN "Sponsor";
+        ELSE
+            RETURN "Admin";
+        END IF;
+    END;;
+
 DELIMITER ;
