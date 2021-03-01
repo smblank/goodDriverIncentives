@@ -36,3 +36,12 @@
     cursor: pointer;
     margin: 1%;
 }
+
+#shipping{
+    margin-bottom: 8%
+}
+
+#cart{
+    color: black;
+    font-size: 400%;
+}
