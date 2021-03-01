@@ -19,7 +19,7 @@ class Product(models.Model):
     def __str__(self):
         return self.Name 
     
-class OrderedProducts(models.Model):
+class OrderedProduct(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default='')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     qty = models.IntegerField(default=1)
@@ -29,7 +29,7 @@ class OrderedProducts(models.Model):
 
 class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default='')
-    Products = models.ManyToManyField(OrderedProducts)
+    Products = models.ManyToManyField(OrderedProduct)
     Start = models.DateTimeField(auto_now_add=True)
     End = models.DateTimeField()
     Ordered = models.BooleanField(default=False)
