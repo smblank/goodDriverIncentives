@@ -72,6 +72,14 @@ def loginpg(request):
     context={}
     return render(request, '/index.html/', context)
 
+def logoutpg(request)
+
+    del request.session['loggedin']
+    del request.session['id']
+    del request.session['email']
+    del request.session['role']
+    
+    return render(request, '/index.html')
 
 #need to check vs role 
 def moveout(request):
