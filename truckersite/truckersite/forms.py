@@ -72,7 +72,7 @@ def loginpg(request):
 
     return render(request, '/index.html/', context)
 
-def logoutpg(request)
+def logoutpg(request):
 
     del request.session['loggedin']
     del request.session['id']
