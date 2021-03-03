@@ -69,7 +69,7 @@ def loginpg(request):
             return moveout(request)
         else:
             messages.info(request, 'Incorrect login')
-    context={}
+
     return render(request, '/index.html/', context)
 
 def logoutpg(request)
@@ -85,10 +85,10 @@ def logoutpg(request)
 def moveout(request):
     if 'loggedin' in session:
         if request.session.get('role') == Driver
-            return redirect('/driver_dash.html/')
+            return render(request,'/driver_dash.html/')
         if request.session.get('role') == Sponsor
-            return redirect('/sponsor_dash.html/')
+            return render(request,'/sponsor_dash.html/')
         if request.session.get('role') == Admin
-            return redirect('/admin_dash.html/')
-    return redirect('/index/')
+            return render(request,'/admin_dash.html/')
+    return render(request, '/index/')
 
