@@ -90,5 +90,6 @@ def moveout(request):
             return render(request,'/sponsor_dash.html/')
         if request.session.get('role') == Admin
             return render(request,'/admin_dash.html/')
-    return render(request, '/index/')
+    else:
+        return render(request, '/index/')
 
