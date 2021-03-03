@@ -5,8 +5,14 @@
 
 <head>
 
-    <!-- Line 8 source: https://www.w3schools.com/html/html_responsive.asp -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- PUT IN EVERY HTML FILE -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
     <title> Apply </title>
 
@@ -16,32 +22,150 @@
 </head>
 
 <body>
-    <div id = "header">
-        <p id = "title"> Good Driver Incentive Program Application </p>
+
+    <div class = "container-fluid">
+
+        <div class = "row">
+            <div class = "col-md-12">
+                <div id = "header">
+                    <p id = "title"> Good Driver Incentive Program Application </p>
+                </div>
+            </div>    
+        </div>
+
+        <div class = "row">
+            <div class = "col-md-12">
+                <h2 class = "sectionheader"> Name </h2>
+            </div>
+        </div>
+
+        <div class = "row">
+            <div class = "col-md-12">
+                <input type = "text" class = "fields" id = "firstname" maxlength = "100" placeholder = "First Name">
+            </div>
+        </div>
+
+        <div class = "row">
+            <div class = "col-md-12">
+                <input type = "text" class = "fields" id = "lastname" maxlength = "100" placeholder = "Last Name">
+            </div>
+        </div>
+
+        <div class = "row">
+            <div class = "col-md-12">
+                <h2 class = "sectionheader"> Contact Information </h2>
+            </div>
+        </div>
+
+        <div class = "row">
+            <div class = "col-md-12">
+                <input type = "text" class = "fields" id = "phone" maxlength = "100" placeholder = "Phone Number">
+            </div>
+        </div>
+
+        <div class = "row">
+            <div class = "col-md-12">
+                <input type = "text" class = "fields" id = "email" maxlength = "100" placeholder = "Email">
+            </div>
+        </div>
+
+        <div class = "row">
+            <div class = "col-md-12">
+                <h2 class = "sectionheader"> Home Address </h2>
+            </div>
+        </div>
+
+        <div class = "row">
+            <div class = "col-md-12">
+                <input type = "text" class = "fields" id = "address1" maxlength = "100" placeholder = "Address Line 1">
+            </div>
+        </div>
+
+        <div class = "row">
+            <div class = "col-md-12">
+                <input type = "text" class = "fields" id = "address2" maxlength = "100" placeholder = "Address Line 2">
+            </div>
+        </div>
+
+        <div class = "row">
+            <div class = "col-md-12">
+                <input type = "text" class = "fields" id = "city" maxlength = "100" placeholder = "City">
+            </div>
+        </div>
+
+        <div class = "row">
+            <div class = "col-md-12">
+                <input type = "text" class = "fields" id = "state" maxlength = "100" placeholder = "State">
+            </div>
+        </div>
+
+        <div class = "row">
+            <div class = "col-md-12">
+                <input type = "text" class = "fields" id = "zip" maxlength = "5" placeholder = "Zip">
+
+            </div>
+        </div>
+
+        <div class = "row">
+            <div class = "col-md-12">
+                <h2 class = "sectionheader"> Organization Name </h2>
+            </div>
+        </div>
+
+        <div class = "row">
+            <div class = "col-md-12">
+                <div style = "margin-left: 38%; margin-bottom: 1%;">
+                    <!-- Source: https://stackoverflow.com/questions/50895806/bootstrap-4-multiselect-dropdown/50897096 -->
+                    <select id = "organization" class = "selectpicker" multiple>
+                        <!-- EXAMPLE: <option value = "org1"> Organization 1</option> -->
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class = "row">
+            <div class = "col-md-12">
+                <h2 class = "sectionheader"> Sponsor Name </h2>
+            </div>
+        </div>
+
+        <div class = "row">
+            <div class = "col-md-12">
+                <div style = "margin-left: 38%; margin-bottom: 1%;">
+                    <!-- Source: https://stackoverflow.com/questions/50895806/bootstrap-4-multiselect-dropdown/50897096 -->
+                    <select id = "sponsor" class = "selectpicker" multiple>
+                        <!-- EXAMPLE: <option value = "spon1"> Organization 1</option> --> 
+                        <option value = "org1"> Organization 1</option>
+                        <option value = "org1"> Organization 2</option>
+                        <option value = "org1"> Organization 3</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class = "row">
+            <div class = "col-md-12 text-right">
+                <button id = "sumbitapplication" onclick = "submitApplication()"> Submit </button>
+            </div>
+        </div>
+
+        <div class = "row">
+            <div class = "col-md-12 text-right">
+                <!-- Linking another html document to a button source: https://www.w3schools.com/html/html_links.asp -->
+                <button id = "cancelapplication" onclick = "document.location = 'index.html'"> Cancel </button>
+            </div>
+        </div>
+        
     </div>
 
-    <h2 class = "sectionheader" style = "top: 5%; left: 38%;"> Name </h2>
-    <input type = "text" style = "top: 10%; left: 38%;" class = "fields" id = "firstname" maxlength = "100" placeholder = "First Name">
-    <input type = "text" style = "top: 16%; left: 38%;" class = "fields" id = "lastname" maxlength = "100" placeholder = "Last Name">
 
-    <h2 class = "sectionheader" style = "top: 20%; left: 38%;"> Contact Information </h2>
-    <input type = "text" style = "top: 25%; left: 38%;" class = "fields" id = "phone" maxlength = "100" placeholder = "Phone Number">
-    <input type = "text" style = "top: 31%; left: 38%;" class = "fields" id = "email" maxlength = "100" placeholder = "Email">
+    
+    <!--
 
-    <h2 class = "sectionheader" style = "top: 35%; left: 38%;"> Home Address </h2>
-    <input type = "text" style = "top: 40%; left: 38%;" class = "fields" id = "address1" maxlength = "100" placeholder = "Address Line 1">
-    <input type = "text" style = "top: 46%; left: 38%;" class = "fields" id = "address2" maxlength = "100" placeholder = "Address Line 2">
-    <input type = "text" style = "top: 52%; left: 38%;" class = "fields" id = "city" maxlength = "100" placeholder = "City">
-    <input type = "text" style = "top: 58%; left: 38%;" class = "fields" id = "state" maxlength = "100" placeholder = "State">
-    <input type = "text" style = "top: 64%; left: 38%;" class = "fields" id = "zip" maxlength = "5" placeholder = "Zip">
 
-    <h2 class = "sectionheader" style = "top: 68%; left: 38%;"> Organization Information </h2>
-    <input type = "text" style = "top: 74%; left: 38%;" class = "fields" id = "orgname" maxlength = "100" placeholder = "Organization Name">
-    <input type = "text" style = "top: 80%; left: 38%;" class = "fields" id = "sponsorname" maxlength = "100" placeholder = "Sponsor Name">
-
-    <button id = "sumbitapplication" onclick = "submitApplication()"> Submit </button>
-    <!-- Linking another html document to a button source: https://www.w3schools.com/html/html_links.asp -->
-    <button id = "cancelapplication" onclick = "document.location = 'index.html'"> Cancel </button>
+     -->
+    
+   <!-- <button id = "cancelapplication" onclick = "document.location = 'index.html'"> Cancel </button> -->
 
 </body>
 
