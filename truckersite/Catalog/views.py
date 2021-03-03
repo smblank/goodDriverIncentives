@@ -8,7 +8,7 @@ from django.utils import timezone
 import random
 # Create your views here.
 
-APP_ID = 'ApurvPat-FindingS-SBX-1b1a1f9b6-dfc400b9'
+APP_ID = 'ApurvPat-FindingS-PRD-ddc78fcfb-06024fa2'
 
 def createCatalog(words, SearchWords, request):
     api = Finding(id = APP_ID, config=None, http=True)
@@ -77,3 +77,6 @@ def removeFromCart(request, slug):
     else:
         messages.info(request, "No valid active order")
         return redirect("catalog:checkoutPage")
+
+def checkoutPage(request):
+    pass
