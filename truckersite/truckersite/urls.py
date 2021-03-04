@@ -19,6 +19,7 @@ from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^driver_catalog', include('Catalog.urls'))
-    path('',views.userreggin)
+    url(r'^driver_catalog', include('Catalog.urls')),
+    path('',views.userreggin),
+    path('',forms.loginog),
 ]
