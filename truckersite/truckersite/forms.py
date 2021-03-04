@@ -68,9 +68,9 @@ def loginpg(request):
 
             return moveout(request)
         else:
-            messages.info(request, 'Incorrect login')
+            messages.success(request, 'Incorrect login')
 
-    return render(request, '/index.html/', context)
+    return render(request, '/turkersite/templates/index.html/', context)
 
 def logoutpg(request):
 
@@ -79,17 +79,17 @@ def logoutpg(request):
     del request.session['email']
     del request.session['role']
     
-    return render(request, '/index.html')
+    return render(request, '/turkersite/templates/index.html')
 
 #need to check vs role 
 def moveout(request):
     if 'loggedin' in session:
         if request.session.get('role') == Driver
-            return render(request,'/driver_dash.html/')
+            return render(request,'/turkersite/templates/driver_dash.html/')
         if request.session.get('role') == Sponsor
-            return render(request,'/sponsor_dash.html/')
+            return render(request,'/turkersite/templates/sponsor_dash.html/')
         if request.session.get('role') == Admin
-            return render(request,'/admin_dash.html/')
+            return render(request,'/turkersite/templates/admin_dash.html/')
     else:
-        return render(request, '/index/')
+        return render(request, '/turkersite/templates/index/')
 
