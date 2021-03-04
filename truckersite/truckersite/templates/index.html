@@ -29,10 +29,11 @@
             </div>
         </div>
 
+        <form method = "POST"> <!--{% csrf_token %} Need to add csrf stuff-->
         <div class = "row text-center">
             <div class = "col-md-12">
 
-                <input type = "text" class = "login" id = "emaillogin" maxlength = "100" placeholder = "Email">
+                <input type = "text" class = "login" id = "emaillogin" maxlength = "100" placeholder = "Email" name="email" required>
 
             </div>
         </div>
@@ -48,7 +49,7 @@
         <div class = "row text-center">
             <div class = "col-md-12">
 
-                <input type = "password" class = "login" id = "passwordlogin" maxlength = "100" placeholder = "Password">
+                <input type = "password" class = "login" id = "passwordlogin" maxlength = "100" placeholder = "Password" name="password" required>
 
             </div>
         </div>
@@ -64,10 +65,11 @@
         <div class = "row text-center">
             <div class = "col-md-12">
 
-                <button id = "loginbutton" onclick = "login()"> Log in </button>
+                <button id = "loginbutton"> Log in </button>
 
             </div>
         </div>
+        </form>
 
         <div class = "row text-center">
             <div class = "col-md-12">
