@@ -21,5 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^driver_catalog', include('Catalog.urls')),
     path('',views.userreggin),
-    path('',forms.loginog),
+    path('',forms.loginpg),
 ]
