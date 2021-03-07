@@ -377,4 +377,22 @@ READS SQL DATA
         RETURN phone;
     END;;
 
+DROP FUNCTION IF EXISTS updateDriverPhone;
+
+CREATE FUNCTION updateDriverPhone (userEmail VARCHAR(50), newPhone CHAR(12))
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        DECLARE user INT;
+
+        SELECT getUserID(userEmail) INTO user;
+
+        UPDATE DRIVER
+            SET
+                PhoneNo = newPhone
+            WHERE UserID = user;
+
+        RETURN 0;
+    END;;
+
 DELIMITER ;
