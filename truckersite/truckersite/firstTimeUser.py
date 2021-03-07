@@ -32,9 +32,7 @@ def getRandomPassword(userEmail):
 
     return randPassword
 
-def firstTimeEmail(userEmail):
-    password = getRandomPassword(userEmail)
-
+def firstTimeEmail(userEmail, password):
     query = "SELECT getUserName(%s)"
 
     conn = getDB()
@@ -51,7 +49,7 @@ def firstTimeEmail(userEmail):
     message = """\
     Welcome %s!
     
-    Congratualations! You've been accepted into the Good Dirvers Incentive Program. Once you login for the first time, you'll be able to create your own password and start earning points. For your first login, please use this temporary password: %s. Welcom to the Program!
+    Congratualations! You've been accepted into the Good Dirvers Incentive Program. Once you login for the first time, you'll be able to create your own password and start earning points. For your first login, please use this temporary password: %s. Welcome to the Program!
     
     Login Link: http://ec2-3-88-207-55.compute-1.amazonaws.com/""" % (userName,password)
 
@@ -59,5 +57,5 @@ def firstTimeEmail(userEmail):
     email = EmailMessage(subject, message, 'gooddriverprogram@gmail.com', [userEmail])
     email.send()
 
-getRandomPassword("email")
-firstTimeEmail("smblankenship99@gmail.com")
+pass = getRandomPassword("email")
+firstTimeEmail("smblankenship99@gmail.com", pass)

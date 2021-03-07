@@ -11,9 +11,15 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+PROJECT_PATH = os.path.abspath(os.path.dirname(__name__))
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'truckersite.settings')
+os.environ["PYTHON_PATH"] = PROJECT_PATH
 
 
 # Quick-start development settings - unsuitable for production
@@ -119,7 +125,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = PROJECT_PATH + '/truckersite/templates/'
+
+STATIC_ROOT = PROJECT_PATH + '/truckersite/templates/'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

@@ -1,4 +1,4 @@
-from . import views
+from Catalog import views
 from django.conf.urls import url
 
 app = 'Catalog'
