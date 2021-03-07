@@ -1,21 +1,47 @@
 
 /* Source for box shadows: https://www.w3schools.com/css/tryit.asp?filename=tryresponsive_styles */
 
-html{
+/* Full-height columns: https://codepen.io/danield770/pen/eWBXoY?editors=1100 */
+html, body{
   scroll-behavior: smooth;
+  font-family: Arial, Helvetica, sans-serif;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+}
+
+body{
+  padding-top: 60px;
+}
+
+#header{
+  background-color: #ACEFFF;
+}
+
+#title{
+  font-size: 110%;
+}
+
+#menubutton{
+  color: black;
+}
+
+#sidebar{
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  border-right-style: solid;
+  border-right-color: #7070707e;
 }
 
 .sectionheader{
-  font-family: Arial, Helvetica, sans-serif;
   font-size: 150%;
-  position: absolute;
   left: 2%;
 }
 
 .settingname{
-  font-family: Arial, Helvetica, sans-serif;
   font-size: 110%;
-  position: absolute;
+  position: relative;
   text-decoration: underline;
   left: 11%;
   cursor: pointer;
@@ -23,287 +49,115 @@ html{
 }
 
 .setting{
-  position: absolute;
-  font-family: Arial, Helvetica, sans-serif;
   font-size: 170%;
-  left: 21%;
 }
 
 #pfpsetting{
-  position: absolute;
-  left: 21%;
-  top: 10%;
   width: 8%;
-  height: 16%;
+  height: 13%;
 }
 
 #upload{
-  position: absolute;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  left: 21%;
-  top: 27%;
-  height: 3%;
-  width: 8%;
-  font-family: Arial, Helvetica, sans-serif;
+  width: fit-content;
+  height: fit-content;
+  padding-right: 1.5%;
+  padding-left: 1.5%;
+  padding-top: .1%;
   font-size: 100%;
+  margin-top: 1%;
   border-radius: 30px;
   border-style: solid;
   border-color: black;
   background-color: white;
+  cursor: pointer;
+}
+
+.save{
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  width: fit-content;
+  height: fit-content;
+  padding-right: 1.5%;
+  padding-left: 1.5%;
+  padding-top: .2%;
+  padding-bottom: .2%;
+  font-size: 100%;
+  border-radius: 30px;
+  border-style: solid;
+  border-color: black;
+  background-color: #A1EDA7;
   cursor: pointer;
 }
 
 .settingtext{
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  width: 20%;
+  width: 25%;
   height: 4%;
   font-size: 200%;
-  left: 21%;
-  font-family: Arial, Helvetica, sans-serif;
-  position: absolute;
 }
 
 #addresses{
-  position: absolute;
-  font-family: Arial, Helvetica, sans-serif;
-  left: 21%;
-  top: 66%;
   height: 2%;
   width: 10%;
   font-size: 80%;
+  margin-right: 100%;
 }
 
 #submit{
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  position: absolute;
-  left: 21%;
-  top: 69%;
-  height: 3%;
-  width: 8%;
-  font-family: Arial, Helvetica, sans-serif;
+  width: fit-content;
+  height: fit-content;
+  padding-right: 1.5%;
+  padding-left: 1.5%;
+  padding-top: .2%;
+  padding-bottom: .2%;
   font-size: 100%;
   border-radius: 30px;
   border-style: solid;
   border-color: black;
   background-color: white;
   cursor: pointer;
+  margin-top: .5%;
 }
 
 #default{
-  position: absolute;
-  font-family: Arial, Helvetica, sans-serif;
-  left: 21%;
-  top: 79%;
   height: 2%;
-  width: 10%;
+  width: 11%;
   font-size: 80%;
 }
 
-#changedefault{
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  position: absolute;
-  left: 21%;
-  top: 82%;
-  height: 3%;
-  width: 8%;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 100%;
-  border-radius: 30px;
-  border-style: solid;
-  border-color: black;
-  background-color: white;
-  cursor: pointer;
-}
-
-#savechanges{
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  position: fixed;
-  left: 65%;
-  top: 92%;
-  height: 5%;
-  width: 12%;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 120%;
-  border-radius: 30px;
-  border-style: solid;
-  border-color: black;
-  background-color: #A1EDA7;
-  cursor: pointer;
-}
-
-
-/* Switch Credit:  https://www.w3schools.com/howto/howto_css_switch.asp*/
-.switch {
-  position: absolute;
-  width: 60px;
-  height: 34px;
-}
-  
-.switch input { 
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-  
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #707070;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-  
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-input:checked + .slider {
-  background-color: #ACEFFF;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px #ACEFFF;
-}
-
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-}
-
-.slider.round {
-  border-radius: 34px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
-
 .checkboxes{
-  position: absolute;
-  height: 3%;
-  width: 3%;
+  margin-left: 2%;
   cursor: pointer;
 }
 
 .checkboxlabels{
-  position: absolute;
-  font-family: Arial, Helvetica, sans-serif;
   font-size: 115%;
-}
-
-#addaddress{
-  position: absolute;
-  background-color: white;
-  border-style: solid;
-  border-color: black;
-  height: 30%;
-  width: 40%;
-  left: 21%;
-  top: 66%;
-  z-index: 1;
-  visibility: hidden;
 }
 
 .adding{
   width: 60%; 
-  height: 15%;
+  height: 12%;
   font-size: 150%;
-  font-family: Arial, Helvetica, sans-serif;
-  position: absolute;
+  margin-right: 100%;
+  margin-bottom: 1%;
+  margin-left: 2%;
 }
 
 #submitaddress{
-  position: absolute;
-  left: 75%;
-  top: 65%;
-  height: 15%;
-  width: 20%;
-  font-family: Arial, Helvetica, sans-serif;
+  width: fit-content;
+  height: fit-content;
+  padding-right: 3%;
+  padding-left: 3%;
+  padding-top: .2%;
+  padding-bottom: .2%;
   font-size: 120%;
   border-radius: 30px;
   border-style: solid;
   border-color: black;
   background-color: #A1EDA7;
   cursor: pointer;
-}
-
-#canceladdress{
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  position: absolute;
-  left: 75%;
-  top: 82%;
-  height: 15%;
-  width: 20%;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 120%;
-  border-radius: 30px;
-  border-style: solid;
-  border-color: black;
-  background-color: #EDA1A1;
-  cursor: pointer;
-}
-
-#confirmdeleteaddress{
-  position: absolute;
-  background-color: white;
-  border-style: solid;
-  border-color: black;
-  height: 30%;
-  width: 40%;
-  left: 21%;
-  top: 66%;
-  z-index: 1;
-  visibility: hidden;
-}
-
-#confirmationmessage{
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 150%;
-  position: absolute;
-  left: 17%;
-}
-
-#keepaddress{
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  position: absolute;
-  left: 40%;
-  top: 50%;
-  height: 15%;
-  width: 20%;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 120%;
-  border-radius: 30px;
-  border-style: solid;
-  border-color: black;
-  background-color: #A1EDA7;
-  cursor: pointer;
-}
-
-#deleteaddress{
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  position: absolute;
-  left: 40%;
-  top: 70%;
-  height: 15%;
-  width: 20%;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 120%;
-  border-radius: 30px;
-  border-style: solid;
-  border-color: black;
-  background-color: #EDA1A1;
-  cursor: pointer;
+  margin-right: 2%;
+  margin-left: 4%;
+  margin-bottom: 2%;
 }
