@@ -125,10 +125,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = PROJECT_PATH + '/truckersite/templates/'
+STATIC_URL = os.path.join(PROJECT_PATH,'truckersite/templates/')
 
-STATIC_ROOT = PROJECT_PATH + '/truckersite/templates/'
+STATIC_ROOT = os.path.join(PROJECT_PATH,'truckersite/templates/')
 
+
+#Media directory (files uploaded by outside user)
+MEDIA_ROOT = os.path.join(PROJECT_PATH,'truckersite/media/')
+MEDIA_URL = "/media/"
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True

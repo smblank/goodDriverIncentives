@@ -16,10 +16,20 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.urls import path
+from truckersite import views, forms
+from userProfile import views as profileViews
+from userProfile import models as profileOps
 
 urlpatterns = [
+    path('',forms.loginpg, name = "login"), 
+    path('getNewDriverEmail', profileOps.getNewDriverEmail, name = "getNewDriverEmail"),
+    path('getNewDriverPass', profileOps.getNewDriverPassword, name = 'getNewDriverPass'),
+    path('getNewDriverPhone', profileOps.getNewDriverPhone, name = 'getNewDriverPhone'),
+    path('getNewDriverAddress', profileOps.getNewDriverAddress, name = 'getNewDriverAddress'),
+    path('getDriverDefaultAddr', profileOps.getDriverDefaultAddr, name = 'getDriverDefaultAddr'),
+    path('getNewDriverProfilePic', profileOps.getDriverProfilePic, name = 'getNewDriverProfilePic'),
+    path('driverProfile/', profileViews.driverProfile, name = "driverProfile"),
     path('admin/', admin.site.urls),
     url(r'^driver_catalog', include('Catalog.urls')),
     path('',views.userreggin),
-    path('',forms.loginpg),
-]
+

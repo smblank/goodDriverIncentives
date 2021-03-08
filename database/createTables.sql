@@ -3,6 +3,7 @@ CREATE TABLE USER
     Name                VARCHAR(100)    NOT NULL,
     Email               VARCHAR(50)     NOT NULL,
     HashedPassword      BINARY(64)      NOT NULL,
+    ProfilePic          VARBINARY(256),
     PRIMARY KEY (UserID));
 
 CREATE TABLE PASSWORD_CHANGE
@@ -55,6 +56,7 @@ CREATE TABLE DRIVER_ADDRESSES
     (AddressID  INT             NOT NULL    AUTO_INCREMENT,
     UserID      INT             NOT NULL,
     Address     VARCHAR(100)    NOT NULL,
+    DefaultAddr     BOOL        NOT NULL,
     PRIMARY KEY (AddressID),
     FOREIGN KEY (UserID) REFERENCES USER (UserID));
 
