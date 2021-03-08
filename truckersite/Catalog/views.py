@@ -1,82 +1,89 @@
-from django.shortcuts import render
-from ebaysdk.finding import Connection as Finding
-from .models import OrderedProduct, Product, SearchWord, Order
+from ebaysdk import finding
+from ebaysdk.finding import Connection as finding
+from bs4 import BeautifulSoup
+from .models import Product, OrderedProduct, Order
+from django.template.defaultfilters import random, slugify
 from django.shortcuts import render, redirect, get_object_or_404
-from django.template.defaultfilters import slugify, wordcount
 from django.contrib import messages
 from django.utils import timezone
-import random
-# Create your views here.
 
 APP_ID = 'ApurvPat-FindingS-PRD-ddc78fcfb-06024fa2'
 
-def createCatalog(words, SearchWords, request):
-    api = Finding(id = APP_ID, config=None, http=True)
-    response = api.execute('fAdvanced', {'SearchWord': wordcount, 'input':[{'EntriesPerPAge':50}]})
-    prds = response.dic()
-    prds = prds["SearchResult"]
+def addProducts(request):
+    api = finding(appid = APP_ID, config_file = None)
+    request = {'keywords': {'TV', 'Computer', 'Phone'}, 'outputSelector': 'SellerInfo',}
+    response = api.execute('findItemsByKeywords', request)
+    soup = BeautifulSoup(response.content, 'lxml')
+    #entries = int (soup.find('totalentries').text)
+    items = soup.find_all('item')
+    
+    for item in items:
+        name_tmp = item.title.string.lower().strip()
+        price_tmp = float(item.currentprice.string)
+        image_tmp = item.viewitemurl.string.lower()
+        #cat = item.categoryname.string.lower()
 
-    for prd in prds["Product"]:
-        slug = slugify(prd["Name"])
-        num = random.randint(1, 10000)
-        slug += str(num)
-        try:
-            Product.objects.create(Name=prd["Name"], Price=float(prd["sellingStatus"]["convertedCurrentPrice"]["value"]), Img=prd["galleryURL"], slug=slug, keyWord=SearchWord)
-        except:
-            Product.objects.create(Name=prd["Name"], Price=float(prd["sellingStatus"]["convertedCurrentPrice"]["value"]), Img=prd["galleryURL"], slug=slug, keyWord=SearchWord)
+        Product.objects.create(name = name_tmp, price = price_tmp, image = image_tmp)
 
-def Catalog(request):
-    all = []
-    for i in range(0, 50):
-        for j in range(0, SearchWord.object.all().count()):
-            all.append(Product.objects.all()[(j*50)+i])
-    return render(request, 'driver_catalog.html', {'all':all})
+def product_list(request):
+    context = {
+        'items': Product.objects.all()
+    }
+    return render(request, "driver_catalog.html", context)
 
-def addToCart(request, slug):
-    prd = get_object_or_404(Product, slug=slug)
-    orderItem, created = OrderedProduct.objects.get_or_create(item=prd, user = request.user, ordered=False)
-    orderSet = Order.objects.filter(user=request.user, ordered=False)
-    if orderSet.exists():
-        order = orderSet[0]
-        if order.items.filter(item__slug=prd.slug).exists():
-            orderItem.quantity += 1
-            orderItem.save()
-            messages.info(request, "Quantity updated")
-            return redirect("catalog:checkoutPage")
+def add_to_cart(request, slug):
+    item = get_object_or_404(Product, slug=slug)
+    order_item, created = OrderedProduct.objects.get_or_create(
+        item=item,
+        user=request.user,
+        ordered=False
+    )
+    order_qs = Order.objects.filter(user=request.user, ordered=False)
+    if order_qs.exists():
+        order = order_qs[0]
+        # check if the order item is in the order
+        if order.items.filter(item__slug=item.slug).exists():
+            order_item.quantity += 1
+            order_item.save()
+            messages.info(request, "This item quantity was updated.")
+            return redirect("Catalog:driver_cart")
         else:
-            messages.info(request, "Item added to cart")
-            order.items.add(orderItem)
-            return redirect("catalog:checkoutPage")
+            order.items.add(order_item)
+            messages.info(request, "This item was added to your cart.")
+            return redirect("Catalog:driver_cart")
     else:
-        order = Order.objects.create(user=request.user, orderDate=timezone.now())
-        order.Products.add(orderItem)
-        messages.info(request, "Item added to cart")
-        return redirect("catalog:checkoutPage")
+        ordered_date = timezone.now()
+        order = Order.objects.create(
+            user=request.user, ordered_date=ordered_date)
+        order.items.add(order_item)
+        messages.info(request, "This item was added to your cart.")
+        return redirect("Catalog:driver_cart")
 
-def removeFromCart(request, slug):
-    prd = get_object_or_404(Product, slug=slug)
-    orderSet = Order.objects.filter(user=request.user, ordered=False)
-    if orderSet.exists():
-        order = orderSet[0]
-        if order.items.filter(item__slug=prd.slug).exists():
-            orderItem = OrderedProduct.objects.filter(item=prd, user=request.user, ordered=False)[0]
-            if orderItem.quantity > 1:
-                orderItem.quantity -= 1
-                orderItem.save()
-                messages.info(request, "Item quantity updated")
-                return redirect("catalog:checkoutPage")
-            else:
-                orderItem.quantity -= 1
-                order.items.remove(orderItem)
-                orderItem.delete()
-                messages.info(request, "Item removed from cart")
-                return redirect("catalog:checkoutPage")
+def remove_from_cart(request, slug):
+    item = get_object_or_404(Product, slug=slug)
+    order_qs = Order.objects.filter(
+        user=request.user,
+        ordered=False
+    )
+    if order_qs.exists():
+        order = order_qs[0]
+        # check if the order item is in the order
+        if order.items.filter(item__slug=item.slug).exists():
+            order_item = OrderedProduct.objects.filter(
+                item=item,
+                user=request.user,
+                ordered=False
+            )[0]
+            order.items.remove(order_item)
+            order_item.delete()
+            messages.info(request, "This item was removed from your cart.")
+            return redirect("Catalog:driver_cart")
         else:
-            messages.info(request, "Item not in cart")
-            return redirect("catalog:checkoutPage")
+            messages.info(request, "This item was not in your cart")
+            return redirect("Catalog:driver_cart", slug=slug)
     else:
-        messages.info(request, "No valid active order")
-        return redirect("catalog:checkoutPage")
+        messages.info(request, "You do not have an active order")
+        return redirect("Catalog:driver_cart", slug=slug)
 
 def checkoutPage(request):
     pass
