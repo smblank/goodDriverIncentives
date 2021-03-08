@@ -97,17 +97,27 @@
 
                 <p class = "setting" style = "top: 3%;"> Change Profile Picture </p>
                 <img id = "pfpsetting" src = "Defaultpfp.png"> <br>
-                <button id = "upload"> Upload Image </button>
-                <button class = "save" id = "savepfp"> <i class = "fa fa-save"></i> </button>
 
-                <p class = "setting" id = "changeemail" style = "margin-top: 1.5%;"> Change Email </p>
-                <input class = "settingtext" type = "text" id = "emailsetting" maxlength = "100" placeholder = "Email">
-                <button class = "save" id = "saveemail"> <i class = "fa fa-save"></i> </button>
+                <form method = "Post" action = "{% url 'getNewDriverProfilePic'%}">
+                    {% csrf_token %}
+                    <button id = "upload" type = "file" id="loadFileXml" value="loadXml" onclick="document.getElementById('profilePic').click();" name> Upload Image </button>
+                    <input type = "file" id = "profilePic" name = "profilePic" style = "display:none;"/>
+                </form>
 
-                <p class = "setting" id = "changepassword" style = "margin-top: 1.5%;"> Change Password </p>
-                <input class = "settingtext" type = "password" id = "changepassword1" style = "margin-right: 100%;" maxlength = "100" placeholder = "Password">
-                <input class = "settingtext" type = "password" id = "changepassword2" style = "margin-top: 1%;" maxlength = "100" placeholder = "Confirm Password">
-                <button class = "save" id = "savepassword"> <i class = "fa fa-save"></i> </button>
+                <form method = "Post" action = "{% url 'getNewDriverEmail'%}">
+                    {% csrf_token %}
+                    <p class = "setting" id = "changeemail" style = "margin-top: 1.5%;"> Change Email </p>
+                    <input class = "settingtext" type = "text" id = "emailsetting" maxlength = "100" placeholder = "Email" name = "email">
+                    <button class = "save" id = "saveemail"> <i class = "fa fa-save"></i> </button>
+                </form>
+
+                <form method = "Post" action = "{% url 'getNewDriverPass'%}">
+                    {% csrf_token %}
+                    <p class = "setting" id = "changepassword" style = "margin-top: 1.5%;"> Change Password </p>
+                    <input class = "settingtext" type = "password" id = "changepassword1" style = "margin-right: 100%;" maxlength = "100" placeholder = "Password" name = "password1">
+                    <input class = "settingtext" type = "password" id = "changepassword2" style = "margin-top: 1%;" maxlength = "100" placeholder = "Confirm Password" name = "password2">
+                    <button class = "save" id = "savepassword"> <i class = "fa fa-save"></i> </button>
+                </form>
 
                 <p class = "setting" id = "manageaddresses" style = "margin-top: 1.5%;"> Manage Addresses </p>
                 <select id = "addresses">
@@ -121,23 +131,27 @@
                 <div class = "modal fade" id = "addaddress" tabindex = "-1" role = "dialog" aria-labelledby = "exampleModalLabel" aria-hidden = "true">
                     <div class = "modal-dialog" role = "document">
                         <div class = "modal-content">
-                            <div class = "modal-header">
-                            <h5 class = "modal-title" id = "exampleModalLabel">Add New Address</h5>
-                            <button type = "button" class = "close" data-dismiss = "modal" aria-label = "Close">
-                                <span aria-hidden = "true">&times;</span>
-                            </button>
-                            </div>
-                            <div class = "modal-body">
-                                <input type = "text" class = "adding" id = "addressline1" style = "margin-top: 2%;" maxlength = "100" placeholder = "Address Line 1">
-                                <input type = "text" class = "adding" id = "addressline2" maxlength = "100" placeholder = "Address Line 2">
-                                <input type = "text" class = "adding" id = "city" maxlength = "100" placeholder = "City">
-                                <input type = "text" class = "adding" id = "state"  maxlength = "100" placeholder = "State">
-                                <input type = "text" class = "adding" maxlength = "100" placeholder = "Zip">
-                            </div>
-                            <div class = "modal-footer">
-                            <button type = "button" class = "btn btn-secondary" style = "background-color: #EDA1A1; border-color: #EDA1A1; color: black;" data-dismiss = "modal"> Cancel</button>
-                            <button type = "button" id = "savenewaddress"  style = "background-color: #A1EDA7; border-color: #A1EDA7; color: black;" class = "btn btn-primary">Save changes</button>
-                            </div>
+                            <form method = "Post" action = "{% url 'getNewDriverAddress'%}">
+                                 {% csrf_token%}
+                                <div class = "modal-header">
+                                <h5 class = "modal-title" id = "exampleModalLabel">Add New Address</h5>
+                                <button type = "button" class = "close" data-dismiss = "modal" aria-label = "Close">
+                                    <span aria-hidden = "true">&times;</span>
+                                </button>
+                                </div>
+                                <div class = "modal-body">
+
+                                    <input type = "text" class = "adding" id = "addressline1" style = "margin-top: 2%;" maxlength = "100" placeholder = "Address Line 1" name = "address1">
+                                    <input type = "text" class = "adding" id = "addressline2" maxlength = "100" placeholder = "Address Line 2" name = "address2">
+                                    <input type = "text" class = "adding" id = "city" maxlength = "100" placeholder = "City" name = "city">
+                                    <input type = "text" class = "adding" id = "state"  maxlength = "100" placeholder = "State" name = "state">
+                                    <input type = "text" class = "adding" maxlength = "100" placeholder = "Zip" name = "zip">
+                                </div>
+                                <div class = "modal-footer">
+                                <button type = "button" class = "btn btn-secondary" style = "background-color: #EDA1A1; border-color: #EDA1A1; color: black;" data-dismiss = "modal"> Cancel</button>
+                                <button type = "submit" id = "savenewaddress"  style = "background-color: #A1EDA7; border-color: #A1EDA7; color: black;" class = "btn btn-primary">Save changes</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -165,14 +179,20 @@
                 </div>
                 
                 <p class = "setting" id = "changedefaultaddress" style = "margin-top: 1.5%;"> Change Default Address </p>
-                <select id = "default">
-                    <option value = "none"> Choose an Address </option>
-                </select>
-                <button class = "save" id = "savedefaultaddress"> <i class = "fa fa-save"></i> </button>
+                <form method = "Post" action = "{%url 'getDriverDefaultAddr'%}">
+                    {% csrf_token%}
+                    <select id = "default" name = 'default'>
+                        <option value = "none"> Choose an Address </option>
+                    </select>
+                    <button class = "save" id = "savedefaultaddress"> <i class = "fa fa-save"></i> </button>
+                </form>
 
-                <p class = "setting" id = "changephonenumber" style = "margin-top: 1.5%;"> Change Phone Number </p>
-                <input class = "settingtext" type = "text" id = "phonesetting" maxlength = "100" placeholder = "Phone Number">
-                <button class = "save" id = "savephonenumber"> <i class = "fa fa-save"></i> </button>
+                <form method = "Post" action = "{%url 'getNewDriverPhone'%}">
+                    {% csrf_token%}
+                   <p class = "setting" id = "changephonenumber" style = "margin-top: 1.5%;"> Change Phone Number </p>
+                    <input class = "settingtext" type = "text" id = "phonesetting" maxlength = "100" placeholder = "Phone Number" name = "phone">
+                    <button class = "save" id = "savephonenumber"> <i class = "fa fa-save"></i> </button>
+                </form>
 
                 <p class = "setting" id = "2fa" style = "margin-top: 1.5%;"> Account Settings </p>
                 <!-- Switch Credit: https://getbootstrap.com/docs/4.2/components/forms/ -->

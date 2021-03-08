@@ -8,4 +8,4 @@ SELECT createDriver("Jane Doe", "jane@example.com", "password", "temp address", 
 
 INSERT INTO PASSWORD_CHANGE (ChangeNo, ChangeDate, ChangeType, UserID) VALUES (2, 2/13/2021, 'Reset', 1);
 
-INSERT INTO DRIVER_ADDRESSES (UserID, Address) VALUES (1, "42 Road LN, City, ST, 1234");
+INSERT INTO DRIVER_ADDRESSES (UserID, Address, DefaultAddr) VALUES (1, "42 Road LN, City, ST, 1234", False);

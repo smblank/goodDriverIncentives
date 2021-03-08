@@ -294,7 +294,7 @@ MODIFIES SQL DATA
 
         SELECT getUserID(userEmail) INTO user;
         
-        INSERT INTO DRIVER_ADDRESSES (UserID, Address) VALUES (user, newAddress);
+        INSERT INTO DRIVER_ADDRESSES (UserID, Address, DefaultAddr) VALUES (user, newAddress, False);
 
         SELECT AddressID INTO newAddressId
         FROM DRIVER_ADDRESSES
@@ -316,7 +316,7 @@ MODIFIES SQL DATA
 
         SELECT AddressId INTO addressNo
         FROM DRIVER_ADDRESSES
-        WHERE Address = oldAddress;
+        WHERE Address = oldAddress AND UserID = user;
 
         UPDATE DRIVER_ADDRESSES
             SET
@@ -359,6 +359,47 @@ READS SQL DATA
         RETURN address;
     END;;
 
+DROP FUNCTION IF EXISTS setAddressDefault;
+
+CREATE FUNCTION setAddressDefault (userEmail VARCHAR(50), defaultAddress VARCHAR(100))
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        DECLARE user INT;
+        DECLARE addrID INT;
+
+        SELECT getUserID(userEmail) INTO user;
+
+        SELECT AddressID INTO addrID
+        FROM DRIVER_ADDRESSES
+        WHERE Address = defaultAddress AND UserID = user;
+
+        UPDATE DRIVER_ADDRESSES
+            SET
+                DefaultAddr = True
+            WHERE AddressID = addrID;
+
+        RETURN 0;
+    END;;
+
+DROP FUNCTION IF EXISTS getDefaultAddress;
+
+CREATE FUNCTION getDefaultAddress (userEmail VARCHAR(50))
+RETURNS VARCHAR(100)
+READS SQL DATA
+    BEGIN
+        DECLARE user INT;
+        DECLARE defaultAddress VARCHAR(100);
+
+        SELECT getUserID(userEmail) INTO user;
+
+        SELECT Address INTO defaultAddress
+        FROM DRIVER_ADDRESSES
+        WHERE UserID = user AND DefaultAddr = True;
+
+        RETURN defaultAddress;
+    END;;
+
 DROP FUNCTION IF EXISTS getDriverPhone;
 
 CREATE FUNCTION getDriverPhone (userEmail VARCHAR(50))
@@ -395,4 +436,16 @@ MODIFIES SQL DATA
         RETURN 0;
     END;;
 
+DROP FUNCTION IF EXISTS setProfilePic;
+
+CREATE FUNCTION setProfilePic (userEmail VARCHAR(50), newPic VARBINARY(256))
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        UPDATE USER
+            SET ProfilePic = newPic
+        WHERE Email = userEmail;
+
+        RETURN 0;
+    END;;
 DELIMITER ;

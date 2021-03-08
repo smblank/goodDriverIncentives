@@ -175,6 +175,52 @@ def addAddress(email, newAddress):
     except Error as err:
         print(err)
 
+def setDefaultAddress(email, defaultAddr):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        emailExists = checkEmail(email)
+
+        if emailExists == True:
+            query = "SELECT setAddressDefault(%s, %s)"
+            cursor.execute(query, (email, defaultAddr,))
+
+            cursor.close()
+            conn.close()
+            return "Default address set."
+        else:
+            cursor.close()
+            conn.close()
+            return "Error setting default address (Email not found)"
+
+    except Error as err:
+        print(err)
+
+def getDefaultAddress(email):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        emailExits = checkEmail(email)
+
+        if emailExists == True:
+            query = "SELECT getDefaultAddress(%s)"
+            cursor.execute(query, (email,))
+            result = cursor.fetchone()
+
+            for addr in result:
+                cursor.close()
+                conn.close()
+                return addr
+        else:
+            cursor.close()
+            conn.close()
+            return "Error finding default address (Email not found)"
+  
+    except Error as err:
+        print(err)
+
 def getUserType(email):
     try:
         conn = getDB()
@@ -205,5 +251,25 @@ def updatePhone(email, newPhone):
         cursor.close()
         conn.close()
         return "Phone number successfully updated."
+    except Error as err:
+        print(err)
+
+def setProfilePic(email, picture):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        emailExists = checkEmail(email)
+
+        if emailExists == True:
+            query = "SELECT setProfilePic(%s, %s)"
+            cursor.execute(query, (email, picture,))
+    
+            cursor.close()
+            conn.close()
+            return "Profile picture successfully updated."
+        else:
+            return "Error updating profile picture (Email not found)"
+
     except Error as err:
         print(err)
