@@ -28,10 +28,11 @@ body{
 
 #sidebar{
   height: 100%;
-  width: 100%;
+  width: 23.5%;
   background-color: white;
   border-right-style: solid;
   border-right-color: #7070707e;
+  position: fixed;
 }
 
 .sectionheader{
