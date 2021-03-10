@@ -90,8 +90,6 @@ CREATE TABLE POINT_CHANGE
 CREATE TABLE PRODUCT
     (ProductID              INT                 NOT NULL    AUTO_INCREMENT,
     ProductName             VARCHAR(45)         NOT NULL,
-    ProductImage            VARBINARY(256)      NOT NULL,
-    ProductDescription      VARCHAR(150)        NOT NULL,
     ProductAvailability     VARCHAR(15)         NOT NULL,
     Price                   FLOAT               NOT NULL,
     PRIMARY KEY (ProductID));

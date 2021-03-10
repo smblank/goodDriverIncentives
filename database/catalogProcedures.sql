@@ -1,5 +1,23 @@
 DELIMITER ;;
 
+DROP FUNCTION IF EXISTS createProduct;
+
+CREATE FUNCTION createProduct (name VARCHAR(45), price FLOAT)
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        DECLARE newProduct INT;
+
+        INSERT INTO PRODUCT (ProductName, Price)
+        VALUES (name, price);
+
+        SELECT ProductId INTO newProduct
+        FROM PRODUCT
+        WHERE ProductID = @@Identity;
+
+        RETURN newProduct;
+    END;;
+
 DROP FUNCTION IF EXISTS isInCatalog;
 
 CREATE FUNCTION isInCatalog (product INT, catalogue INT)
@@ -80,6 +98,18 @@ MODIFIES SQL DATA
         INSERT INTO BELONGS_TO (UserID, OrderID) VALUES (driver, newID);
 
         RETURN newID;
+    END;;
+
+DROP FUNCTION IF EXISTS cancelOrder;
+
+CREATE FUNCTION cancelOrder (orderID INT)
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        DELETE FROM DRIVER_ORDER
+        WHERE OrderID = orderID;
+
+        RETURN 0;
     END;;
 
 DROP FUNCTION IF EXISTS addToOrder;

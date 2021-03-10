@@ -273,3 +273,315 @@ def setProfilePic(email, picture):
 
     except Error as err:
         print(err)
+
+def checkIsInCatalog (productID, catalogID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT isInCatalog(%s, %s)"
+        cursor.execute(query, (productID, catalogID,))
+        result = cursor.fetchone()
+
+        for inCatalog in result:
+            cursor.close()
+            conn.close()
+            return inCatalog
+
+    except Error as err:
+        print(err)
+
+def addToCatalog (productID, catalogID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT addToCatalog(%s, %s)"
+        cursor.execute(query, (productID, catalogID,))
+
+        cursor.close()
+        conn.close()
+        return "Product successfuly added to catalog"
+    
+    except Error as err:
+        print(err)
+
+def removeToCatalog (productID, catalogID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT removeFromCatalog(%s, %s)"
+        cursor.execute(query, (productID, catalogID,))
+        result = cursor.fetchone()
+
+        for success in result:
+            if success == True:
+                cursor.close()
+                conn.close()
+                return "Product successfuly removed from catalog"
+
+            else:
+                cursor.close()
+                conn.close()
+                return "Error removing product (product or catalog does not exist)"
+    
+    except Error as err:
+        print(err)
+
+def createOrder (driverID, date):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT createOrder(%s, %s)"
+        cursor.execute(query, (driverID, date,))
+        result = cursor.fetchone()
+
+        for orderID in result
+            cursor.close()
+            conn.close()
+            return orderID
+    
+    except Error as err:
+        print(err)
+
+def cancelOrder (orderID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT cancelOrder(%s)"
+        cursor.execute(query, (orderID,))
+
+        cursor.close()
+        conn.close()
+        return "Order successfully canceled"
+    
+    except Error as err:
+        print(err)
+
+
+def addToOrder (orderID, productID, amt):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT addToOrder(%s, %s, %s)"
+        cursor.execute(query, (orderID, productID, amt,))
+
+        cursor.close()
+        conn.close()
+        return "Product successfuly added to order"
+    
+    except Error as err:
+        print(err)
+
+def removeFromOrder (orderID, productID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT removeFromOrder(%s, %s)"
+        cursor.execute(query, (orderID, productID,))
+
+        cursor.close()
+        conn.close()
+        return "Product successfuly removed from catalog"
+    
+    except Error as err:
+        print(err)
+
+def updateQuantityInOrder (orderID, productID, newAmt):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT updateQuantity(%s, %s, %s)"
+        cursor.execute(query, (orderID, productID, newAmt,))
+
+        cursor.close()
+        conn.close()
+        return "Quantity successfully updated"
+    
+    except Error as err:
+        print(err)
+
+def checkIsInOrder (orderID, productID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT isInOrder(%s, %s)"
+        cursor.execute(query, (orderID, productID,))
+        result = cursor.fetchone()
+
+        for inOrder in result:
+            cursor.close()
+            conn.close()
+            return inOrder
+    
+    except Error as err:
+        print(err)
+
+def addToWishlist (driverID, productID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT addToWishlist(%s, %s)"
+        cursor.execute(query, (driverID, productID,))
+
+        cursor.close()
+        conn.close()
+        return "Product successfuly added to wishlist"
+    
+    except Error as err:
+        print(err)
+
+def removeFromWishlist (driverID, productID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT removeFromWishlist(%s, %s)"
+        cursor.execute(query, (driverID, productID,))
+
+        cursor.close()
+        conn.close()
+        return "Product successfuly removed from wishlist"
+    
+    except Error as err:
+        print(err)
+
+def checkIsInWishlist (driverID, productID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT isInWishlist(%s, %s)"
+        cursor.execute(query, (driverID, productID,))
+        result = cursor.fetchone()
+
+        for inWishlist in result:
+            cursor.close()
+            conn.close()
+            return inWishlist
+    
+    except Error as err:
+        print(err)
+
+def updatePrice (productID, newPrice):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT updatePrice(%s, %s)"
+        cursor.execute(query, (productID, newPrice,))
+
+        cursor.close()
+        conn.close()
+        return "Product price successfully updated"
+
+    except Error as err:
+        print(err)
+
+def updateAvailability (productID, newAvailability):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT updateAvailability(%s, %s)"
+        cursor.execute(query, (productID, newAvailability,))
+
+        cursor.close()
+        conn.close()
+        return "Product availability successfully updated"
+
+    except Error as err:
+        print(err)
+
+def getProductName (productID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT getProductName(%s)"
+        cursor.execute(query, (productID,))
+        result = cursor.fetchone()
+
+        for productName in result:
+            cursor.close()
+            conn.close()
+            return productName
+
+    except Error as err:
+        print(err)
+
+def getProductImage (productID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT getProductImage(%s)"
+        cursor.execute(query, (productID,))
+        result = cursor.fetchone()
+
+        for productImage in result:
+            cursor.close()
+            conn.close()
+            return productImage
+
+    except Error as err:
+        print(err)
+
+def getProductDescription (productID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT getProductDescription(%s)"
+        cursor.execute(query, (productID,))
+        result = cursor.fetchone()
+
+        for productDesc in result:
+            cursor.close()
+            conn.close()
+            return productDesc
+
+    except Error as err:
+        print(err)
+
+def getProductAvailability (productID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT getProductAvailability(%s)"
+        cursor.execute(query, (productID,))
+        result = cursor.fetchone()
+
+        for productAvailability in result:
+            cursor.close()
+            conn.close()
+            return productAvailability
+
+    except Error as err:
+        print(err)
+
+def getProductPrice (productID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT getProductPrice(%s)"
+        cursor.execute(query, (productID,))
+        result = cursor.fetchone()
+
+        for productPrice in result:
+            cursor.close()
+            conn.close()
+            return productPrice
+
+    except Error as err:
+        print(err)
