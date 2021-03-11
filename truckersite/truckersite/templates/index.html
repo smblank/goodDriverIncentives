@@ -29,7 +29,8 @@
             </div>
         </div>
 
-        <form method = "POST"> <!--{% csrf_token %} Need to add csrf stuff-->
+        <form method = "POST" action = "{% url 'login' %}"> 
+            {% csrf_token %}
         <div class = "row text-center">
             <div class = "col-md-12">
 

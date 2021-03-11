@@ -1,76 +1,34 @@
 from django import forms
 from django.forms import ValidationError
 from django.conf import settings
-from django.contrib.auth import login,logout, authenticate
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.http import HttpResponse
-from mysql.connector import connect
 from django.contrib import messages
-from django.shortcuts import render, redirect 
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+import dbConnectionFunctions as db
 
-def getDB():
-    try:
-        connection = connect(host = 'truckingdb.c9tkxb1tjvpp.us-east-1.rds.amazonaws.com', user = 'admin', password = 'accesstodb', database = 'DRIVER_DB', autocommit = True)
-    
-    except Error as err:
-        print(err)
-
-    else:
-        return connection
-
-def getCursor(connection):
-    try:
-        cursor = connection.cursor(buffered = True)
-    
-    except Error as err:
-        print(err)
-    
-    else:
-        return cursor
-
-def getUserType(connection, cursor, email):
-    try:
-        query = "SELECT getUserType(%s)"
-
-        cursor.execute(query, (email,))
-        result = cursor.fetchone()
-
-        for userType in result:
-            return userType
-    
-    except Error as err:
-        print(err)
+def login(request):
+    return render(request, 'index.html')
 
 #need to move this to index @app.route('/index/', methods=['GET', 'POST'])
 def loginpg(request):
-    connection = getDB()
-    cursor = getCursor(connection)
-
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
         
-        #might need to fix below
-        cursor1 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor1.execute('SELECT * FROM accounts WHERE email = %s AND password = %s', (email, password,))
-        account = cursor1.fetchone()
-        user= authenticate(request, account['email'], account['password'])
+        correctPassword = db.checkPassword(email, password)
 
-        if account & user is not None:
-            login(request,user)
+        if correctPassword == True:
             request.session['loggedin'] = True
-            request.session['id'] = account['UserID']
-            request.session['email'] = account['email']
-            request.session['role'] = getUserType( connection,cursor,account['email'])
+            request.session['id'] = db.getUserID(email)
+            request.session['email'] = email
+            request.session['role'] = db.getUserType(email)
+
+
             
-
-
             return moveout(request)
         else:
             messages.success(request, 'Incorrect login')
-
-    return render(request, '/turkersite/templates/index.html/', context)
+            return render(request, 'index.html')
 
 def logoutpg(request):
 
@@ -79,17 +37,19 @@ def logoutpg(request):
     del request.session['email']
     del request.session['role']
     
-    return render(request, '/turkersite/templates/index.html')
+    return render(request, 'index.html')
 
 #need to check vs role 
 def moveout(request):
-    if 'loggedin' in session:
-        if request.session.get('role') == Driver
-            return render(request,'/turkersite/templates/driver_dash.html/')
-        if request.session.get('role') == Sponsor
-            return render(request,'/turkersite/templates/sponsor_dash.html/')
-        if request.session.get('role') == Admin
-            return render(request,'/turkersite/templates/admin_dash.html/')
+    if 'loggedin' in request.session:
+        print(request.session.get('role'))
+        if request.session.get('role') == 'Driver':
+            return render(request, 'driver_dash.html')
+        if request.session.get('role') == 'Sponsor':
+            return render(request, 'sponsor_dash.html')
+        if request.session.get('role') == 'Admin':
+            return render(request, 'admin_dash.html')
     else:
-        return render(request, '/turkersite/templates/index/')
+        print('not logged in...displaying login')
+        return render(request, 'index.html')
 

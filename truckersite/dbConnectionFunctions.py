@@ -239,6 +239,40 @@ def getUserType(email):
     except Error as err:
         print(err)
 
+def getUserID(email):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT getUserID(email)"
+        cursor.execute(query, (email,))
+        result = cursor.fetchone()
+
+        for userID in result:
+            cursor.close()
+            conn.close()
+            return userID
+
+    except Error as err:
+        print(err)
+
+def checkPassword (email, password):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT checkPassword(%s, %s)"
+        cursor.execute(query, (email, password,))
+        result = cursor.fetchone()
+
+        for correctPassword in result:
+            cursor.close()
+            conn.close()
+            return correctPassword
+
+    except Error as err:
+        print(err)
+
 def updatePhone(email, newPhone):
     try:
         conn = getDB()
@@ -338,7 +372,7 @@ def createOrder (driverID, date):
         cursor.execute(query, (driverID, date,))
         result = cursor.fetchone()
 
-        for orderID in result
+        for orderID in result:
             cursor.close()
             conn.close()
             return orderID

@@ -65,31 +65,29 @@ READS SQL DATA
         DECLARE isSponsor BOOLEAN;
         DECLARE isAdmin BOOLEAN;
 
-        SELECT UserID INTO user
-        FROM USER
-        WHERE Email = userEmail;
+        SELECT getUserID(userEmail) INTO user;
 
         SELECT EXISTS(
             SELECT UserID
-            FROM DRIVERS
+            FROM DRIVER
             WHERE UserID = user
         ) INTO isDriver;
 
         SELECT EXISTS(
             SELECT UserID
-            FROM SPONSORS
+            FROM SPONSOR
             WHERE UserID = user
         ) INTO isSponsor;
 
         SELECT EXISTS(
             SELECT UserID
-            FROM ADMINS
+            FROM ADMINISTRATOR
             WHERE UserID = user
         ) INTO isAdmin;
 
-        IF isDriver = 1 THEN
+        IF isDriver THEN
             RETURN "Driver";
-        ELSEIF isSponsor = 1 THEN
+        ELSEIF isSponsor THEN
             RETURN "Sponsor";
         ELSE
             RETURN "Admin";
