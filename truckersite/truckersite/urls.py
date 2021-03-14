@@ -20,11 +20,14 @@ from truckersite import views, forms
 from userProfile import views as profileViews
 from userProfile import models as profileOps
 
+from django.conf.urls.static import static
+from django.conf import settings
+
 urlpatterns = [
-    path('',forms.login), 
-    path('login', forms.loginpg, name = 'login'),
+    #path('',forms.login), 
+    #path('login', forms.loginpg, name = 'login'),
     
-    path('',views.userreggin),
+    #path('',views.userreggin),
 
     #Driver profile forms
     path('', profileViews.driverProfile),
@@ -38,4 +41,4 @@ urlpatterns = [
 
     url(r'^driver_catalog', include('Catalog.urls')),
     path('admin/', admin.site.urls),
-]
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
