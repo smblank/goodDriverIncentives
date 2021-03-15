@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+
+<html lang = "en-US">
+<meta charset = "UTF-8">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <title> Sales By Driver Report </title>
+
+    <!-- Links the .css file -->
+    <link rel="stylesheet" type="text/css" href="sales_by_driver.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+    
+    <div class = "container-fluid">
+
+        <!-- Credit for navbar: https://getbootstrap.com/docs/4.1/components/navbar/-->
+        <!-- Credit for navbar: https://getbootstrap.com/docs/4.1/components/navbar/-->
+        <nav class = "navbar navbar-expand-md navbar-light fixed-top" id = "header">
+            <ul class = "navbar-nav w-100 justify-content-between">
+                <li class = "nav-item dropdown">
+                    <a class = "nav-link dropdown-toggle" id = "menubutton" role = "button" data-toggle = "dropdown" aria-haspopup = "true" aria-expanded = "false"> Menu </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class = "dropdown-item" href = "driver_catalog.html"> Organizations </a>
+                        <a class = "dropdown-item" href = "#"> Notifications </a>
+                        <a class = "dropdown-item" href = "admin_generate_report.html"> Generate Reports </a>
+                        <a class = "dropdown-item" href = "#"> Issues </a>
+                        <a class = "dropdown-item" href = "index.html"> Logout </a>
+                    </div>
+                </li>
+
+                <li class = "nav-item active">
+                    <a class = "nav-link" href = "admin_dash.html" id = "title"> Good Driver Incentive Program </a>
+                </li>
+
+                <a class = "navbar-brand" href = "admin_profile.html">
+                    <img src = "Defaultpfp.png" width = "30" height = "30">
+                </a>
+            </ul>
+        </nav>
+
+        <div class = "row">
+            <div class = "col-md-3 text-left">
+                <div id = "sidebar">
+                    <a id = "back" href = "admin_generate_report.html"> <i class = "fa fa-arrow-left"></i> Generate Report </a>
+                    <h3 class = "text-center" style = "margin-bottom: 5%; margin-top: 2%;"> Sales By Sponsor Report </h3>
+
+                    <h4> Select Driver(s) </h4>
+                    <!-- Source: https://stackoverflow.com/questions/50895806/bootstrap-4-multiselect-dropdown/50897096 -->
+                    <select id = "drivers" class = "selectpicker" multiple>
+                        <option value = "all"> All Drivers </option>
+                    </select>
+
+                    <h4> Start Date </h4>
+                    <input type = "text" id = "start" placeholder = "mm/dd/yy" maxlength = "8">
+                    <h4> End Date </h4>
+                    <input type = "text" id = "end" placeholder = "mm/dd/yy" maxlength = "8">
+                    
+                    <button id = "generate"> Generate Report </button>
+                    <button id = "download"> Download Report <i class = "fa fa-download"></i> </button>
+                </div>
+            </div>
+
+            <div class = "col-md-9" id = "preview">
+
+            </div>
+        </div>
+
+    </div>
+
+
+</body>
+
+</html>
