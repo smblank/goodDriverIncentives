@@ -7,13 +7,15 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
 
     <title> My Profile </title>
 
@@ -53,7 +55,99 @@
             </ul>
         </nav>
 
-        <p> Will be sponsor profile page </p>
+        <div class = "row h-100">
+            <div class = "col-md-3 h-100">
 
+                <div id = "sidebar">
+
+                    <p id = "pagename" style = "font-size: 200%;"> My Profile </p>
+
+                    <!-- https://stackoverflow.com/questions/16349490/html-css-buttons-that-scroll-down-to-different-div-sections-on-a-webpage -->
+                    <p class = "sectionheader" style = "margin-top: 6%;"> Account Information </p>
+                    <a class = "settingname" href = "#changepfp"> Change Profile Picture </a> <br>
+                    <a class = "settingname" href = "#changeemail"> Change Email </a> <br>
+                    <a class = "settingname" href = "#changepassword"> Change Password</a> <br>
+            
+                    <p class = "sectionheader" style = "margin-top: 10%;"> Personal Information </p>
+                    <a class = "settingname" href = "#changephonenumber"> Change Phone Number </a> <br>
+            
+                    <p class = "sectionheader" style = "margin-top: 10%;"> Account Settings </p>
+                    <a class = "settingname" href = "#2FA"> Two-Factor Authentication </a> <br>
+                    <a class = "settingname" href = "#emailnotifications"> Email Notifications </a> <br>
+                    <a class = "settingname" href = "#notifications"> Notifications </a> <br>
+                    <a class = "settingname" href = "#nightmode"> Night Mode </a> <br>
+            
+                </div>
+
+            </div>
+
+            <div class = "col-md-9 h-100">
+
+                <p class = "setting" style = "top: 3%;"> Change Profile Picture </p>
+                <img id = "pfpsetting" src = "{% static 'img/Defaultpfp.png' %}"> <br>
+
+                <form method = "Post" action = "{% url 'getNewDriverProfilePic'%}">
+                    {% csrf_token %}
+                    <button id = "upload" type = "file" id="loadFileXml" value="loadXml" onclick="document.getElementById('profilePic').click();" name> Upload Image </button>
+                    <input type = "file" id = "profilePic" name = "profilePic" style = "display:none;"/>
+                </form>
+
+                <form method = "Post" action = "{% url 'getNewDriverEmail'%}">
+                    {% csrf_token %}
+                    <p class = "setting" id = "changeemail" style = "margin-top: 1.5%;"> Change Email </p>
+                    <input class = "settingtext" type = "text" id = "emailsetting" maxlength = "100" placeholder = "Email" name = "email">
+                    <button class = "save" id = "saveemail"> <i class = "fa fa-save"></i> </button>
+                </form>
+
+                <form method = "Post" action = "{% url 'getNewDriverPass'%}">
+                    {% csrf_token %}
+                    <p class = "setting" id = "changepassword" style = "margin-top: 1.5%;"> Change Password </p>
+                    <input class = "settingtext" type = "password" id = "changepassword1" style = "margin-right: 100%;" maxlength = "100" placeholder = "Password" name = "password1">
+                    <input class = "settingtext" type = "password" id = "changepassword2" style = "margin-top: 1%;" maxlength = "100" placeholder = "Confirm Password" name = "password2">
+                    <button class = "save" id = "savepassword"> <i class = "fa fa-save"></i> </button>
+                </form>
+
+                <form method = "Post" action = "{%url 'getNewDriverPhone'%}">
+                    {% csrf_token%}
+                   <p class = "setting" id = "changephonenumber" style = "margin-top: 1.5%;"> Change Phone Number </p>
+                    <input class = "settingtext" type = "text" id = "phonesetting" maxlength = "100" placeholder = "Phone Number" name = "phone">
+                    <button class = "save" id = "savephonenumber"> <i class = "fa fa-save"></i> </button>
+                </form>
+
+                <p class = "setting" id = "2fa" style = "margin-top: 1.5%;"> Account Settings </p>
+                <!-- Switch Credit: https://getbootstrap.com/docs/4.2/components/forms/ -->
+                <div class = "custom-control custom-switch">
+                    <input type = "checkbox" class = "custom-control-input" id = "2FA">
+                    <label class = "custom-control-label" for = "2FA"> Two-Factor Authentication </label>
+                </div>
+
+                <div class = "custom-control custom-switch">
+                    <input type = "checkbox" class = "custom-control-input" id = "emailnotifications">
+                    <label class = "custom-control-label" for = "emailnotifications"> Email Notifications </label>
+                </div>
+
+                <input class = "checkboxes" type = "checkbox" id = "emailnotification1" style = "left: 22%; top: 117%">
+                <label class = "checkboxlabels" for = "emailnotification1" style = "left: 25%; top: 118%"> Resolved Issues </label> <br>
+                <input class = "checkboxes" type = "checkbox" id = "emailnotification2" style = "left: 22%; top: 120%">
+                <label class = "checkboxlabels" for = "emailnotification2" style = "left: 25%; top: 121%"> Submitted Issues </label> <br>
+
+                <div class = "custom-control custom-switch">
+                    <input type = "checkbox" class = "custom-control-input" id = "websitenotifications" checked>
+                    <label class = "custom-control-label" for = "websitenotifications"> Website Notifications </label>
+                </div>
+
+                <input class = "checkboxes" type = "checkbox" id = "notification1" style = "left: 22%; top: 134%" checked>
+                <label class = "checkboxlabels" for = "notification1" style = "left: 25%; top: 135%"> Resolved Issues </label> <br>
+                <input class = "checkboxes" type = "checkbox" id = "notification1" style = "left: 22%; top: 137%" checked>
+                <label class = "checkboxlabels" for = "notification1" style = "left: 25%; top: 138%"> Submitted Issues </label> <br>
+
+                <div class = "custom-control custom-switch">
+                    <input type = "checkbox" class = "custom-control-input" id = "nightmode">
+                    <label class = "custom-control-label" for = "nightmode"> Night Mode </label> <br> <br>
+                </div>
+                
+            </div>
+
+        </div>
     </div>
 </body>
