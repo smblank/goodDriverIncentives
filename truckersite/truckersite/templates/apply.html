@@ -39,16 +39,16 @@
                 <h2 class = "sectionheader"> Name </h2>
             </div>
         </div>
-
+        <form method = "POST" action="{% url 'Uregister'%}">
         <div class = "row">
             <div class = "col-md-12">
-                <input type = "text" class = "fields" id = "firstname" maxlength = "100" placeholder = "First Name">
+                <input type = "text" class = "fields" id = "firstname" maxlength = "100" placeholder = "First Name" name = "Name" required>
             </div>
         </div>
 
         <div class = "row">
             <div class = "col-md-12">
-                <input type = "text" class = "fields" id = "lastname" maxlength = "100" placeholder = "Last Name">
+                <input type = "text" class = "fields" id = "lastname" maxlength = "100" placeholder = "Last Name" name = "lname" required>
             </div>
         </div>
 
@@ -60,13 +60,13 @@
 
         <div class = "row">
             <div class = "col-md-12">
-                <input type = "text" class = "fields" id = "phone" maxlength = "100" placeholder = "Phone Number">
+                <input type = "text" class = "fields" id = "phone" maxlength = "100" placeholder = "Phone Number" name = "PhoneNo" required>
             </div>
         </div>
 
         <div class = "row">
             <div class = "col-md-12">
-                <input type = "text" class = "fields" id = "email" maxlength = "100" placeholder = "Email">
+                <input type = "text" class = "fields" id = "email" maxlength = "100" placeholder = "Email" name = "Email" required>
             </div>
         </div>
 
@@ -78,31 +78,31 @@
 
         <div class = "row">
             <div class = "col-md-12">
-                <input type = "text" class = "fields" id = "address1" maxlength = "100" placeholder = "Address Line 1">
+                <input type = "text" class = "fields" id = "address1" maxlength = "100" placeholder = "Address Line 1" name = "Address" required>
             </div>
         </div>
 
         <div class = "row">
             <div class = "col-md-12">
-                <input type = "text" class = "fields" id = "address2" maxlength = "100" placeholder = "Address Line 2">
+                <input type = "text" class = "fields" id = "address2" maxlength = "100" placeholder = "Address Line 2" name = "address2" >
             </div>
         </div>
 
         <div class = "row">
             <div class = "col-md-12">
-                <input type = "text" class = "fields" id = "city" maxlength = "100" placeholder = "City">
+                <input type = "text" class = "fields" id = "city" maxlength = "100" placeholder = "City" name = "city" required>
             </div>
         </div>
 
         <div class = "row">
             <div class = "col-md-12">
-                <input type = "text" class = "fields" id = "state" maxlength = "100" placeholder = "State">
+                <input type = "text" class = "fields" id = "state" maxlength = "100" placeholder = "State" name = "state" required>
             </div>
         </div>
 
         <div class = "row">
             <div class = "col-md-12">
-                <input type = "text" class = "fields" id = "zip" maxlength = "5" placeholder = "Zip">
+                <input type = "text" class = "fields" id = "zip" maxlength = "5" placeholder = "Zip" name = "zipcode" required>
 
             </div>
         </div>
@@ -117,7 +117,7 @@
             <div class = "col-md-12">
                 <div style = "margin-left: 38%; margin-bottom: 1%;">
                     <!-- Source: https://stackoverflow.com/questions/50895806/bootstrap-4-multiselect-dropdown/50897096 -->
-                    <select id = "organization" class = "selectpicker" multiple>
+                    <select id = "organization" class = "selectpicker" multiple name = "org" required>
                         <!-- EXAMPLE: <option value = "org1"> Organization 1</option> -->
                     </select>
                 </div>
@@ -134,7 +134,7 @@
             <div class = "col-md-12">
                 <div style = "margin-left: 38%; margin-bottom: 1%;">
                     <!-- Source: https://stackoverflow.com/questions/50895806/bootstrap-4-multiselect-dropdown/50897096 -->
-                    <select id = "sponsor" class = "selectpicker" multiple>
+                    <select id = "sponsor" class = "selectpicker" multiple name = "sponsor" required>
                         <!-- EXAMPLE: <option value = "spon1"> Organization 1</option> --> 
                         <option value = "org1"> Organization 1</option>
                         <option value = "org1"> Organization 2</option>
@@ -149,7 +149,7 @@
                 <button id = "sumbitapplication" onclick = "submitApplication()"> Submit </button>
             </div>
         </div>
-
+        </form>
         <div class = "row">
             <div class = "col-md-12 text-right">
                 <!-- Linking another html document to a button source: https://www.w3schools.com/html/html_links.asp -->
