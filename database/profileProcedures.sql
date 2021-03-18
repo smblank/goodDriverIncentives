@@ -449,4 +449,132 @@ MODIFIES SQL DATA
 
         RETURN 0;
     END;;
+
+DROP FUNCTION IF EXISTS getOrgNo;
+
+CREATE FUNCTION getOrgNo (userEmail VARCHAR(50))
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        DECLARE orgNo INT;
+        DECLARE userType VARCHAR(10);
+        DECLARE user INT;
+
+        SELECT getUserType(userEmail) INTO userType;
+        SELECT getUserID(userEmail) INTO user;
+
+        IF userType = "Driver" THEN
+            SELECT OrgID INTO orgNo
+            FROM DRIVER
+            WHERE UserID = user;
+
+        ELSEIF userType = "Sponsor" THEN
+            SELECT OrgID INTO orgNo
+            FROM SPONSOR
+            WHERE UserID = user;
+        END IF;
+
+        RETURN orgNo;
+    END;;
+
+DROP FUNCTION IF EXISTS removeDriver;
+
+CREATE FUNCTION removeDriver(driverEmail VARCHAR(50))
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        DECLARE user INT;
+        DECLARE list INT;
+
+        SELECT getUserID(driverEmail) INTO user;
+
+        SELECT ListID INTO list
+        FROM WISHLIST
+        WHERE DriverID = user;
+
+        DELETE FROM IS_IN_WISHLIST
+            WHERE ListID = list;
+        
+        DELETE FROM WISHLIST
+            WHERE ListID = list;
+
+        DELETE FROM BELONGS_TO
+            WHERE DriverID = user;
+
+        DELETE FROM POINT_CHANGE
+            WHERE DriverID = user;
+
+        DELETE FROM LOGIN_ATTEMPT
+            WHERE UserID = user;
+
+        DELETE FROM DRIVER_ADDRESSES
+            WHERE DriverID = user;
+
+        DELETE FROM DRIVER
+            WHERE UserID = user;
+
+        DELETE FROM PASSWORD_CHANGE
+            WHERE UserID = user;
+
+        DELETE FROM USER
+            WHERE UserID = user;
+
+        RETURN 0;
+    END;;
+
+DROP FUNCTION IF EXISTS removeSponsor;
+
+CREATE FUNCTION removeSponsor(sponsorEmail VARCHAR(50), newSponsorEmail VARCHAR(50))
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        DECLARE user INT;
+        DECLARE newSponsor INT;
+
+        SELECT getUserID(sponsorEmail) INTO user;
+        SELECT getUserID(newSponsorEmail) INTO newSponsor;
+
+        UPDATE POINT_CHANGE
+            SET SponsorID = newSponsor
+            WHERE SponsorID = user;
+
+        DELETE FROM LOGIN_ATTEMPT
+            WHERE UserID = user;
+
+        DELETE FROM SPONSOR
+            WHERE UserID = user;
+
+        DELETE FROM PASSWORD_CHANGE
+            WHERE UserID = user;
+
+        DELETE FROM USER
+            WHERE UserID = user;
+
+        RETURN 0;
+    END;;
+
+DROP FUNCTION IF EXISTS removeAdmin;
+
+CREATE FUNCTION removeAdmin (adminEmail VARCHAR(50))
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        DECLARE user INT;
+
+        SELECT getUserID(adminEmail) INTO user;
+
+        DELETE FROM LOGIN_ATTEMPT
+            WHERE UserID = user;
+
+        DELETE FROM ADMINISTRATOR
+            WHERE UserID = user;
+
+        DELETE FROM PASSWORD_CHANGE
+            WHERE UserID = user;
+
+        DELETE FROM USER
+            WHERE UserID = user;
+
+        RETURN 0;
+    END;;
 DELIMITER ;

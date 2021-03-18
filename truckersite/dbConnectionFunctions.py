@@ -655,3 +655,106 @@ def spendPoints (driverEmail, cost):
 
     except Error as err:
         print(err)
+
+def getRandomPassword():
+    #Generate a random password that is 20 characters long
+    randPassword = ''
+    for _ in range(20):
+        randPassword = randPassword + random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits)
+
+    return randPassword
+
+def getOrgNo (userEmail):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT getOrgNo(%s)"
+        cursor.execute(query, (driverEmail,))
+        result = cursor.fetchone()
+
+        for orgNo in result:
+            cursor.close()
+            conn.close()
+            return orgNo
+
+    except Error as err:
+        print(err)
+
+def createDriver(name, email, password, address, phone, orgNo):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT createDriver(%s, %s, %s, %s, %s, %s)"
+        cursor.execute(query, (name, email, password, address, phone, orgNo))
+
+        return "Driver successfully created" 
+
+    except Error as err:
+        print(err)
+
+def createSponsor(name, email, password, ccNum, ccSec, ccDate, billAddr, orgNo):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT createDriver(%s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(query, (name, email, password, ccNum, ccSec, ccDate, billAddr, orgNo))
+
+        return "Sponsor successfully created" 
+
+    except Error as err:
+        print(err)
+
+def createAdmin(name, email, password):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT createDriver(%s, %s, %s)"
+        cursor.execute(query, (name, email, password))
+
+        return "Admin successfully created" 
+
+    except Error as err:
+        print(err)
+
+def removeDriver(email):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT removeDriver(%s)"
+        cursor.execute(query, (email,))
+
+        return "Driver successfully deleted" 
+
+    except Error as err:
+        print(err)
+
+def removeSponsor (email, newSponsor):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT removeSponsor(%s, %s)"
+        cursor.execute(query, (email, newSponsor))
+
+        return "Sponsor successfully deleted" 
+
+    except Error as err:
+        print(err)
+
+def removeAdmin(email):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT removeAdmin(%s)"
+        cursor.execute(query, (email,))
+
+        return "Admin successfully deleted" 
+
+    except Error as err:
+        print(err)

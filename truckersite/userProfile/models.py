@@ -167,3 +167,72 @@ def getAdminProfilePic(request):
     response = db.setProfilePic(request.session['email'], profilePic)
 
     return views.adminProfile(request)
+
+
+
+
+def createNewDriver(request):
+    name = request.POST.get('name')
+    email = request.POST.get('email')
+    addr1 = request.POST.get('addr1')
+    addr2 = request.POST.get('addr2')
+    city = request.POST.get('city')
+    state = request.POST.get('state')
+    zip = request.POST.get('zip')
+
+    newAddr = addr1
+    if addr2 != '':
+        newAddr += ' ' + addr2
+    newAddr += ', ' + city + ', ' + state + ' ' + zip
+
+    newPhone = request.POST.get('phone')
+    newPassword = db.getRandomPassword()
+    userType = db.getUserType(request.session['email'])
+
+    if userType == 'Sponsor':
+        orgNo = db.getOrgNo(request.session['email'])
+        db.createDriver(name, email, newPassword, newAddr, newPhone, orgNo)
+        return views.sponsorProfile(request)
+
+    elif userType == 'Admin':
+        orgNo = request.POST.get('org')
+        db.createDriver(name, email, newPassword, newAddr, newPhone, orgNo)
+        return views.adminProfile(request)
+
+def createNewSponsor(request):
+    name = request.POST.get('name')
+    email = request.POST.get('email')
+    password = db.getRandomPassword()
+    ccNum = request.POST.get('ccNum')
+    ccSec = request.POST.get('ccSec')
+    ccDate = request.POST.get('ccDate')
+    addr1 = request.POST.get('addr1')
+    addr2 = request.POST.get('addr2')
+    city = request.POST.get('city')
+    state = request.POST.get('state')
+    zip = request.POST.get('state')
+
+    newAddr = addr1
+    if addr2 != '':
+        newAddr += ' ' + addr2
+    newAddr += ', ' + city + ', ' + state + ' ' + zip
+
+    userType = db.getUserType(request.session['email'])
+
+    if userType == 'Sponsor':
+        orgNo = db.getOrgNo(reqest.session['email'])
+        db.createSponsor(name, email, password, ccNum, ccSec, ccDate, newAddr, orgNo)
+        return views.sponsorProfile(request)
+
+    elif userType == 'Admin':
+        orgNo = request.POST.get('orgNo')
+        db.createSponsor(name, email, password, ccNum, ccSec, ccDate, newAddr, orgNo)
+        return views.adminProfile(request)
+
+def createNewAdmin(request):
+    name = request.POST.get('name')
+    email = request.POST.get('email')
+    password = db.getRandomPassword()
+
+    db.createNewAdmin(name, email, password)
+    return views.adminProfile(request)
