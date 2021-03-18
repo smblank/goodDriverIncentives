@@ -35,3 +35,16 @@ def removeAdmin(request):
     db.removeAdmin(email)
 
     return views.adminDash(request)
+
+def updateLogin(request):
+    user = request.POST.get('oldEmail')
+    newEmail = request.POST.get('newEmail')
+    newPassword = request.POST.get('newPass')
+
+    if newEmail != '':
+        db.updateEmail(user, newEmail)
+    
+    if newPassword != '':
+        db.updatePassword(user, newPassword)
+
+    return views.adminDash(request)
