@@ -65,9 +65,6 @@
                     <a class = "settingname" href = "#changeemail"> Change Email </a> <br>
                     <a class = "settingname" href = "#changepassword"> Change Password</a> <br>
             
-                    <p class = "sectionheader" style = "margin-top: 10%;"> Personal Information </p>
-                    <a class = "settingname" href = "#changephonenumber"> Change Phone Number </a> <br>
-            
                     <p class = "sectionheader" style = "margin-top: 10%;"> Account Settings </p>
                     <a class = "settingname" href = "#2FA"> Two-Factor Authentication </a> <br>
                     <a class = "settingname" href = "#emailnotifications"> Email Notifications </a> <br>
@@ -83,32 +80,25 @@
                 <p class = "setting" style = "top: 3%;"> Change Profile Picture </p>
                 <img id = "pfpsetting" src = "{% static 'img/Defaultpfp.png' %}"> <br>
 
-                <form method = "Post" action = "{% url 'getNewDriverProfilePic'%}">
+                <form method = "Post" action = "{% url 'getNewAdminProfilePic'%}">
                     {% csrf_token %}
                     <button id = "upload" type = "file" id="loadFileXml" value="loadXml" onclick="document.getElementById('profilePic').click();" name> Upload Image </button>
                     <input type = "file" id = "profilePic" name = "profilePic" style = "display:none;"/>
                 </form>
 
-                <form method = "Post" action = "{% url 'getNewDriverEmail'%}">
+                <form method = "Post" action = "{% url 'getNewAdminEmail'%}">
                     {% csrf_token %}
                     <p class = "setting" id = "changeemail" style = "margin-top: 1.5%;"> Change Email </p>
                     <input class = "settingtext" type = "text" id = "emailsetting" maxlength = "100" placeholder = "Email" name = "email">
                     <button class = "save" id = "saveemail"> <i class = "fa fa-save"></i> </button>
                 </form>
 
-                <form method = "Post" action = "{% url 'getNewDriverPass'%}">
+                <form method = "Post" action = "{% url 'getNewAdminPass'%}">
                     {% csrf_token %}
                     <p class = "setting" id = "changepassword" style = "margin-top: 1.5%;"> Change Password </p>
                     <input class = "settingtext" type = "password" id = "changepassword1" style = "margin-right: 100%;" maxlength = "100" placeholder = "Password" name = "password1">
                     <input class = "settingtext" type = "password" id = "changepassword2" style = "margin-top: 1%;" maxlength = "100" placeholder = "Confirm Password" name = "password2">
                     <button class = "save" id = "savepassword"> <i class = "fa fa-save"></i> </button>
-                </form>
-
-                <form method = "Post" action = "{%url 'getNewDriverPhone'%}">
-                    {% csrf_token%}
-                   <p class = "setting" id = "changephonenumber" style = "margin-top: 1.5%;"> Change Phone Number </p>
-                    <input class = "settingtext" type = "text" id = "phonesetting" maxlength = "100" placeholder = "Phone Number" name = "phone">
-                    <button class = "save" id = "savephonenumber"> <i class = "fa fa-save"></i> </button>
                 </form>
 
                 <p class = "setting" id = "2fa" style = "margin-top: 1.5%;"> Account Settings </p>

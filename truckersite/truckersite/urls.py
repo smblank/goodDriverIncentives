@@ -24,13 +24,12 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
-    #path('',forms.login), 
-    #path('login', forms.loginpg, name = 'login'),
+    path('',forms.login), 
+    path('login', forms.loginpg, name = 'login'),
     
-    #path('',views.userreggin),
+    path('',views.userreggin),
 
     #Driver profile forms
-    path('', profileViews.driverProfile),
     path('getNewDriverEmail', profileOps.getNewDriverEmail, name = "getNewDriverEmail"),
     path('getNewDriverPass', profileOps.getNewDriverPassword, name = 'getNewDriverPass'),
     path('getNewDriverPhone', profileOps.getNewDriverPhone, name = 'getNewDriverPhone'),
@@ -38,6 +37,19 @@ urlpatterns = [
     path('getDriverDefaultAddr', profileOps.getDriverDefaultAddr, name = 'getDriverDefaultAddr'),
     path('getNewDriverProfilePic', profileOps.getDriverProfilePic, name = 'getNewDriverProfilePic'),
     path('driverProfile/', profileViews.driverProfile, name = "driverProfile"),
+
+    #Sponsor profile forms
+    path('getNewSponsorProfilePic', profileOps.getSponsorProfilePic, name = 'getNewSponsorProfilePic'),
+    path('getNewSponsorEmail', profileOps.getNewSponsorEmail, name = 'getNewSponsorEmail'),
+    path('getNewDriverPass', profileOps.getNewSponsorPassword, name = 'getNewDriverPass'),
+    path('getNewDriverPhone', profileOps.getNewSponsorPhone, name = 'getNewDriverPhone'),
+    path('sponsorProfile/', profileViews.sponsorProfile, name = 'sponsorProfile'),
+
+    #Admin profile forms
+    path('getNewAdminProfilePic', profileOps.getAdminProfilePic, name = 'getNewAdminProfilePic'),
+    path('getNewAdminEmail', profileOps.getNewAdminEmail, name = 'getNewAdminEmail'),
+    path('getNewAdminPass', profileOps. getNewAdminPassword, name = 'getNewAdminPass'),
+    path('adminProfile/', profileViews.adminProfile, name = 'adminProfile'),
 
     url(r'^driver_catalog', include('Catalog.urls')),
     path('admin/', admin.site.urls),

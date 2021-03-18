@@ -100,3 +100,70 @@ def getDriverProfilePic(request):
     response = db.setProfilePic(request.session['email'], profilePic)
 
     return views.driverProfile(request)
+
+
+
+def getNewSponsorEmail(request):
+    newEmail = request.POST.get('email')
+    response = db.updateEmail(newEmail, request.session['email'])
+    return render(request, 'sponsor_profile.html')
+
+def getNewSponsorPhone(request):
+    newPhone = request.POST.get('phone')
+
+    validPhone = checkPhone(newPhone)
+
+    if validPhone == True:
+        newPhone = formatPhone(newPhone)
+        response = db.updatePhone(request.session['email'], newPhone)
+    
+    else:
+        response = "Sorry that is not a valid phone number (ex. 555-555-5555)"
+
+    return render(request, 'sponsor_profile.html')
+
+def getNewSponsorPassword(request):
+    newPass = request.POST.get('password1')
+    confirmPass = request.POST.get('password2')
+
+    if newPass != confirmPass:
+        response = "The passwords do not match."
+        return render(request, 'sponsor_profile.html')
+    
+    response = db.changePassword(request.session['email'], newPass)
+
+    return render(request, 'sponsor_profile.html')
+
+def getSponsorProfilePic(request):
+    profilePic = request.POST.get('profilePic')
+
+    response = db.setProfilePic(request.session['email'], profilePic)
+
+    return views.sponsorProfile(request)
+
+
+
+
+def getNewAdminEmail(request):
+    newEmail = request.POST.get('email')
+    response = db.updateEmail(newEmail, request.session['email'])
+    return render(request, 'admin_profile.html')
+
+def getNewAdminPassword(request):
+    newPass = request.POST.get('password1')
+    confirmPass = request.POST.get('password2')
+
+    if newPass != confirmPass:
+        response = "The passwords do not match."
+        return render(request, 'admin_profile.html')
+    
+    response = db.changePassword(request.session['email'], newPass)
+
+    return render(request, 'admin_profile.html')
+
+def getAdminProfilePic(request):
+    profilePic = request.POST.get('profilePic')
+
+    response = db.setProfilePic(request.session['email'], profilePic)
+
+    return views.adminProfile(request)

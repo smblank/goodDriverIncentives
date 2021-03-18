@@ -86,13 +86,13 @@
                 <p class = "setting" style = "top: 3%;"> Change Profile Picture </p>
                 <img id = "pfpsetting" src = "{% static 'img/Defaultpfp.png' %}"> <br>
 
-                <form method = "Post" action = "{% url 'getNewDriverProfilePic'%}">
+                <form method = "Post" action = "{% url 'getNewSponsorProfilePic'%}">
                     {% csrf_token %}
                     <button id = "upload" type = "file" id="loadFileXml" value="loadXml" onclick="document.getElementById('profilePic').click();" name> Upload Image </button>
                     <input type = "file" id = "profilePic" name = "profilePic" style = "display:none;"/>
                 </form>
 
-                <form method = "Post" action = "{% url 'getNewDriverEmail'%}">
+                <form method = "Post" action = "{% url 'getNewSponsorEmail'%}">
                     {% csrf_token %}
                     <p class = "setting" id = "changeemail" style = "margin-top: 1.5%;"> Change Email </p>
                     <input class = "settingtext" type = "text" id = "emailsetting" maxlength = "100" placeholder = "Email" name = "email">
