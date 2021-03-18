@@ -370,4 +370,52 @@ READS SQL DATA
         RETURN productPrice;
     END;;
 
+DROP FUNCTION IF EXISTS changePointTotal;
+
+CREATE FUNCTION changePointTotal (driverEmail VARCHAR(50), pointChange INT)
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        DECLARE newTot INT;
+        DECLARE driver INT;
+
+        SELECT getUserID(driverEmail) INTO driver;
+
+        UPDATE DRIVER
+            SET Points = Points + pointChange
+            WHERE UserID = driver;
+
+        SELECT Points INTO newTot
+        FROM DRIVER
+        WHERE UserID = driver;
+
+        RETURN newTot;
+    END;;
+
+DROP FUNCTION IF EXISTS manualPointChange;
+
+CREATE FUNCTION manualPointChange (driverEmail VARCHAR(50), sponsorEmail VARCHAR(50), reason VARCHAR(100), pointChange INT, changeDate DATE)
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        DECLARE newTot INT;
+        DECLARE driver INT;
+        DECLARE sponsor INT;
+        DECLARE reasonID INT;
+
+        SELECT getUserID(driverEmail) INTO driver;
+        SELECT getUserID(sponsorEmail) INTO sponsor;
+
+        SELECT ReasonID INTO reasonID
+        FROM POINT_CHANGE_REASON
+        WHERE ReasonDescription = reason;
+
+        SELECT changePointTotal(driverEmail, pointChange) INTO newTot;
+
+        INSERT INTO POINT_CHANGE (ChangeDate, ReasonID, NumPoints, TotalPoints, DriverID, SponsorID)
+        VALUES (changeDate, reasonID, pointChange, newTot, driver, sponsor);
+
+        RETURN newTot;
+    END;;
+
 DELIMITER ;

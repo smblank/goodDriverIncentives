@@ -3,9 +3,6 @@ from django.shortcuts import render
 import dbConnectionFunctions as db
 from userProfile import views
 
-email = 'johndoe@email.com'
-oldEmail = email
-
 def checkPhone(phoneNo):
     digits = ''
 
@@ -45,7 +42,7 @@ def formatPhone(phoneNo):
 
 def getNewDriverEmail(request):
     newEmail = request.POST.get('email')
-    response = db.updateEmail(newEmail, oldEmail)
+    response = db.updateEmail(newEmail, request.session['email'])
     return render(request, 'driver_profile.html')
 
 def getNewDriverPhone(request):
@@ -55,7 +52,7 @@ def getNewDriverPhone(request):
 
     if validPhone == True:
         newPhone = formatPhone(newPhone)
-        response = db.updatePhone(email, newPhone)
+        response = db.updatePhone(request.session['email'], newPhone)
     
     else:
         response = "Sorry that is not a valid phone number (ex. 555-555-5555)"
@@ -70,7 +67,7 @@ def getNewDriverPassword(request):
         response = "The passwords do not match."
         return render(request, 'driver_profile.html')
     
-    response = db.changePassword(email, newPass)
+    response = db.changePassword(request.session['email'], newPass)
 
     return render(request, 'driver_profile.html')
 
@@ -86,20 +83,20 @@ def getNewDriverAddress(request):
         newAddr += ' ' + addr2
     newAddr += ', ' + city + ', ' + state + ' ' + zip
 
-    response = db.addAddress(email, newAddr)
+    response = db.addAddress(request.session['email'], newAddr)
 
     return views.driverProfile(request)
 
 def getDriverDefaultAddr(request):
     defaultAddr = request.POST.get('default')
 
-    response = db.setDefaultAddress(email, defaultAddr)
+    response = db.setDefaultAddress(request.session['email'], defaultAddr)
 
     return views.driverProfile(request)
 
 def getDriverProfilePic(request):
     profilePic = request.POST.get('profilePic')
 
-    response = db.setProfilePic(email, profilePic)
+    response = db.setProfilePic(request.session['email'], profilePic)
 
     return views.driverProfile(request)

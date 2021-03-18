@@ -1,3 +1,5 @@
+ALTER TABLE tablename AUTO_INCREMENT = 1;
+
 CREATE TABLE USER
     (UserID             INT             NOT NULL    AUTO_INCREMENT,
     Name                VARCHAR(100)    NOT NULL,
@@ -53,12 +55,12 @@ CREATE TABLE DRIVER
     FOREIGN KEY (OrgID) REFERENCES ORGANIZATION (OrgID));
 
 CREATE TABLE DRIVER_ADDRESSES
-    (AddressID  INT             NOT NULL    AUTO_INCREMENT,
-    UserID      INT             NOT NULL,
-    Address     VARCHAR(100)    NOT NULL,
+    (AddressID      INT             NOT NULL    AUTO_INCREMENT,
+    DriverID        INT             NOT NULL,
+    Address         VARCHAR(100)    NOT NULL,
     DefaultAddr     BOOL        NOT NULL,
     PRIMARY KEY (AddressID),
-    FOREIGN KEY (UserID) REFERENCES USER (UserID));
+    FOREIGN KEY (DriverID) REFERENCES DRIVER (UserID));
 
 CREATE TABLE LOGIN_ATTEMPT
     (AttemptNo      INT     NOT NULL    AUTO_INCREMENT,
@@ -70,7 +72,7 @@ CREATE TABLE LOGIN_ATTEMPT
 
 CREATE TABLE POINT_CHANGE_REASON
     (ReasonID           INT             NOT NULL    AUTO_INCREMENT,
-    ReasonDescription   VARCHAR(50)     NOT NULL,
+    ReasonDescription   VARCHAR(100)     NOT NULL,
     OrgID               INT             NOT NULL,
     PRIMARY KEY (ReasonID),
     FOREIGN KEY (OrgID) REFERENCES ORGANIZATION (OrgID));
@@ -81,11 +83,11 @@ CREATE TABLE POINT_CHANGE
     ReasonID        INT     NOT NULL,
     NumPoints       INT     NOT NULL,
     TotalPoints     INT     NOT NULL,
-    UserID          INT     NOT NULL,
+    DriverID        INT     NOT NULL,
     SponsorID       INT     NOT NULL,
     PRIMARY KEY (ChangeID),
-    FOREIGN KEY (UserID) REFERENCES USER (UserID),
-    FOREIGN KEY (SponsorID) REFERENCES USER (USERID));
+    FOREIGN KEY (DriverID) REFERENCES DRIVER (UserID),
+    FOREIGN KEY (SponsorID) REFERENCES SPONSOR (USERID));
 
 CREATE TABLE PRODUCT
     (ProductID              INT                 NOT NULL    AUTO_INCREMENT,
@@ -115,17 +117,17 @@ CREATE TABLE IS_IN_ORDER
     FOREIGN KEY (ProductID) REFERENCES PRODUCT (ProductID));
 
 CREATE TABLE BELONGS_TO
-    (UserID     INT     NOT NULL,
+    (DriverID     INT     NOT NULL,
     OrderID     INT     NOT NULL,
-    PRIMARY KEY (UserID, OrderID),
-    FOREIGN KEY (UserID) REFERENCES USER (UserID),
+    PRIMARY KEY (DriverID, OrderID),
+    FOREIGN KEY (DriverID) REFERENCES DRIVER (UserID),
     FOREIGN KEY (OrderID) REFERENCES DRIVER_ORDER (OrderID));
 
 CREATE TABLE WISHLIST
     (ListID       INT     NOT NULL    AUTO_INCREMENT,
-    UserID        INT     NOT NULL,
+    DriverID        INT     NOT NULL,
     PRIMARY KEY (ListID),
-    FOREIGN KEY (UserID) REFERENCES USER (UserID));
+    FOREIGN KEY (DriverID) REFERENCES DRIVER (UserID));
 
 CREATE TABLE IS_IN_WISHLIST
     (ProductID      INT     NOT NULL,

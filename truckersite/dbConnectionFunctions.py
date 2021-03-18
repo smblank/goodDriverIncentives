@@ -619,3 +619,39 @@ def getProductPrice (productID):
 
     except Error as err:
         print(err)
+
+def adjustPoints (driverEmail, sponsorEmail, reason, amt):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT manualPointChange(%s, %s, %s, %s, %s)"
+
+        changeDate = datetime.date.today()
+        cursor.execute(query, (driverEmail, sponsorEmail, reason, amt, changeDate))
+        result = cursor.fetchone()
+
+        for newTotal in result:
+            cursor.close()
+            conn.close()
+            return newTotal
+
+    except Error as err:
+        print(err)
+
+def spendPoints (driverEmail, cost):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT changePointTotal(%s, %s)"
+        cursor.execute(query, (driverEmail, cost))
+        result = cursor.fetchone()
+
+        for newTotal in result:
+            cursor.close()
+            conn.close()
+            return newTotal
+
+    except Error as err:
+        print(err)

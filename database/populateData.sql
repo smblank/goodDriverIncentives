@@ -1,11 +1,7 @@
-INSERT INTO USER (UserID, Name, Email, HashedPassword) VALUES (1, 'John Doe', 'johndoe@email.com', SHA('password'));
+SELECT createOrg ("Test Organization", 0.10);
 
-INSERT INTO ORG_CATALOG (CatalogID) VALUES (1);
+SELECT createDriver ("Test Driver", "driver@email.com", "driverPass", "42 Road Way, City, ST, 12345", "555-555-5555", 1);
 
-INSERT INTO ORGANIZATION (OrgID, Name, Pointconversion, CatalogID) VALUES (1, "Organization", 0.10, 1);
+SELECT createSponsor ("Test Sponsor", "sponsor@email.com", "sponsorPass", 5555555555555555, 123, 08/22, "1 Road Rd, City, ST, 12345", 1);
 
-SELECT createDriver("Jane Doe", "jane@example.com", "password", "temp address", "123-456-7890", 1);
-
-INSERT INTO PASSWORD_CHANGE (ChangeNo, ChangeDate, ChangeType, UserID) VALUES (2, 2/13/2021, 'Reset', 1);
-
-INSERT INTO DRIVER_ADDRESSES (UserID, Address, DefaultAddr) VALUES (1, "42 Road LN, City, ST, 1234", False);
+SELECT createAdmin ("Test Admin", "admin@email.com", "adminPass");

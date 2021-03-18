@@ -23,11 +23,11 @@ MODIFIES SQL DATA
     BEGIN
         DECLARE newID INT;
 
-        INSERT INTO WISHLIST (UserID) VALUES (user);
+        INSERT INTO WISHLIST (DriverID) VALUES (user);
 
         SELECT ListID INTO newID
         FROM WISHLIST
-        WHERE userID = user;
+        WHERE DriverID = user;
 
         RETURN newID;
     END;;
@@ -40,20 +40,17 @@ MODIFIES SQL DATA
     BEGIN
         DECLARE validEmail BOOLEAN;
         DECLARE newID INT;
-        DECLARE wishID INT;
 
-        SELECT emailExists (userEmail) INTO validEmail FROM USER;
+        SELECT emailExists (userEmail) INTO validEmail;
 
         IF validEmail = TRUE THEN
             SET newID = -1;
         ELSE
             INSERT INTO USER (Name, Email, HashedPassword) VALUES (userName, userEmail, SHA(userPassword));
 
-            SELECT userID INTO newID
+            SELECT UserID INTO newID
             FROM USER
             WHERE Email = userEmail;
-
-            SELECT createWishlist(newID) INTO wishID;
         END IF;
 
         RETURN newID;
@@ -110,17 +107,21 @@ MODIFIES SQL DATA
 
 DROP FUNCTION IF EXISTS createDriver;
 
-/*Create driver address*/
 CREATE FUNCTION createDriver (userName VARCHAR(100), userEmail VARCHAR(50), userPassword VARCHAR(20), addr VARCHAR(100), phone CHAR(12), organization INT)
 RETURNS INT
 MODIFIES SQL DATA
     BEGIN
         DECLARE newID INT;
+        DECLARE wishID INT;
 
         SELECT createUser(userName, userEmail, userPassword) INTO newID;
 
         IF newID > -1 THEN
-            INSERT INTO DRIVER (UserID, PhoneNo, Points, OrgID) VALUES (newID, phone, 0, organization);
+            INSERT INTO DRIVER (UserID, PhoneNo, Points, OrgID)
+                VALUES (newID, phone, 0, organization);
+            INSERT INTO DRIVER_ADDRESSES (DriverID, Address, DefaultAddr)
+                VALUES (newID, Address, False);
+            SELECT createWishlist(newID) INTO wishID;
         END IF;
 
         RETURN newID;
@@ -294,7 +295,7 @@ MODIFIES SQL DATA
 
         SELECT getUserID(userEmail) INTO user;
         
-        INSERT INTO DRIVER_ADDRESSES (UserID, Address, DefaultAddr) VALUES (user, newAddress, False);
+        INSERT INTO DRIVER_ADDRESSES (DriverID, Address, DefaultAddr) VALUES (user, newAddress, False);
 
         SELECT AddressID INTO newAddressId
         FROM DRIVER_ADDRESSES
@@ -316,7 +317,7 @@ MODIFIES SQL DATA
 
         SELECT AddressId INTO addressNo
         FROM DRIVER_ADDRESSES
-        WHERE Address = oldAddress AND UserID = user;
+        WHERE Address = oldAddress AND DriverID = user;
 
         UPDATE DRIVER_ADDRESSES
             SET
@@ -354,7 +355,7 @@ READS SQL DATA
 
         SELECT Address INTO address
         FROM DRIVER_ADDRESSES
-        WHERE UserID = user;
+        WHERE DriverID = user;
 
         RETURN address;
     END;;
