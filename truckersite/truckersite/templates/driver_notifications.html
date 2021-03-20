@@ -4,6 +4,7 @@
 <meta charset = "UTF-8">
 
 <head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
@@ -14,17 +15,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
-
-    <title> Product </title>
+    <title> My Notifications </title>
 
     <!-- Links the .css file -->
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/product.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/notifications.css' %}">
+
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
 
 </head>
 
 <body>
+    
     <div class = "container-fluid">
 
         <!-- Credit for navbar: https://getbootstrap.com/docs/4.1/components/navbar/-->
@@ -46,38 +49,37 @@
                     <a class = "nav-link" href = "driver_dash.html" id = "title"> Good Driver Incentive Program </a>
                 </li>
 
-                <a class = "navbar-brand" href = "driver_profile.html">
+                <a class = "navbar-brand" href = "{% url 'driverProfile'%}">
                     <img src = "Defaultpfp.png" width = "30" height = "30">
                 </a>
             </ul>
         </nav>
 
-        <div class = "row">
-            <div class = "col-md-3">
-                <div id = "sidebar">
-                    <a id = "back" href = "driver_catalog.html"> <i class = "fa fa-arrow-left"></i> Catalog </a>
-                    <p id = "pointstitle"> My Points: </p>
-                    <p id = "points"> 0 </p>
-                </div>
-            </div>
-
-            <div class = "col-md-9 text-right" style = "height: 900px;">
-                <!-- Source for Search Bar: https://getbootstrap.com/docs/4.1/components/input-group/ -->
-                <div class = "input-group" style = "width: 100%; margin: 0;">
-                    <input type = "text" class = "form-control" placeholder = "Search" aria-label = "search" aria-describedby = "button-addon2">
-                    <div class = "input-group-append">
-                        <button class = "btn btn-outline-secondary" type = "button" id = "search"> <i class = "fa fa-search"></i> </button>
-                    </div>
-                </div>
-                <a id = "cart" href = "driver_cart.html"> <i class = "fa fa-shopping-cart"></i> </a>
-                
-                <!-- Put Items Here -->
-
-                <button id = "addcart"> Add to Cart </button>
-                <button id = "addwishlist"> Add to Wishlist </button>
+        <div class = "row text-center">
+            <div class = "col-md-12">
+                <h2 id = "pagename" style = "margin-bottom: 5%;"> Notifications </h2>
             </div>
         </div>
+
+        <div class = "row">
+            <div class = "col-md-3"></div>
+
+            <div class = "col-md-6">
+                <!-- Template for a notification, if there is a better way then go for it
+                <div class = "notification">
+                    <button class = "deletenotification"> <i class = "fa fa-window-close"></i> </button>
+                    <h3> Notification Subject </h2>
+                    <h5> Notification Details </h4>    
+                </div> -->
+                
+            </div>
+
+
+            <div class = "col-md-3"></div>
+        </div>
+
     </div>
+
 
 </body>
 
