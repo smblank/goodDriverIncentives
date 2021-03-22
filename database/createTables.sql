@@ -5,7 +5,7 @@ CREATE TABLE USER
     Name                VARCHAR(100)    NOT NULL,
     Email               VARCHAR(50)     NOT NULL,
     HashedPassword      BINARY(64)      NOT NULL,
-    ProfilePic          VARBINARY(256),
+    ProfilePicPath      VARCHAR(100)    NOT NULL,
     PRIMARY KEY (UserID));
 
 CREATE TABLE PASSWORD_CHANGE
@@ -28,7 +28,7 @@ CREATE TABLE ORG_CATALOG
 CREATE TABLE ORGANIZATION
     (OrgID              INT                 NOT NULL    AUTO_INCREMENT,
     Name                VARCHAR(50)         NOT NULL,
-    Logo                VARBINARY(256),
+    LogoPath            VARCHAR(100),
     PointConversion     FLOAT               NOT NULL,
     CatalogID           INT                 NOT NULL,
     PRIMARY KEY (OrgID),

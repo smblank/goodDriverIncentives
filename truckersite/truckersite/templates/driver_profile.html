@@ -50,7 +50,7 @@
                         <a class = "dropdown-item" href = "driver_catalog.html"> Catalog </a>
                         <a class = "dropdown-item" href = "wishlist.html"> Wishlist </a>
                         <a class = "dropdown-item" href = "#"> Order History </a>
-                        <a class = "dropdown-item" href = "driver_notifications.html"> Notifications </a>
+                        <a class = "dropdown-item" href = "#"> Notifications </a>
                         <a class = "dropdown-item" href = "driver_submit_issue.html"> Submit an Issue </a>
                         <a class = "dropdown-item" href = "index.html"> Logout </a>
                     </div>
@@ -61,7 +61,7 @@
                 </li>
 
                 <a class = "navbar-brand" href = "driver_profile.html">
-                    <img src = "{% static 'img/Defaultpfp.png' %}" width = "30" height = "30">
+                    <img src = "{{profilePic}}" width = "30" height = "30">
                 </a>
             </ul>
         </nav>
@@ -97,12 +97,12 @@
             <div class = "col-md-9 h-100">
 
                 <p class = "setting" style = "top: 3%;"> Change Profile Picture </p>
-                <img id = "pfpsetting" src = "{% static 'img/Defaultpfp.png' %}"> <br>
+                <img id = "pfpsetting" src = "{{profilePic}}"> <br>
 
-                <form method = "Post" action = "{% url 'getNewDriverProfilePic'%}">
+                <form method = "POST" enctype="multipart/form-data" action = "{% url 'getNewDriverProfilePic'%}">
                     {% csrf_token %}
-                    <button id = "upload" type = "file" id="loadFileXml" value="loadXml" onclick="document.getElementById('profilePic').click();" name> Upload Image </button>
-                    <input type = "file" id = "profilePic" name = "profilePic" style = "display:none;"/>
+                    <input type = "file" id = "profilePic" name = "profilePic"/>
+                    <button id = "submit" type = "file"> Upload Image </button>
                 </form>
 
                 <form method = "Post" action = "{% url 'getNewDriverEmail'%}">

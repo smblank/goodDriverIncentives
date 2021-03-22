@@ -36,7 +36,7 @@ urlpatterns = [
     path('getNewDriverAddress', profileOps.getNewDriverAddress, name = 'getNewDriverAddress'),
     path('getDriverDefaultAddr', profileOps.getDriverDefaultAddr, name = 'getDriverDefaultAddr'),
     path('getNewDriverProfilePic', profileOps.getDriverProfilePic, name = 'getNewDriverProfilePic'),
-    path('driverProfile/', profileViews.driverProfile, name = "driverProfile"),
+    path('driverProfile', profileViews.driverProfile, name = "driverProfile"),
 
     #Sponsor profile forms
     path('getNewSponsorProfilePic', profileOps.getSponsorProfilePic, name = 'getNewSponsorProfilePic'),

@@ -35,9 +35,9 @@
                 <li class = "nav-item dropdown">
                     <a class = "nav-link dropdown-toggle" id = "menubutton" role = "button" data-toggle = "dropdown" aria-haspopup = "true" aria-expanded = "false"> Menu </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class = "dropdown-item" href = "sponsor_organization.html"> Organization Page </a>
+                        <a class = "dropdown-item" href = "#"> Organization Page </a>
                         <a class = "dropdown-item" href = "#"> Catalog </a>
-                        <a class = "dropdown-item" href = "sponsor_notifications.html"> Notifications </a>
+                        <a class = "dropdown-item" href = "#"> Notifications </a>
                         <a class = "dropdown-item" href = "sponsor_generate_report.html"> Generate Report </a>
                         <a class = "dropdown-item" href = "sponsor_submit_issue.html"> Submit an Issue </a>
                         <a class = "dropdown-item" href = "sponsor_view_issues.html"> Issues </a>
@@ -50,7 +50,7 @@
                 </li>
 
                 <a class = "navbar-brand" href = "sponsor_profile.html">
-                    <img src = "Defaultpfp.png" width = "30" height = "30">
+                    <img src = "{{profilePic}}" width = "30" height = "30">
                 </a>
             </ul>
         </nav>
@@ -84,12 +84,12 @@
             <div class = "col-md-9 h-100">
 
                 <p class = "setting" style = "top: 3%;"> Change Profile Picture </p>
-                <img id = "pfpsetting" src = "{% static 'img/Defaultpfp.png' %}"> <br>
+                <img id = "pfpsetting" src = "{{profilePic}}"> <br>
 
-                <form method = "Post" action = "{% url 'getNewSponsorProfilePic'%}">
+                <form method = "POST" enctype="multipart/form-data" action = "{% url 'getNewSponsorProfilePic'%}">
                     {% csrf_token %}
-                    <button id = "upload" type = "file" id="loadFileXml" value="loadXml" onclick="document.getElementById('profilePic').click();" name> Upload Image </button>
-                    <input type = "file" id = "profilePic" name = "profilePic" style = "display:none;"/>
+                    <input type = "file" id = "profilePic" name = "profilePic"/>
+                    <button id = "submit" type = "file"> Upload Image </button>
                 </form>
 
                 <form method = "Post" action = "{% url 'getNewSponsorEmail'%}">

@@ -34,8 +34,8 @@
                 <li class = "nav-item dropdown">
                     <a class = "nav-link dropdown-toggle" id = "menubutton" role = "button" data-toggle = "dropdown" aria-haspopup = "true" aria-expanded = "false"> Menu </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class = "dropdown-item" href = "admin_organization.html"> Organizations </a>
-                        <a class = "dropdown-item" href = "admin_notifications.html"> Notifications </a>
+                        <a class = "dropdown-item" href = "driver_catalog.html"> Organizations </a>
+                        <a class = "dropdown-item" href = "#"> Notifications </a>
                         <a class = "dropdown-item" href = "admin_generate_report.html"> Generate Reports </a>
                         <a class = "dropdown-item" href = "admin_view_issues.html"> Issues </a>
                         <a class = "dropdown-item" href = "index.html"> Logout </a>
@@ -47,7 +47,7 @@
                 </li>
 
                 <a class = "navbar-brand" href = "admin_profile.html">
-                    <img src = "Defaultpfp.png" width = "30" height = "30">
+                    <img src = "{{profilePic}}" width = "30" height = "30">
                 </a>
             </ul>
         </nav>
@@ -78,12 +78,12 @@
             <div class = "col-md-9 h-100">
 
                 <p class = "setting" style = "top: 3%;"> Change Profile Picture </p>
-                <img id = "pfpsetting" src = "{% static 'img/Defaultpfp.png' %}"> <br>
+                <img id = "pfpsetting" src = "{{profilePic}}"> <br>
 
-                <form method = "Post" action = "{% url 'getNewAdminProfilePic'%}">
+                <form method = "POST" enctype="multipart/form-data" action = "{% url 'getNewAdminProfilePic'%}">
                     {% csrf_token %}
-                    <button id = "upload" type = "file" id="loadFileXml" value="loadXml" onclick="document.getElementById('profilePic').click();" name> Upload Image </button>
-                    <input type = "file" id = "profilePic" name = "profilePic" style = "display:none;"/>
+                    <input type = "file" id = "profilePic" name = "profilePic"/>
+                    <button id = "submit" type = "file"> Upload Image </button>
                 </form>
 
                 <form method = "Post" action = "{% url 'getNewAdminEmail'%}">

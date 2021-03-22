@@ -2,6 +2,7 @@ from django.db import models
 from django.shortcuts import render
 import dbConnectionFunctions as db
 from userProfile import views
+import os
 
 def checkPhone(phoneNo):
     digits = ''
@@ -94,10 +95,18 @@ def getDriverDefaultAddr(request):
 
     return views.driverProfile(request)
 
+#Modified code from xyres's response at https://stackoverflow.com/questions/48036214/django-upload-image-in-specific-folder-without-filefield-or-imagefield-and-media
 def getDriverProfilePic(request):
-    profilePic = request.POST.get('profilePic')
+    profilePic = request.FILES['profilePic']
+    extension = os.path.splitext(profilePic.name)[1]
+    userID = db.getUserID(request.session['email'])
 
-    response = db.setProfilePic(request.session['email'], profilePic)
+    imgPath = 'static/img/' + 'user' + str(userID) + extension
+    response = db.setProfilePic(request.session['email'], 'user' + str(userID) + extension)
+
+    with open(imgPath, 'wb+') as f:
+        for chunk in profilePic.chunks():
+            f.write(chunk)
 
     return views.driverProfile(request)
 
@@ -135,9 +144,16 @@ def getNewSponsorPassword(request):
     return render(request, 'sponsor_profile.html')
 
 def getSponsorProfilePic(request):
-    profilePic = request.POST.get('profilePic')
+    profilePic = request.FILES['profilePic']
+    extension = os.path.splitext(profilePic.name)[1]
+    userID = db.getUserID(request.session['email'])
 
-    response = db.setProfilePic(request.session['email'], profilePic)
+    imgPath = 'static/img/' + 'user' + str(userID) + extension
+    response = db.setProfilePic(request.session['email'], 'user' + str(userID) + extension)
+
+    with open(imgPath, 'wb+') as f:
+        for chunk in profilePic.chunks():
+            f.write(chunk)
 
     return views.sponsorProfile(request)
 
@@ -162,9 +178,16 @@ def getNewAdminPassword(request):
     return render(request, 'admin_profile.html')
 
 def getAdminProfilePic(request):
-    profilePic = request.POST.get('profilePic')
+    profilePic = request.FILES['profilePic']
+    extension = os.path.splitext(profilePic.name)[1]
+    userID = db.getUserID(request.session['email'])
 
-    response = db.setProfilePic(request.session['email'], profilePic)
+    imgPath = 'static/img/' + 'user' + str(userID) + extension
+    response = db.setProfilePic(request.session['email'], 'user' + str(userID) + extension)
+
+    with open(imgPath, 'wb+') as f:
+        for chunk in profilePic.chunks():
+            f.write(chunk)
 
     return views.adminProfile(request)
 

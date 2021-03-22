@@ -46,7 +46,7 @@ MODIFIES SQL DATA
         IF validEmail = TRUE THEN
             SET newID = -1;
         ELSE
-            INSERT INTO USER (Name, Email, HashedPassword) VALUES (userName, userEmail, SHA(userPassword));
+            INSERT INTO USER (Name, Email, HashedPassword, ProfilePicPath) VALUES (userName, userEmail, SHA(userPassword), 'Defaultpfp.png');
 
             SELECT UserID INTO newID
             FROM USER
@@ -444,7 +444,7 @@ RETURNS INT
 MODIFIES SQL DATA
     BEGIN
         UPDATE USER
-            SET ProfilePic = newPic
+            SET ProfilePicPath = newPic
         WHERE Email = userEmail;
 
         RETURN 0;
@@ -576,5 +576,26 @@ MODIFIES SQL DATA
             WHERE UserID = user;
 
         RETURN 0;
+    END;;
+
+DROP FUNCTION IF EXISTS getProfilePic;
+
+/*Why is VARCHAR not able to be read into varaible?*/
+CREATE FUNCTION getProfilePic(userEmail VARCHAR(50))
+RETURNS VARCHAR(100)
+READS SQL DATA
+    BEGIN
+        DECLARE imgPath VARCHAR(100);
+        DECLARE user INT;
+
+        SELECT getUserID(userEmail) INTO user;
+
+        SELECT ProfilePicPath INTO imgPath
+        FROM USER
+        WHERE UserID = user;
+
+        RETURN (SELECT ProfilePicPath
+                FROM USER
+                WHERE UserID = user);
     END;;
 DELIMITER ;

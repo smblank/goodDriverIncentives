@@ -244,7 +244,7 @@ def getUserID(email):
         conn = getDB()
         cursor = getCursor(conn)
 
-        query = "SELECT getUserID(email)"
+        query = "SELECT getUserID(%s)"
         cursor.execute(query, (email,))
         result = cursor.fetchone()
 
@@ -755,6 +755,40 @@ def removeAdmin(email):
         cursor.execute(query, (email,))
 
         return "Admin successfully deleted" 
+
+    except Error as err:
+        print(err)
+
+def getProfilePic(email):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT getProfilePic(%s)"
+        cursor.execute(query, (email,))
+        result = cursor.fetchone()
+
+        for profilePic in result:
+            cursor.close()
+            conn.close()
+            return profilePic
+
+    except Error as err:
+        print(err)
+
+def getUserName(email):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT getUserName(%s)"
+        cursor.execute(query, (email,))
+        result = cursor.fetchone()
+
+        for name in result:
+            cursor.close()
+            conn.close()
+            return name
 
     except Error as err:
         print(err)
