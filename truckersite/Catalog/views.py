@@ -6,6 +6,7 @@ from django.template.defaultfilters import random, slugify
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.utils import timezone
+from django.core.mail import send_mail
 
 APP_ID = 'ApurvPat-FindingS-PRD-ddc78fcfb-06024fa2'
 
@@ -22,7 +23,6 @@ def addProducts(request):
         price_tmp = float(item.currentprice.string)
         image_tmp = item.viewitemurl.string.lower()
         #cat = item.categoryname.string.lower()
-
         Product.objects.create(name = name_tmp, price = price_tmp, image = image_tmp)
 
 def product_list(request):
@@ -30,6 +30,10 @@ def product_list(request):
         'items': Product.objects.all()
     }
     return render(request, "driver_catalog.html", context)
+
+def createCatalog(request):
+    #call add products here to create catalog
+    pass
 
 def add_to_cart(request, slug):
     item = get_object_or_404(Product, slug=slug)
@@ -86,4 +90,54 @@ def remove_from_cart(request, slug):
         return redirect("Catalog:driver_cart", slug=slug)
 
 def checkoutPage(request):
-    pass
+    firstName = request.GET.get('firstName')
+    lastName = request.GET.get('lastName')
+    email = request.GET.get('email')
+    address = request.GET.get('address')
+    address2 = request.GET.get('address2')
+    country = request.GET.get('country')
+    state = request.GET.get('state')
+    zipCode = request.GET.get('zipCode')
+    sum = 0
+    itemStr ='Thank you for your purchase, ' + firstName + '\n\n'
+    itemStr = itemStr + firstName + ' ' + lastName + '\n'
+    itemStr = itemStr + address + '\n'
+    if address2 != '':
+        itemStr = itemStr + address2 + '\n'
+    itemStr = itemStr + state + ', ' + country + '\n'
+    itemStr = itemStr + zipCode + '\n' + '\n'
+    items = Order.objects.filter(user=request.user, ordered=False)
+    for item in items[0].items.all():
+        sum += item.item.price*item.quantity
+        itemStr += item.item.title + '\t'
+        itemStr += str(item.item.price)
+        itemStr += '\n'
+    
+    itemStr = itemStr + "\nTotal Cost: " + str(sum)
+
+    order = Order.objects.filter(user=request.user, ordered=False)[0]
+    order.ordered = True
+    order.save()
+    for item in order.items.all():
+        print(item.item.title)
+        item.ordered = True
+        item.save()
+    return redirect("catalog:catalog")
+
+def cancelOrder(request, pk):
+    sum = 0
+    order = Order.objects.filter(user=request.user, pk=pk, ordered=True)[0]
+    itemStr ='Hi, ' + request.user.username + '\n\n' + 'You cancelled your order #' + str(pk) + '.\nPlease find the details of your refund below.\n\n'
+    for item in order.items.all():
+        itemStr+= item.item.title + '\t' + str(item.quantity) + '\n'
+        sum += item.item.price*item.quantity
+
+
+    itemStr += '\nTotal Refund: ' + str(sum)
+
+    subj = 'Order #' + str(pk) + ' Cancellation'
+
+    order.delete()
+    message = 'Order ' + str(pk + ' successfully cancelled')
+    messages.info(request, message)
+    return redirect("catalog:pastOrders")

@@ -7,13 +7,15 @@ from django.conf import settings
 #class categories(models.Model):
  #   word = models.CharField(max_length=50, null=True)
 #
-    #  def __str__(self):
+    #   def __str__(self):
     #       return self.word
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     image = models.TextField(null=True)
+    #slug = models.SlugField()
+    #description = models.TextField()
     #cat = models.ForeignKey(categories, on_delete=models.CASCADE, default='')
 
     def __str__(self):
