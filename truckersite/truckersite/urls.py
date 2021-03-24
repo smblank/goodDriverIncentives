@@ -27,7 +27,7 @@ urlpatterns = [
     path('',forms.login), 
     path('login', forms.loginpg, name = 'login'),
     
-    path('',views.userreggin),
+    path('reg',views.userreggin),
 
     #Driver profile forms
     path('getNewDriverEmail', profileOps.getNewDriverEmail, name = "getNewDriverEmail"),
