@@ -29,7 +29,9 @@ initial setup commands:
 
 add public ec2 address to allowed hosts in settings.py
 
-python manage.py runserver 0:8000
+run server:
+
+	python manage.py runserver 0:8000
 
 edit rds inbound rule to include port 3306 and ec2 ipaddress
 
@@ -87,3 +89,5 @@ run commands:
 	chmod 664 S21-4910-Project/truckersite/db.sqlite3
 	sudo chown :www-data S21-4910-Project/truckersite/db.sqlite3
 	sudo chown :www-data S21-4910-Project/truckersite
+
+**Sucessful setup of Django!**
