@@ -27,7 +27,7 @@ def loginpg(request):
             
             return moveout(request)
         else:
-            messages.success(request, 'Incorrect login')
+            messages.success(request, 'Incorrect Email or Password')
             return render(request, 'index.html')
 
 def logoutpg(request):
