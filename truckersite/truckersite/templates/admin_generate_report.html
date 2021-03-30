@@ -36,7 +36,7 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class = "dropdown-item" href = "admin_organization.html"> Organizations </a>
                         <a class = "dropdown-item" href = "admin_notifications.html"> Notifications </a>
-                        <a class = "dropdown-item" href = "admin_generate_report.html"> Generate Reports </a>
+                        <a class = "dropdown-item" href = "{% url 'adminReportGeneration'%}"> Generate Reports </a>
                         <a class = "dropdown-item" href = "admin_view_issues.html"> Issues </a>
                         <a class = "dropdown-item" href = "index.html"> Logout </a>
                     </div>
@@ -67,10 +67,10 @@
                       Choose Report to Generate
                     </button>
                     <div class = "dropdown-menu">
-                        <a class = "dropdown-item" href = "sales_by_sponsor.html">Sales By Sponsor</a>
-                        <a class = "dropdown-item" href = "sales_by_driver.html">Sales By Driver</a>
-                        <a class = "dropdown-item" href = "invoice.html">Invoice</a>
-                        <a class = "dropdown-item" href = "audit_log.html">Audit Log</a>
+                        <a class = "dropdown-item" href = "{% url 'sponsorSales'%}">Sales By Sponsor</a>
+                        <a class = "dropdown-item" href = "{% url 'driverSales'%}">Sales By Driver</a>
+                        <a class = "dropdown-item" href = "{% url 'invoice'%}">Invoice</a>
+                        <a class = "dropdown-item" href = "{% url 'auditLog'%}">Audit Log</a>
                     </div>
                 </div>
             </div>

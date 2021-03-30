@@ -71,6 +71,21 @@ READS SQL DATA
         RETURN id;
     END;;
 
+DROP FUNCTION IF EXISTS getUserEmail;
+
+CREATE FUNCTION getUserEmail (id INT)
+RETURNS VARCHAR(50)
+READS SQL DATA
+    BEGIN
+        DECLARE email VARCHAR(50);
+
+        SELECT Email INTO email
+        FROM USER
+        WHERE UserID = id;
+
+        RETURN email;
+    END;;
+
 DROP FUNCTION IF EXISTS createAdmin;
 
 CREATE FUNCTION createAdmin (userName VARCHAR(100), userEmail VARCHAR(50), userPassword VARCHAR(20))
@@ -146,7 +161,7 @@ MODIFIES SQL DATA
 
 DROP FUNCTION IF EXISTS acceptApplicant;
 
-CREATE FUNCTION acceptApplicant (userEmail VARCHAR(50), reasoning VARCHAR(150), randomPassword VARCHAR(20))
+CREATE FUNCTION acceptApplicant (userEmail VARCHAR(50), reasoning VARCHAR(150), randomPassword VARCHAR(20), acceptDate DATE)
 RETURNS INT
 MODIFIES SQL DATA
     BEGIN
@@ -159,7 +174,8 @@ MODIFIES SQL DATA
         UPDATE APPLICANT
             SET
                 IsAccepted = true,
-                Reason = reasoning
+                Reason = reasoning,
+                ApplicantDate = acceptDate
             WHERE Email = userEmail;
 
         SELECT ApplicantName, PhoneNo, HomeAddress, OrgID
@@ -174,13 +190,14 @@ MODIFIES SQL DATA
 
 DROP FUNCTION IF EXISTS rejectApplicant;
 
-CREATE FUNCTION rejectApplicant (userEmail VARCHAR(50), reasoning VARCHAR(150))
+CREATE FUNCTION rejectApplicant (userEmail VARCHAR(50), reasoning VARCHAR(150), rejectDate DATE)
 RETURNS INT
 MODIFIES SQL DATA
     BEGIN
         UPDATE APPLICANT
             SET
-                Reason = reasoning
+                Reason = reasoning,
+                ApplicantDate = rejectDate
             WHERE Email = userEmail;
 
         RETURN 0;
@@ -475,6 +492,21 @@ MODIFIES SQL DATA
         END IF;
 
         RETURN orgNo;
+    END;;
+
+DROP FUNCTION IF EXISTS getOrgName;
+
+CREATE FUNCTION getOrgName (orgID INT)
+RETURNS VARCHAR(50)
+READS SQL DATA
+    BEGIN
+        DECLARE orgName VARCHAR(50);
+
+        SELECT Name INTO orgName
+        FROM ORGANIZATION
+        WHERE OrgID = orgID;
+
+        RETURN orgName;
     END;;
 
 DROP FUNCTION IF EXISTS removeDriver;

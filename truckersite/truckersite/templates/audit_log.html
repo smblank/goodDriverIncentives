@@ -56,30 +56,124 @@
         <div class = "row">
             <div class = "col-md-3 text-left">
                 <div id = "sidebar">
-                    <a id = "back" href = "admin_generate_report.html"> <i class = "fa fa-arrow-left"></i> Generate Report </a>
+                    <a id = "back" href = "{% url 'adminReportGeneration'%}"> <i class = "fa fa-arrow-left"></i> Generate Report </a>
                     <h3 class = "text-center" style = "margin-bottom: 5%; margin-top: 2%;"> Audit Log </h3>
 
                     <h4> Select Audit Log Type </h4>
                     <!-- Source: https://stackoverflow.com/questions/50895806/bootstrap-4-multiselect-dropdown/50897096 -->
-                    <select id = "drivers" class = "selectpicker" multiple>
-                        <option value = "applications"> Driver Applications </option>
-                        <option value = "points"> Point Changes </option>
-                        <option value = "passwords"> Password Changes </option>
-                        <option value = "loginattemps"> Login Attempts </option>
-                    </select>
+                    <form method = "Post" action = "{% url 'getAuditLog'%}">
+                        {% csrf_token %}
+                        <select id = "drivers" name = "logType" class = "selectpicker">
+                            <option value = "applications"> Driver Applications </option>
+                            <option value = "points"> Point Changes </option>
+                            <option value = "passwords"> Password Changes </option>
+                            <option value = "loginattemps"> Login Attempts </option>
+                        </select>
 
-                    <h4> Start Date </h4>
-                    <input type = "text" id = "start" placeholder = "mm/dd/yy" maxlength = "8">
-                    <h4> End Date </h4>
-                    <input type = "text" id = "end" placeholder = "mm/dd/yy" maxlength = "8">
-                    
-                    <button id = "generate"> Generate Report </button>
+                        <h4> Start Date </h4>
+                        <input type = "text" id = "start" name = "startDate" placeholder = "mm/dd/yy" maxlength = "8">
+                        <h4> End Date </h4>
+                        <input type = "text" id = "end" name = "endDate" placeholder = "mm/dd/yy" maxlength = "8">
+                        
+                        <button id = "generate"> Generate Report </button>
+                    </form>
                     <button id = "download"> Download Report <i class = "fa fa-download"></i> </button>
                 </div>
             </div>
 
             <div class = "col-md-9" id = "preview">
+                <p>Date Range: {{startDate}} - {{endDate}}</p>
 
+                {% if applications %}
+                    <table>
+                        <tr>
+                            <td>Date</td>
+                            <td>Sponsor</td>
+                            <td>Applicant Name</td>
+                            <td>Status</td>
+                            <td>Reason</td>
+                        </tr>
+
+                        {% for applicant in applicants %}
+                            <tr>
+                                <td>{{applicant.Date}}</td>
+                                <td>{{applicant.orgName}}</td>
+                                <td>{{applicant.name}}</td>
+                                
+                                {% if applicant.status %}
+                                    <td>Accepted</td>
+                                    <td>--------</td>
+                                {% else %}
+                                    <td>Rejected</td>
+                                    <td>{{applicant.reason}}</td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </table>
+
+                {% elif points %}
+                    {% for driver, changes in drivers %}
+                        <p>Driver: {{driver}}</p>
+                        <table>
+                            <tr>
+                                <td>Date</td>
+                                <td>Sponsor</td>
+                                <td>Point Change</td>
+                                <td>Reason</td>
+                            </tr>
+
+                            {% for change in changes %}
+                                <tr>
+                                    <td>{{change.date}}</td>
+                                    <td>{{change.orgName}}</td>
+                                    <td>{{change.pointChange}}</td>
+                                    <td>{{change.reason}}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    {% endfor %}
+
+                {% elif passwords %}
+                    {% for user, changes in users %}
+                        <p>User: {{user}}</p>
+                        <table>
+                            <tr>
+                                <td>Date</td>
+                                <td>Type of Change</td>
+                            </tr>
+
+                            {% for change in changes %}
+                                <tr>
+                                    <td>{{change.date}}</td>
+                                    <td>{{change.changeType}}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    {% endfor %}
+
+                {% elif login %}
+                    {% for user, attempts in users %}
+                        <p>User: {{user}}</p>
+                        <table>
+                            <tr>
+                                <td>Date</td>
+                                <td>Success</td>
+                            </tr>
+
+                            {% for attempt in attempts %}
+                                <tr>
+                                    <td>{{attempt.date}}</td>
+                                    {% if attempt.succeeded %}
+                                        <td>Success</td>
+                                    {% else %}
+                                        <td>Failure</td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    {% endfor %}
+
+                {%endif%}
             </div>
         </div>
 

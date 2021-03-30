@@ -17,8 +17,12 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.urls import path
 from truckersite import views, forms
+
 from userProfile import views as profileViews
 from userProfile import models as profileOps
+
+from reports import views as reportViews
+from reports import models as reportOps
 
 from django.conf.urls.static import static
 from django.conf import settings
@@ -50,6 +54,21 @@ urlpatterns = [
     path('getNewAdminEmail', profileOps.getNewAdminEmail, name = 'getNewAdminEmail'),
     path('getNewAdminPass', profileOps. getNewAdminPassword, name = 'getNewAdminPass'),
     path('adminProfile/', profileViews.adminProfile, name = 'adminProfile'),
+
+    #Sponsor report generation
+    path('sponsorReportGeneration/', reportViews.sponsorGenerateReport, name = 'sponsorReportGeneration'),
+    path('getSponsorReport', reportOps.getSponsorReport, name = 'getSponsorReport'),
+
+    #Admin report generation
+    path('adminReportGeneration/', reportViews.adminGenerateReport, name = 'adminReportGeneration'),
+    path('auditLog/', reportViews.auditLog, name = 'auditLog'),
+    path('invoice/', reportViews.invoice, name = 'invoice'),
+    path('driverSales/', reportViews.driverSales, name = 'driverSales'),
+    path('sponsorSales/', reportViews.sponsorSales, name = 'sponsorSales'),
+    path('getAuditLog', reportOps.getAuditLog, name = 'getAuditLog'),
+    path('getInvoice', reportOps.getInvoice, name = 'getInvoice'),
+    path('getDriverSales', reportOps.getDriverSales, name = 'getDriverSales'),
+    path('getSponsorSales', reportOps.getSponsorSales, name = 'getSponsorSales'),
 
     url(r'^driver_catalog', include('Catalog.urls')),
     path('admin/', admin.site.urls),

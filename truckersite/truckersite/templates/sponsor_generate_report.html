@@ -62,21 +62,55 @@
 
                     <h4> Select Driver(s) </h4>
                     <!-- Source: https://stackoverflow.com/questions/50895806/bootstrap-4-multiselect-dropdown/50897096 -->
-                    <select id = "drivers" class = "selectpicker" multiple>
-                        <option value = "all"> All Drivers </option>
-                    </select>
+                    <form method = "Post" action = "{% url 'getSponsorReport'%}">
+                        {% csrf_token %}
+                        <select id = "drivers" name = driver class = "selectpicker" multiple>
+                            <option value = "all"> All Drivers </option>
+                        </select>
 
-                    <h4> Start Date </h4>
-                    <input type = "text" id = "start" placeholder = "mm/dd/yy" maxlength = "8">
-                    <h4> End Date </h4>
-                    <input type = "text" id = "end" placeholder = "mm/dd/yy" maxlength = "8">
-                    
-                    <button id = "generate"> Generate Report </button>
-                    <button id = "download"> Download Report <i class = "fa fa-download"></i> </button>
+                        <h4> Start Date </h4>
+                        <input type = "text" id = "start" name = startDate placeholder = "mm/dd/yy" maxlength = "8">
+                        <h4> End Date </h4>
+                        <input type = "text" id = "end" name = endDate placeholder = "mm/dd/yy" maxlength = "8">
+                        
+                        <button id = "generate"> Generate Report </button>
+                    </form>
+                        <button id = "download"> Download Report <i class = "fa fa-download"></i> </button>
                 </div>
             </div>
 
             <div class = "col-md-9" id = "preview">
+                    <p>Date Range: {{startDate}} - {{endDate}}</p>
+                    {% for driver, points, changes in drivers %}
+                        <p>Driver: {{driver}}  TotalPoints: {{points}}</p>
+                        <p>Point Changes</p>
+                        <table width = "60%">
+                            <col style = "width:20%">
+                            <col style = "width:35%">
+                            <col style = "width:30%">
+                            <col style = "width:15%">
+                            <tr>
+                                <td>Date</td>
+                                <td>Change Amount</td>
+                                <td>Sponsor Responsible</td>
+                                <td>Reasoning</td>
+                            </tr>
+                        </table>
+                        {% for change in changes %}
+                                <table  width = "60%">
+                                    <col style = "width:20%">
+                                    <col style = "width:35%">
+                                    <col style = "width:30%">
+                                    <col style = "width:15%">
+                                    <tr>
+                                        <td>{{change.date}}</td>
+                                        <td>{{change.pointChange}}</td>
+                                        <td>{{change.sponsor}}</td>
+                                        <td>{{change.reason}}</td>
+                                    </tr>
+                                </table>
+                        {% endfor %}
+                    {% endfor %}
 
             </div>
         </div>

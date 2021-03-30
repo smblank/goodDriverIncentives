@@ -56,27 +56,87 @@
         <div class = "row">
             <div class = "col-md-3 text-left">
                 <div id = "sidebar">
-                    <a id = "back" href = "admin_generate_report.html"> <i class = "fa fa-arrow-left"></i> Generate Report </a>
+                    <a id = "back" href = "{% url 'adminReportGeneration'%}"> <i class = "fa fa-arrow-left"></i> Generate Report </a>
                     <h3 class = "text-center" style = "margin-bottom: 5%; margin-top: 2%;"> Sales By Sponsor Report </h3>
 
                     <h4> Select Sponsor(s) </h4>
                     <!-- Source: https://stackoverflow.com/questions/50895806/bootstrap-4-multiselect-dropdown/50897096 -->
-                    <select id = "drivers" class = "selectpicker" multiple>
-                        <option value = "all"> All Sponsors </option>
-                    </select>
+                    <form method = "Post" action = "{% url 'getSponsorSales' %}">
+                        {% csrf_token %}
+                        <select id = "drivers" name = "sponsor" class = "selectpicker">
+                            <option value = "all"> All Sponsors </option>
+                        </select>
 
-                    <h4> Start Date </h4>
-                    <input type = "text" id = "start" placeholder = "mm/dd/yy" maxlength = "8">
-                    <h4> End Date </h4>
-                    <input type = "text" id = "end" placeholder = "mm/dd/yy" maxlength = "8">
-                    
-                    <button id = "generate"> Generate Report </button>
+                        <select id = "drivers" name = "driver" class = "selectpicker">
+                            <option value = "all"> All Drivers </option>
+                        </select>
+
+                        <label class="container">Detailed Report
+                            <input type="checkbox" name = "detail">
+                            <span class="checkmark"></span>
+                        </label>
+
+                        <h4> Start Date </h4>
+                        <input type = "text" id = "start" name = "startDate" placeholder = "mm/dd/yy" maxlength = "8">
+                        <h4> End Date </h4>
+                        <input type = "text" id = "end" name = "endDate" placeholder = "mm/dd/yy" maxlength = "8">
+                        
+                        <button id = "generate"> Generate Report </button>
+                    </form>
                     <button id = "download"> Download Report <i class = "fa fa-download"></i> </button>
                 </div>
             </div>
 
             <div class = "col-md-9" id = "preview">
+                <p>Date Range: {{startDate}} - {{endDate}}</p>
+                <p>Sponsor: {{orgName}}</p>
 
+                {% for orders in drivers %}
+
+                        {% if detailed %}
+                            <table>
+                                <tr>
+                                    <td>Date</td>
+                                    <td>Driver</td>
+                                    <td>Product</td>
+                                    <td>Quantity</td>
+                                    <td>Cost</td>
+                                </tr>
+                            {% for order in orders %}
+                                <tr>
+                                    <td>{{order.date}}</td>
+                                    <td>{{order.driver}}</td>
+                                </tr>
+
+                                {% for product in order.products %}
+                                    <tr>
+                                        <td></td>
+                                        <td>{{product.name}}</td>
+                                        <td>{{product.qty}}</td>
+                                        <td>{{product.price}}</td>
+                                    </tr>
+                                {% endfor %}
+
+                                <tr>
+                                    <td colspan = "4" align = "right">Total Cost: {{order.totalCost}}</td>
+                                </tr>
+                            {% endfor %}
+                        
+                        {% else %}
+                            <table>
+                                <tr>
+                                    <td>Date</td>
+                                    <td>Total Cost</td>
+                                </tr>
+                                {% for order in orders %}
+                                <tr>
+                                    <td>{{order.date}}</td>
+                                    <td>{{order.totalCost}}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </table>
+                {% endfor %}
             </div>
         </div>
 

@@ -1,5 +1,23 @@
 DELIMITER ;;
 
+DROP FUNCTION IF EXISTS getDriverPoints;
+
+CREATE FUNCTION getDriverPoints(driverEmail VARCHAR(50))
+RETURNS INT
+READS SQL DATA
+    BEGIN
+        DECLARE driver INT;
+        DECLARE pointTotal INT;
+
+        SELECT getUserID(driverEmail) INTO driver;
+
+        SELECT Points INTO pointTotal
+        FROM DRIVER
+        WHERE UserID = driver;
+
+        RETURN pointTotal;
+    END;;
+
 DROP FUNCTION IF EXISTS createProduct;
 
 CREATE FUNCTION createProduct (name VARCHAR(45), price FLOAT)
@@ -89,7 +107,7 @@ MODIFIES SQL DATA
     BEGIN
         DECLARE newID INT;
 
-        INSERT INTO DRIVER_ORDER (OrderDate) VALUES (dateCreated);
+        INSERT INTO DRIVER_ORDER (OrderDate, Completed) VALUES (dateCreated, FALSE);
 
         SELECT OrderID INTO newID
         FROM DRIVER_ORDER
@@ -110,6 +128,21 @@ MODIFIES SQL DATA
         WHERE OrderID = orderID;
 
         RETURN 0;
+    END;;
+
+DROP FUNCTION IF EXISTS completeOrder;
+
+CREATE FUNCTION completeOrder(completeDate DATE, orderID INT)
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        UPDATE DRIVER_ORDER
+            SET
+                OrderDate = completeDate,
+                Completed = TRUE
+            WHERE OrderID = orderID;
+
+            RETURN 0;
     END;;
 
 DROP FUNCTION IF EXISTS addToOrder;

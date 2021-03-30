@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from mysql.connector import connect, Error
 
 def getDB():
@@ -256,6 +256,40 @@ def getUserID(email):
     except Error as err:
         print(err)
 
+def getUserEmail(id):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT getUserEmail(%s)"
+        cursor.execute(query, (id,))
+        result = cursor.fetchone()
+
+        for userEmail in result:
+            cursor.close()
+            conn.close()
+            return userEmail
+
+    except Error as err:
+        print(err)
+
+def getDriverPoints(email):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT getDrivePoints(%s)"
+        cursor.exectue(query, (email))
+        result = cursor.fetchone()
+
+        for points in result:
+            cursor.close()
+            conn.close()
+            return points
+    
+    except Error as err:
+        print(err)
+
 def checkPassword (email, password):
     try:
         conn = getDB()
@@ -391,6 +425,21 @@ def cancelOrder (orderID):
         cursor.close()
         conn.close()
         return "Order successfully canceled"
+    
+    except Error as err:
+        print(err)
+
+def completeOrder (orderID, completeDate):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT completeOrder(%s, %s)"
+        cursor.execute(query, (orderID, completeDate))
+
+        cursor.close()
+        conn.close()
+        return "Order successfully completed"
     
     except Error as err:
         print(err)
@@ -670,13 +719,30 @@ def getOrgNo (userEmail):
         cursor = getCursor(conn)
 
         query = "SELECT getOrgNo(%s)"
-        cursor.execute(query, (driverEmail,))
+        cursor.execute(query, (userEmail,))
         result = cursor.fetchone()
 
         for orgNo in result:
             cursor.close()
             conn.close()
             return orgNo
+
+    except Error as err:
+        print(err)
+
+def getOrgName (orgID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT getOrgName(%s)"
+        cursor.execute(query, (orgID))
+        result = cursor.fetchone()
+
+        for orgName in result:
+            cursor.close()
+            conn.close()
+            return orgName
 
     except Error as err:
         print(err)
@@ -701,7 +767,9 @@ def createSponsor(name, email, password, ccNum, ccSec, ccDate, billAddr, orgNo):
 
         query = "SELECT createDriver(%s, %s, %s, %s, %s, %s, %s, %s)"
         cursor.execute(query, (name, email, password, ccNum, ccSec, ccDate, billAddr, orgNo))
-
+        
+        cursor.close()
+        conn.close()
         return "Sponsor successfully created" 
 
     except Error as err:
@@ -715,8 +783,59 @@ def createAdmin(name, email, password):
         query = "SELECT createDriver(%s, %s, %s)"
         cursor.execute(query, (name, email, password))
 
+        cursor.close()
+        conn.close()
         return "Admin successfully created" 
 
+    except Error as err:
+        print(err)
+
+def createApplicant(date, name, email, phone, orgID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT createApplicant(%s, %s, %s, %s, %s)"
+        cursor.execute(query, (date, name, email, phone, orgID))
+        result = cursor.fetchone()
+
+        for applicantID in result:
+            cursor.close()
+            conn.close()
+            return applicantID
+        
+    except Error as err:
+        print(err)
+
+def acceptApplicant(email, reasoning, password, acceptDate):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT acceptApplicant(%s, %s, %s, %s)"
+        cursor.execute(query, (email, reasoning, password, acceptDate))
+        result = cursor.fetchone()
+
+        for driverID in result:
+            cursor.close()
+            conn.close()
+            return driverID
+        
+    except Error as err:
+        print(err)
+
+def rejectApplicant(email, reasoning, rejectDate):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT rejectApplicant(%s, %s, %s)"
+        cursor.execute(query, (email, reasoning, acceptDate))
+
+        cursor.close()
+        conn.close()
+        return "Applicant successfully rejected"
+        
     except Error as err:
         print(err)
 
@@ -728,6 +847,8 @@ def removeDriver(email):
         query = "SELECT removeDriver(%s)"
         cursor.execute(query, (email,))
 
+        cursor.close()
+        conn.close()
         return "Driver successfully deleted" 
 
     except Error as err:
@@ -741,6 +862,8 @@ def removeSponsor (email, newSponsor):
         query = "SELECT removeSponsor(%s, %s)"
         cursor.execute(query, (email, newSponsor))
 
+        cursor.close()
+        conn.close()
         return "Sponsor successfully deleted" 
 
     except Error as err:
@@ -754,6 +877,8 @@ def removeAdmin(email):
         query = "SELECT removeAdmin(%s)"
         cursor.execute(query, (email,))
 
+        cursor.close()
+        conn.close()
         return "Admin successfully deleted" 
 
     except Error as err:
@@ -789,6 +914,185 @@ def getUserName(email):
             cursor.close()
             conn.close()
             return name
+
+    except Error as err:
+        print(err)
+
+def indvDriverPointChangeReport(startDate, endDate, orgID, driverID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL indvDriverPointChangeRep(%s, %s, %s, %s)"
+        cursor.execute(query, (startDate, endDate, orgID, driverID))
+        result = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+        return result
+
+    except Error as err:
+        print(err)
+
+def allDriverPointChangeReport(startDate, endDate, orgID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        start = datetime.strptime(startDate, '%m/%d/%y').date()
+        end = datetime.strptime(endDate, '%m/%d/%y').date()
+
+        query = "CALL allDriverPointChangeRep(%s, %s, %s)"
+        cursor.execute(query, (start, end, orgID))
+        result = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+        return result
+
+    except Error as err:
+        print(err)
+
+def indvSponsorSaleReport(startDate, endDate, detailed, driverID, orgID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL indvSponsorSaleRep(%s, %s, %s, %s, %s)"
+        cursor.execute(query, (startDate, endDate, detailed, driverID, orgID))
+        result = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+        return result
+
+    except Error as err:
+        print(err)
+
+def allSponsorSaleReport(startDate, endDate, detailed):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL allSponsorSaleRep(%s, %s, %s)"
+        cursor.execute(query, (startDate, endDate, detailed))
+        result = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+        return result
+
+    except Error as err:
+        print(err)
+
+def driverSaleReport(startDate, endDate, detailed, orgID, driverID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL driverSaleRep(%s, %s, %s, %s, %s)"
+        cursor.execute(query, (startDate, endDate, detailed, orgID, driverID))
+        result = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+        return result
+
+    except Error as err:
+        print(err)
+
+def indvSponsorInvoice(startDate, endDate, orgID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL indvSponsorInvoice(%s, %s, %s)"
+        cursor.execute(query, (startDate, endDate, orgID))
+        result = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+        return result
+
+    except Error as err:
+        print(err)
+
+def allSponsorInvoice(startDate, endDate):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL allSponsorInvoice(%s, %s)"
+        cursor.execute(query, (startDate, endDate))
+        result = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+        return result
+
+    except Error as err:
+        print(err)
+
+def driverApplicationsReport(startDate, endDate):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL driverApplicationsRep(%s, %s)"
+        cursor.execute(query, (startDate, endDate))
+        result = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+        return result
+
+    except Error as err:
+        print(err)
+
+def pointChangeReport(startDate, endDate):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL pointChangeRep(%s, %s)"
+        cursor.execute(query, (startDate, endDate))
+        result = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+        return result
+
+    except Error as err:
+        print(err)
+
+def passwordChangeReport(startDate, endDate):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL passwordChangeRep(%s, %s)"
+        cursor.execute(query, (startDate, endDate))
+        result = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+        return result
+
+    except Error as err:
+        print(err)
+
+def loginAttemptsReport(startDate, endDate):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL loginAttemptsRep(%s, %s)"
+        cursor.execute(query, (startDate, endDate))
+        result = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+        return result
 
     except Error as err:
         print(err)

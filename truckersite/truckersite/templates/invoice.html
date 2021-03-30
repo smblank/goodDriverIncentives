@@ -56,27 +56,55 @@
         <div class = "row">
             <div class = "col-md-3 text-left">
                 <div id = "sidebar">
-                    <a id = "back" href = "admin_generate_report.html"> <i class = "fa fa-arrow-left"></i> Generate Report </a>
+                    <a id = "back" href = "{% url 'adminReportGeneration'%}"> <i class = "fa fa-arrow-left"></i> Generate Report </a>
                     <h3 class = "text-center" style = "margin-bottom: 5%; margin-top: 2%;"> Invoice </h3>
 
                     <h4> Select Sponsor(s) </h4>
                     <!-- Source: https://stackoverflow.com/questions/50895806/bootstrap-4-multiselect-dropdown/50897096 -->
-                    <select id = "drivers" class = "selectpicker" multiple>
-                        <option value = "all"> All Sponsors </option>
-                    </select>
+                    <form method = "Post" action = "{% url 'getInvoice'%}">
+                        {% csrf_token %}
+                        <select id = "drivers" name = "org" class = "selectpicker" multiple>
+                            <option value = "all"> All Sponsors </option>
+                        </select>
 
-                    <h4> Start Date </h4>
-                    <input type = "text" id = "start" placeholder = "mm/dd/yy" maxlength = "8">
-                    <h4> End Date </h4>
-                    <input type = "text" id = "end" placeholder = "mm/dd/yy" maxlength = "8">
-                    
-                    <button id = "generate"> Generate Report </button>
+                        <h4> Start Date </h4>
+                        <input type = "text" id = "start" name = "startDate" placeholder = "mm/dd/yy" maxlength = "8">
+                        <h4> End Date </h4>
+                        <input type = "text" id = "end" name = "endDate" placeholder = "mm/dd/yy" maxlength = "8">
+                        
+                        <button id = "generate"> Generate Report </button>
+                    </form>
                     <button id = "download"> Download Report <i class = "fa fa-download"></i> </button>
                 </div>
             </div>
 
             <div class = "col-md-9" id = "preview">
+                <p>Date Range: {{startDate}} - {{endDate}}</p>
 
+                {% for org, invoices, totalCost in orgs %}
+                    <p>Sponsor: {{org}}</p>
+                    <p>Sales:</p>
+
+                    <table>
+                        <tr>
+                            <td>Date</td>
+                            <td>Driver</td>
+                            <td>Cost</td>
+                        </tr>
+
+                        {% for invoice in invoices %}
+                            <tr>
+                                <td>{{invoice.date}}</td>
+                                <td>{{invoice.driver}}</td>
+                                <td>{{invoice.cost}}</td>
+                            </tr>
+                        {% endfor %}
+
+                        <tr>
+                            <td colspan = "4" align = "right">Total Cost: {{totalCost}}</td>
+                        </tr>
+                    </table>
+                {% endfor %}
             </div>
         </div>
 
