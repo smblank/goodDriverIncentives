@@ -83,9 +83,32 @@ body{
 /* https://stackoverflow.com/questions/48258115/bootstrap-form-input-change-background-color-on-text-enter-and-revert-on-empty-f/48258157 */
 input:not(:placeholder-shown) {
     background-color:  #38383d!important;
+    color: white;
 }
- 
  
 input:placeholder-shown {
     background-color:  #38383d!important;
+    color: white;
+}
+
+#search{
+    color: white;
+}
+
+#submit{
+    width: fit-content;
+    height: fit-content;
+    padding-right: 4%;
+    padding-left: 4%;
+    padding-top: .1%;
+    padding-bottom: .1%;
+    border-radius: 30px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    background-color: #ACEFFF;
+    font-size: 120%;
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+    border-style: solid;
+    border-color: white;
+    cursor: pointer;
 }

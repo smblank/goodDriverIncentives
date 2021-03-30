@@ -19,7 +19,7 @@
 
     <!-- Links the .css file -->
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/driver_dash.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/driver_dash.css'%}">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
 </head>
@@ -36,7 +36,7 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class = "dropdown-item" href = "driver_catalog.html"> Catalog </a>
                         <a class = "dropdown-item" href = "wishlist.html"> Wishlist </a>
-                        <a class = "dropdown-item" href = "#"> Order History </a>
+                        <a class = "dropdown-item" href = "driver_order_history.html"> Order History </a>
                         <a class = "dropdown-item" href = "driver_notifications.html"> Notifications </a>
                         <a class = "dropdown-item" href = "driver_submit_issue.html"> Submit an Issue </a>
                         <a class = "dropdown-item" href = "index.html"> Logout </a>
@@ -70,6 +70,13 @@
         <div class = "row text-center">
             <div class = "col-md-12">
                 <h2 id = "displaypoints"> 0 points </h2>
+            </div>
+        </div>
+
+        <div class = "row text-center">
+            <div class = "col-md-12">
+                <button id = "sponsorview" class = "pull-right" style = "visibility: hidden;"> Sponsor View </button> <!-- visibility: hidden; by deafult should only be available to sponsors and admins-->
+                <button id = "adminview" class = "pull-right" style = "visibility: hidden;"> Admin View </button> <!-- visibility: hidden; by deafult should only be available to admins-->
             </div>
         </div>
 
