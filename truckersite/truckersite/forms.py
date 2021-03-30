@@ -46,7 +46,8 @@ def moveout(request):
         if request.session.get('role') == 'Driver':
             return render(request, 'driver_dash.html')
         if request.session.get('role') == 'Sponsor':
-            return render(request, 'sponsor_dash.html')
+            response = redirect('/sponsor_dash/')
+            return response
         if request.session.get('role') == 'Admin':
             return render(request, 'admin_dash.html')
     else:

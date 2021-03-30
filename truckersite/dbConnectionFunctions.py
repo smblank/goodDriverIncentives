@@ -1,5 +1,7 @@
 from datetime import datetime
 from mysql.connector import connect, Error
+import random
+import string
 
 def getDB():
     try:
@@ -830,7 +832,7 @@ def rejectApplicant(email, reasoning, rejectDate):
         cursor = getCursor(conn)
 
         query = "SELECT rejectApplicant(%s, %s, %s)"
-        cursor.execute(query, (email, reasoning, acceptDate))
+        cursor.execute(query, (email, reasoning, rejectDate))
 
         cursor.close()
         conn.close()

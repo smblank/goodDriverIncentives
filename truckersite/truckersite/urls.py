@@ -24,6 +24,9 @@ from userProfile import models as profileOps
 from reports import views as reportViews
 from reports import models as reportOps
 
+from sponsor import views as sponsorViews
+from sponsor import models as sponsorOps
+
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -72,4 +75,11 @@ urlpatterns = [
 
     url(r'^driver_catalog', include('Catalog.urls')),
     path('admin/', admin.site.urls),
+
+    #Sponsor
+    path('sponsor_dash/', sponsorViews.sponsorDashDisplay, name = 'sponsorDashDisplay'),
+    path('application/<int:applicant_id>', sponsorViews.sponsorViewApplicant, name = 'sponsorViewApplicant'),
+    path('accept_applicant/<int:applicant_id>', sponsorViews.sponsorAcceptApplicant, name = 'sponsorAcceptApplicant'),
+    path('reject_applicant/<int:applicant_id>', sponsorViews.sponsorRejectApplicant, name = 'sponsorRejectApplicant'),
+    
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
