@@ -1,4 +1,4 @@
--#!/bin/bash
+#!/bin/bash
 current_date=`date +"%d-%b-%Y"`
 file_location="/home/ubuntu/pull_log/${current_date}.log"
 
