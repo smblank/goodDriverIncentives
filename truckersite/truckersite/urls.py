@@ -13,6 +13,8 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from Catalog.views import sponsor_catalog
+from Catalog.views import product_list
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.urls import path
@@ -73,7 +75,8 @@ urlpatterns = [
     path('getDriverSales', reportOps.getDriverSales, name = 'getDriverSales'),
     path('getSponsorSales', reportOps.getSponsorSales, name = 'getSponsorSales'),
 
-    url(r'^driver_catalog', include('Catalog.urls')),
+    path('driver_catalog/', product_list, name='catalog'),
+    path('sponsor_catalog/', sponsor_catalog, name='catalog'),
     path('admin/', admin.site.urls),
 
     #Sponsor

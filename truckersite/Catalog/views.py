@@ -31,6 +31,12 @@ def product_list(request):
     }
     return render(request, "driver_catalog.html", context)
 
+def sponsor_catalog(request):
+    context = {
+        'items': Product.objects.all()
+    }
+    return render(request, "sponsor_catalog.html", context)
+
 def createCatalog(request):
     #call add products here to create catalog
     pass

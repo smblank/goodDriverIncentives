@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-
+{% load static %}
 <html lang = "en-US">
 <meta charset = "UTF-8">
 
@@ -72,6 +72,27 @@
                 <a id = "cart" href = "driver_cart.html"> <i class = "fa fa-shopping-cart"></i> </a>
                 
                 <!-- Put Items Here -->
+                <section class="text-center mb-4">
+                {% block content %}
+                <h2> Here is the list of Items </h2>
+                {% for item in items %}
+                    <div class="view overlay">
+                        <img img src={{item.image}} width="255" height="255" alt="">
+                        <a href="/driver_catalog/{{item.slug}}/">
+                        <div class="mask rgba-white-slight"></div>
+                        </a>
+                    </div>
+                    <a href="/driver_catalog/{{item.slug}}/"><h4 class="font-weight-bold blue-text">
+                    <strong>${{item.name}}</strong>
+                    </h4>
+                    </a>
+                  <a href="/driver_catalog/{{item.slug}}/"><h4 class="font-weight-bold blue-text">
+                  <strong>${{item.price}}</strong>
+                  </h4>
+                  </a>
+                  </br>
+                {% endfor %}
+                {% endblock content %}
             </div>
         </div>
     </div>
