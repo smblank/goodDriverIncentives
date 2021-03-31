@@ -35,6 +35,7 @@ body{
 .sectionheader{
     font-size: 150%;
     left: 2%;
+    color: black;
 }
   
 .settingname{
@@ -166,7 +167,6 @@ body{
     padding-top: .1%;
     padding-bottom: .1%;
     border-radius: 30px;
-    border-color: #EDA1A1;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     background-color: #ACEFFF;
     font-size: 120%;
@@ -174,5 +174,30 @@ body{
     color: black;
     border-style: solid;
     border-color: black;
+    cursor: pointer;
+}
+
+#create{
+    width: fit-content;
+    height: fit-content;
+    padding-right: 1%;
+    padding-left: 1%;
+    padding-top: .1%;
+    padding-bottom: .1%;
+    border-radius: 30px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    background-color: #ACEFFF;
+    font-size: 120%;
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+    border-style: solid;
+    border-color: black;
+    cursor: pointer;
+    margin-bottom: 2%;
+}
+
+.delete{
+    background-color: white;
+    border-style: none;
     cursor: pointer;
 }
