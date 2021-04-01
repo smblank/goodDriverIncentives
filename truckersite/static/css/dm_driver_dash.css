@@ -3,6 +3,7 @@ html, body{
     font-family: Arial, Helvetica, sans-serif;
     overflow-y: auto;
     background-color: #2a2a2e;
+    color: white;
 }
 
 body{
@@ -129,4 +130,98 @@ body{
 
 #git:hover{
     color: #ACEFFF;
+}
+
+#edit{
+    width: fit-content;
+    height: fit-content;
+    padding-right: 1%;
+    padding-left: 1%;
+    padding-top: .1%;
+    padding-bottom: .1%;
+    border-radius: 30px;
+    background-color: #A1EDA7;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    font-size: 120%;
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+    cursor: pointer;
+    border-style: solid;
+    border-color: white ;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+#remove{
+    width: fit-content;
+    height: fit-content;
+    padding-right: 1%;
+    padding-left: 1%;
+    padding-top: .1%;
+    padding-bottom: .1%;
+    border-radius: 30px;
+    border-color: #EDA1A1;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    background-color: #EDA1A1;
+    font-size: 120%;
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+    border-style: solid;
+    border-color: white;
+    cursor: pointer;
+}
+
+.editing{
+    width: 80%; 
+    height: 15%;
+    font-size: 150%;
+    margin-right: 100%;
+    margin-bottom: 1%;
+    margin-left: 2%;
+    background-color: #38383d;
+    color: white;
+    border-style: solid;
+    border-color: #38383d;
+}
+
+.newadmin{
+    width: 100%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    margin-bottom: 3%;
+    background-color: #38383d;
+    color: white;
+    border-style: solid;
+    border-color: #38383d;
+}
+
+#add{
+    width: fit-content;
+    height: fit-content;
+    padding-right: 1%;
+    padding-left: 1%;
+    padding-top: .1%;
+    padding-bottom: .1%;
+    border-radius: 30px;
+    background-color: #A1EDA7;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    font-size: 120%;
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+    cursor: pointer;
+    border-style: solid;
+    border-color: white;
+    margin-top: 1%;
+    margin-bottom: 3%;
+}
+
+.form-control{
+    background-color: #38383d;
+    color: white;
+    border-style: solid;
+    border-color: #38383d;
+}
+
+.modal-content{
+    background-color: #2a2a2e;
+    color: white;
 }
