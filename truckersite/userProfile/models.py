@@ -2,7 +2,7 @@ from django.db import models
 from django.shortcuts import render
 import dbConnectionFunctions as db
 from userProfile import views
-import os
+import os,re
 
 def checkPhone(phoneNo):
     digits = ''
@@ -68,6 +68,19 @@ def getNewDriverPassword(request):
         response = "The passwords do not match."
         return render(request, 'driver_profile.html')
     
+    if !newPass.isupper() :
+        response = "You need a capital letter."
+        return render(request, 'driver_profile.html')
+    
+    if any(char.isdigit() for char in newPass) >=1 :
+        response = "You need a number."
+        return render(request, 'driver_profile.html')
+
+    regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
+    if (regex.search(newPass) != None):
+        response = "You need a special character."
+        return render(request, 'driver_profile.html')
+
     response = db.changePassword(request.session['email'], newPass)
 
     return render(request, 'driver_profile.html')
