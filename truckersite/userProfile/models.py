@@ -81,6 +81,10 @@ def getNewDriverPassword(request):
         response = "You need a special character."
         return render(request, 'driver_profile.html')
 
+    if(len(newPass) >= 8):
+        response = "Password needs 8 chars long."
+        return render(request, 'driver_profile.html')       
+
     response = db.changePassword(request.session['email'], newPass)
 
     return render(request, 'driver_profile.html')
@@ -154,16 +158,20 @@ def getNewSponsorPassword(request):
     
     if !newPass.isupper() :
         response = "You need a capital letter."
-        return render(request, 'driver_profile.html')
+        return render(request, 'sponsor_profile.html')
     
     if any(char.isdigit() for char in newPass) >=1 :
         response = "You need a number."
-        return render(request, 'driver_profile.html')
+        return render(request, 'sponsor_profile.html')
 
     regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
     if (regex.search(newPass) != None):
         response = "You need a special character."
-        return render(request, 'driver_profile.html')
+        return render(request, 'sponsor_profile.html')
+
+    if(len(newPass) >= 8):
+        response = "Password needs 8 chars long."
+        return render(request, 'sponsor_profile.html') 
 
     response = db.changePassword(request.session['email'], newPass)
 
@@ -201,16 +209,20 @@ def getNewAdminPassword(request):
     
     if !newPass.isupper() :
         response = "You need a capital letter."
-        return render(request, 'driver_profile.html')
+        return render(request, 'admin_profile.html')
     
     if any(char.isdigit() for char in newPass) >=1 :
         response = "You need a number."
-        return render(request, 'driver_profile.html')
+        return render(request, 'admin_profile.html')
 
     regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
     if (regex.search(newPass) != None):
         response = "You need a special character."
-        return render(request, 'driver_profile.html')
+        return render(request, 'admin_profile.html')
+    
+    if(len(newPass) >= 8):
+        response = "Password needs 8 chars long."
+        return render(request, 'admin_profile.html') 
     
     response = db.changePassword(request.session['email'], newPass)
 
