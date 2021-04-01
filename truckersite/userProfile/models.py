@@ -152,6 +152,19 @@ def getNewSponsorPassword(request):
         response = "The passwords do not match."
         return render(request, 'sponsor_profile.html')
     
+    if !newPass.isupper() :
+        response = "You need a capital letter."
+        return render(request, 'driver_profile.html')
+    
+    if any(char.isdigit() for char in newPass) >=1 :
+        response = "You need a number."
+        return render(request, 'driver_profile.html')
+
+    regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
+    if (regex.search(newPass) != None):
+        response = "You need a special character."
+        return render(request, 'driver_profile.html')
+
     response = db.changePassword(request.session['email'], newPass)
 
     return render(request, 'sponsor_profile.html')
@@ -185,6 +198,19 @@ def getNewAdminPassword(request):
     if newPass != confirmPass:
         response = "The passwords do not match."
         return render(request, 'admin_profile.html')
+    
+    if !newPass.isupper() :
+        response = "You need a capital letter."
+        return render(request, 'driver_profile.html')
+    
+    if any(char.isdigit() for char in newPass) >=1 :
+        response = "You need a number."
+        return render(request, 'driver_profile.html')
+
+    regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
+    if (regex.search(newPass) != None):
+        response = "You need a special character."
+        return render(request, 'driver_profile.html')
     
     response = db.changePassword(request.session['email'], newPass)
 
