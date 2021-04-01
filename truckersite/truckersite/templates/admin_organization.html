@@ -20,7 +20,6 @@
     <!-- Links the .css file -->
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/admin_organization.css' %}">
-    <link rel="stylesheet" type="text/css" href="dm_admin_organization.css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
     <script>
@@ -145,6 +144,7 @@
                 <input type = "text" class = "valuechanges" id = "dollars" placeholder = "Dollars (Ex. - 2.25)" style = "font-size: 200%;">
                 <h1 style = "margin-left: 8%;"> = </h1>
                 <input type = "text" class = "valuechanges" id = "points" placeholder = "Points (Ex. - 1.25)" style = "font-size: 200%;">
+                <button class = "save" id = "savepointchange"> <i class = "fa fa-save"></i> </button>
 
                 <p class = "setting" id = "creditcard" style = "margin-top: 1.5%;"> Credit Card </p>
                 <input type = "text" class = "settingtext" id = "name" placeholder = "Name on Card"> <br>
