@@ -113,6 +113,7 @@
 
                 <p class = "sectionheader" style = "margin-top: 6%;"> Organization Employees </p>
                 <a class = "settingname" href = "#orgsponsors"> Sponsors </a> <br>
+                <a class = "settingname" href = "#addsponsor"> Add Sponsor </a> <br>
                 <a class = "settingname" href = "#orgdrivers"> Drivers </a> <br>
             
                 <p class = "sectionheader" style = "margin-top: 6%;"> Catalog </p>
@@ -166,6 +167,12 @@
 
                 <button id = "remove" onclick = "removeSponsor()"> Remove Sponsor </button>
                 <button id = "edit" onclick = "editSponsor()"> Edit Sponsor Info </button>
+
+                <p class = "setting" id = "addsponsor" style = "margin-top: 1.5%;"> Add Sponsor </p>
+                <input type = "text" class = "settingtext" id = "newsponsoremail" placeholder = "Email"> <br>
+                <input type = "text" class = "settingtext" id = "newsponsorpassword" placeholder = "Password"> <br>
+                <input type = "text" class = "settingtext" id = "newsponsorconfirmpassword" placeholder = "Confirm Password"> <br>
+                <button class = "save" id = "addsponsor"> Add Sponsor </button>
 
                 <p class = "setting" id = "drivers" style = "margin-top: 1.5%;"> Drivers </p>
                 <select class = "form-control form-control-lg" id = "driversdp" style = "margin-bottom: 1.5%;">
