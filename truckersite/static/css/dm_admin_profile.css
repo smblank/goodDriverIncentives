@@ -25,6 +25,19 @@ body{
 
 }
 
+.col-md-3{
+    height: 100%;
+    background-color: white;
+    border-right-style: solid;
+    border-right-color: #7070707e;
+    position: fixed;
+    background-color: #2a2a2e;
+}
+
+.col-md-9{
+    margin-left: 24.5%;
+}
+
 #pagename{
     color: white;
 }
