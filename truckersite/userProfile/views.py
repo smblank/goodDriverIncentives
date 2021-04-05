@@ -6,8 +6,25 @@ import dbConnectionFunctions as db
 def driverProfile(request):
     imgPath = db.getProfilePic(request.session['email'])
     profilePic = 'http://127.0.0.1:8000/static/img/' + imgPath
+
+    class Address:
+        def __init__(self):
+            id = -1
+            addr = ''
+
+    addresses = []
+
+    result = db.getDriverAddresses(request.session['email'])
+
+    for (id, address) in result:
+        newAddr = Address()
+        newAddr.addr = address
+        newAddr.id = id
+        addresses.append(newAddr)
+    
     context = {
-        'profilePic': profilePic
+        'profilePic': profilePic,
+        'addresses': addresses
     }
     return render(request, 'driver_profile.html', context)
 

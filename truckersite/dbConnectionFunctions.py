@@ -2,10 +2,14 @@ from datetime import datetime
 from mysql.connector import connect, Error
 import random
 import string
+from django.core.mail import EmailMessage
 
 def getDB():
     try:
         connection = connect(host = 'truckingdb.c9tkxb1tjvpp.us-east-1.rds.amazonaws.com', user = 'admin', password = 'accesstodb', database = 'DRIVER_DB', autocommit = True)
+
+        while connection is None:
+            connection = connect(host = 'truckingdb.c9tkxb1tjvpp.us-east-1.rds.amazonaws.com', user = 'admin', password = 'accesstodb', database = 'DRIVER_DB', autocommit = True)
     
     except Error as err:
         print(err)
@@ -223,6 +227,22 @@ def getDefaultAddress(email):
     except Error as err:
         print(err)
 
+def getDriverAddresses(email):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL getDriverAddresses(%s)"
+        cursor.execute(query, (email,))
+        result = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+        return result
+  
+    except Error as err:
+        print(err)
+
 def getUserType(email):
     try:
         conn = getDB()
@@ -340,6 +360,38 @@ def setProfilePic(email, picture):
             return "Profile picture successfully updated."
         else:
             return "Error updating profile picture (Email not found)"
+
+    except Error as err:
+        print(err)
+
+def setOrgLogo(orgNo, logoPath):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL setOrgLogo(%s, %s)"
+        cursor.execute(query, (orgNo, logoPath))
+
+        cursor.close()
+        conn.close()
+        return "Logo successfully updated"
+
+    except Error as err:
+        print(err)
+
+def getOrgLogo(orgNo):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT setOrgLogo(%s)"
+        cursor.execute(query, (orgNo))
+        resutl = cursor.fetchone()
+
+        for logo in result:
+            cursor.close()
+            conn.close()
+            return logo
 
     except Error as err:
         print(err)
@@ -671,6 +723,54 @@ def getProductPrice (productID):
     except Error as err:
         print(err)
 
+def getPointChangeReasons(orgNo):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL getPointChangeReasons(%s)"
+        cursor.execute(query, (orgNo,))
+        result = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+        return result
+
+    except Error as err:
+        print(err)
+
+def addPointChangeReason (reason, numPoints, orgNo):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT addPointChangeReason(%s, %s, %s)"
+        cursor.execute(query, (reason, numPoints, orgNo))
+        result = cursor.fetchone()
+
+        for reasonID in result:
+            cursor.close()
+            conn.close()
+            return reasonID
+
+    except Error as err:
+        print(err)
+
+def removePointChangeReason (reason):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL removePointChangeReason(%s)"
+        cursor.execute(query, (reason,))
+
+        cursor.close()
+        conn.close()
+        return "Points successfully moved"
+    
+    except Error as err:
+        print(err)
+
 def adjustPoints (driverEmail, sponsorEmail, reason, amt):
     try:
         conn = getDB()
@@ -686,6 +786,21 @@ def adjustPoints (driverEmail, sponsorEmail, reason, amt):
             cursor.close()
             conn.close()
             return newTotal
+
+    except Error as err:
+        print(err)
+
+def updatePointConversion(orgNo, newConversion):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL updatePointConversion(%s, %s)"
+        cursor.execute(query, (orgNo, newConversion))
+
+        cursor.close()
+        conn.close()
+        return "Point conversion successfully updated"
 
     except Error as err:
         print(err)
@@ -738,7 +853,7 @@ def getOrgName (orgID):
         cursor = getCursor(conn)
 
         query = "SELECT getOrgName(%s)"
-        cursor.execute(query, (orgID))
+        cursor.execute(query, (orgID,))
         result = cursor.fetchone()
 
         for orgName in result:
@@ -748,6 +863,23 @@ def getOrgName (orgID):
 
     except Error as err:
         print(err)
+
+def getOrgs ():
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL getOrgs()"
+        cursor.execute(query, ())
+        result = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+        return result
+
+    except Error as err:
+        print(err)
+        
 
 def createDriver(name, email, password, address, phone, orgNo):
     try:
@@ -762,17 +894,65 @@ def createDriver(name, email, password, address, phone, orgNo):
     except Error as err:
         print(err)
 
-def createSponsor(name, email, password, ccNum, ccSec, ccDate, billAddr, orgNo):
+def getDrivers(org):
     try:
         conn = getDB()
         cursor = getCursor(conn)
 
-        query = "SELECT createDriver(%s, %s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(query, (name, email, password, ccNum, ccSec, ccDate, billAddr, orgNo))
+        query = "CALL getDrivers(%s)"
+        cursor.execute(query, (org,))
+        result = cursor.fetchall()
+        
+        cursor.close()
+        conn.close()
+        return result
+
+    except Error as err:
+        print(err)
+
+def getDriverOrgs (driverID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL getDriverOrgs(%s)"
+        cursor.execute(query, (driverID))
+        result = cursor.fetchall()
+        
+        cursor.close()
+        conn.close()
+        return result
+
+    except Error as err:
+        print(err)
+
+def createSponsor(name, email, password, orgNo):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT createSponsor(%s, %s, %s, %s)"
+        cursor.execute(query, (name, email, password, orgNo))
         
         cursor.close()
         conn.close()
         return "Sponsor successfully created" 
+
+    except Error as err:
+        print(err)
+
+def getSponsors(org):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL getSponsors(%s)"
+        cursor.execute(query, (org,))
+        result = cursor.fetchall()
+        
+        cursor.close()
+        conn.close()
+        return result
 
     except Error as err:
         print(err)
@@ -788,6 +968,22 @@ def createAdmin(name, email, password):
         cursor.close()
         conn.close()
         return "Admin successfully created" 
+
+    except Error as err:
+        print(err)
+
+def getAllAdmins():
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL getAllAdmins()"
+        cursor.execute(query, ())
+        result = cursor.fetchall()
+        
+        cursor.close()
+        conn.close()
+        return result
 
     except Error as err:
         print(err)
@@ -841,13 +1037,13 @@ def rejectApplicant(email, reasoning, rejectDate):
     except Error as err:
         print(err)
 
-def removeDriver(email):
+def removeDriver(driverID):
     try:
         conn = getDB()
         cursor = getCursor(conn)
 
         query = "SELECT removeDriver(%s)"
-        cursor.execute(query, (email,))
+        cursor.execute(query, (driverID,))
 
         cursor.close()
         conn.close()
@@ -856,13 +1052,13 @@ def removeDriver(email):
     except Error as err:
         print(err)
 
-def removeSponsor (email, newSponsor):
+def removeSponsor (sponsorID, newSponsor):
     try:
         conn = getDB()
         cursor = getCursor(conn)
 
         query = "SELECT removeSponsor(%s, %s)"
-        cursor.execute(query, (email, newSponsor))
+        cursor.execute(query, (sponsorID, newSponsor))
 
         cursor.close()
         conn.close()
@@ -1098,3 +1294,68 @@ def loginAttemptsReport(startDate, endDate):
 
     except Error as err:
         print(err)
+
+def addOrgPayment (ccNum, ccSec, ccDate, billAddr, org):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL addOrgPayment(%s, %s, %s, %s, %s)"
+        ccDate = datetime.strptime(ccDate, '%m/%y').date()
+        cursor.execute(query, (ccNum, ccSec, ccDate, billAddr, org))
+
+        cursor.close()
+        conn.close()
+        return "Payment successfully added"
+
+    except Error as err:
+        print(err)
+
+def updateOrgPayment (ccNum, ccSec, ccDate, billAddr, org, payID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL updateOrgPayment(%s, %s, %s, %s, %s, %s)"
+        ccDate = datetime.strptime(ccDate, '%m/%y').date()
+        cursor.execute(query, (ccNum, ccSec, ccDate, billAddr, org, payID))
+
+        cursor.close()
+        conn.close()
+        return "Payment successfully updated"
+
+    except Error as err:
+        print(err)
+
+def emailNewDriver(driverEmail, password):
+    driverName = getUserName(driverEmail)
+    
+    subject = "Acceptance to the Good Driver Incentive Program"
+
+    message = """\
+    Welcome %s!
+    
+    Congratualations! You've been accepted into the Good Dirvers Incentive Program. Once you login for the first time, you'll be able to create your own password and start earning points. For your first login, please use this temporary password: %s. Welcome to the Program!
+    
+    Login Link: http://ec2-3-88-207-55.compute-1.amazonaws.com/""" % (driverName,password)
+
+    #Send email
+    email = EmailMessage(subject, message, 'gooddriverprogram@gmail.com', [driverEmail])
+    email.send()
+
+def emailNewSponsor(sponsorEmail, password, orgNo):
+    sponsorName = getUserName(sponsorEmail)
+    orgName = getOrgName(orgNo)
+    
+    subject = "Added as Sponsor User in Good Drivers Incentive Program"
+
+    message = """\
+    Welcome %s!
+    
+    Welcome to the Good Drivers Incentive Program. You have been added as a new sponsor user for %s. Once you login for the first time, you'll be able to create your own password and be able to access and update the information pertaining to your sponsor. For your first login, please use this temporary password: %s. Welcome to the Program!
+    
+    Login Link: http://ec2-3-88-207-55.compute-1.amazonaws.com/""" % (sponsorName, orgName, password)
+
+    #Send email
+    email = EmailMessage(subject, message, 'gooddriverprogram@gmail.com', [sponsorEmail])
+    email.send()

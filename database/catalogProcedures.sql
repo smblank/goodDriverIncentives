@@ -451,4 +451,37 @@ MODIFIES SQL DATA
         RETURN newTot;
     END;;
 
+DROP FUNCTION IF EXISTS addOrgPayment;
+
+CREATE FUNCTION addOrgPayment (ccNum INT, ccSec INT, ccDate DATE, billAddr VARCHAR(100), organization INT)
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        DECLARE newPayment INT;
+
+        INSERT INTO ORG_PAYMENTS (CreditCardNum, CreditCardSec, CreditCardDate, BillingAddress, OrgID)
+            VALUES (ccNum, ccSec, ccDate, billAddr, organization);
+        
+        SELECT PayID INTO newPayment
+        FROM ORG_PAYMENTS
+        WHERE PayID = @@Identity;
+
+        RETURN newPayment;
+    END;;
+
+DROP PROCEDURE IF EXISTS updateOrgPayment;
+
+CREATE PROCEDURE updateOrgPayment (ccNum INT, ccSec INT, ccDate DATE, billAddr VARCHAR(100), organization INT, payID INT)
+    BEGIN
+        UPDATE ORG_PAYMENTS
+            SET
+                CreditCardNum = ccNum,
+                CreditCardSec = ccSec,
+                CreditCardDate = ccDate,
+                BillingAddress = billAddr
+        WHERE PayID = payID AND OrgID = organization;
+    END;;
+
+
+
 DELIMITER ;

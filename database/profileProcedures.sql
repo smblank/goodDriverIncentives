@@ -103,9 +103,18 @@ MODIFIES SQL DATA
         RETURN newID;
     END;;
 
+DROP PROCEDURE IF EXISTS getAllAdmins;
+
+CREATE PROCEDURE getAllAdmins ()
+    BEGIN
+        SELECT Name, Email
+        FROM USER, ADMINISTRATOR
+        WHERE ADMINISTRATOR.UserID = USER.UserID;
+    END;;
+
 DROP FUNCTION IF EXISTS createSponsor;
 
-CREATE FUNCTION createSponsor (userName VARCHAR(100), userEmail VARCHAR(50), userPassword VARCHAR(20), ccNum INT, ccSec INT, ccDate DATE, billAddress VARCHAR(100), organization INT)
+CREATE FUNCTION createSponsor (userName VARCHAR(100), userEmail VARCHAR(50), userPassword VARCHAR(20), organization INT)
 RETURNS INT
 MODIFIES SQL DATA
     BEGIN
@@ -114,10 +123,19 @@ MODIFIES SQL DATA
         SELECT createUser(userName, userEmail, userPassword) INTO newID;
 
         IF newID > -1 THEN
-            INSERT INTO SPONSOR (UserID, CreditCardNum, CreditCardSec, CreditCardDate, BillingAddress, OrgID) VALUES (newID, ccNum, ccSec, ccDate, billAddress, organization);
+            INSERT INTO SPONSOR (UserID, OrgID) VALUES (newID, organization);
         END IF;
 
         RETURN newID;
+    END;;
+
+DROP PROCEDURE IF EXISTS getSponsors;
+
+CREATE PROCEDURE getSponsors (organization INT)
+    BEGIN
+        SELECT SPONSOR.UserID, Name, Email
+        FROM USER, SPONSOR
+        WHERE USER.UserID = SPONSOR.UserID AND SPONSOR.OrgID = organization;
     END;;
 
 DROP FUNCTION IF EXISTS createDriver;
@@ -132,14 +150,36 @@ MODIFIES SQL DATA
         SELECT createUser(userName, userEmail, userPassword) INTO newID;
 
         IF newID > -1 THEN
-            INSERT INTO DRIVER (UserID, PhoneNo, Points, OrgID)
-                VALUES (newID, phone, 0, organization);
+            INSERT INTO DRIVER (UserID, PhoneNo, Points)
+                VALUES (newID, phone, 0);
             INSERT INTO DRIVER_ADDRESSES (DriverID, Address, DefaultAddr)
-                VALUES (newID, Address, False);
+                VALUES (newID, addr, False);
+            INSERT INTO DRIVER_ORGS (UserID, OrgID)
+                VALUES (newID, organization);
             SELECT createWishlist(newID) INTO wishID;
         END IF;
 
         RETURN newID;
+    END;;
+
+DROP PROCEDURE IF EXISTS getDrivers;
+
+CREATE PROCEDURE getDrivers (organization INT)
+    BEGIN
+        SELECT DRIVER.UserID, Name, Email
+        FROM USER, DRIVER, DRIVER_ORGS
+        WHERE USER.UserID = DRIVER.UserID AND DRIVER.UserID = DRIVER_ORGS.UserID AND
+            DRIVER_ORGS.OrgID = organization;
+    END;;
+
+DROP PROCEDURE IF EXISTS getDriverOrgs;
+
+CREATE PROCEDURE getDriverOrgs (driver INT)
+    BEGIN
+        SELECT OrgID, ORGANIZATION.Name
+        FROM DRIVER_ORGS, ORGANIZATION
+        WHERE DRIVER_ORGS.OrgID = ORGANIZATION.OrgID AND
+            DRIVER_ORGS.UserID = driver;
     END;;
 
 DROP FUNCTION IF EXISTS createApplicant;
@@ -238,6 +278,14 @@ MODIFIES SQL DATA
         WHERE OrgID = @@Identity;
 
         RETURN newID;
+    END;;
+
+DROP PROCEDURE IF EXISTS getOrgs;
+
+CREATE PROCEDURE getOrgs()
+    BEGIN
+        SELECT OrgID, Name
+        FROM ORGANIZATION;
     END;;
 
 DROP FUNCTION IF EXISTS updateEmail;
@@ -359,22 +407,17 @@ READS SQL DATA
         RETURN userName;
     END;;
 
-DROP FUNCTION IF EXISTS getDriverAddress;
+DROP PROCEDURE IF EXISTS getDriverAddresses;
 
-CREATE FUNCTION getDriverAddress (userEmail VARCHAR(50))
-RETURNS VARCHAR(100)
-READS SQL DATA
+CREATE PROCEDURE getDriverAddresses (userEmail VARCHAR(50))
     BEGIN
-        DECLARE address VARCHAR(100);
         DECLARE user INT;
 
         SELECT getUserID(userEmail) INTO user;
 
-        SELECT Address INTO address
+        SELECT AddressID, Address
         FROM DRIVER_ADDRESSES
         WHERE DriverID = user;
-
-        RETURN address;
     END;;
 
 DROP FUNCTION IF EXISTS setAddressDefault;
@@ -509,20 +552,42 @@ READS SQL DATA
         RETURN orgName;
     END;;
 
+DROP FUNCTION IF EXISTS getOrgLogo;
+
+CREATE FUNCTION getOrgLogo(orgNo INT)
+RETURNS VARCHAR(100)
+READS SQL DATA
+    BEGIN
+        DECLARE logo VARCHAR(100);
+
+        SELECT LogoPath INTO logo
+        FROM ORGANIZATION
+        WHERE OrgID = orgNo;
+
+        RETURN logo;
+    END;;
+
+DROP PROCEDURE IF EXISTS setOrgLogo;
+
+CREATE PROCEDURE setOrgLogo(orgNo INT, logoPath VARCHAR(100))
+    BEGIN
+        UPDATE ORGANIZATION
+            SET
+                LogoPath = logoPath
+        WHERE OrgID = orgNo;
+    END;;
+
 DROP FUNCTION IF EXISTS removeDriver;
 
-CREATE FUNCTION removeDriver(driverEmail VARCHAR(50))
+CREATE FUNCTION removeDriver(driver INT)
 RETURNS INT
 MODIFIES SQL DATA
     BEGIN
-        DECLARE user INT;
         DECLARE list INT;
-
-        SELECT getUserID(driverEmail) INTO user;
 
         SELECT ListID INTO list
         FROM WISHLIST
-        WHERE DriverID = user;
+        WHERE DriverID = driver;
 
         DELETE FROM IS_IN_WISHLIST
             WHERE ListID = list;
@@ -531,56 +596,53 @@ MODIFIES SQL DATA
             WHERE ListID = list;
 
         DELETE FROM BELONGS_TO
-            WHERE DriverID = user;
+            WHERE DriverID = driver;
 
         DELETE FROM POINT_CHANGE
-            WHERE DriverID = user;
+            WHERE DriverID = driver;
 
         DELETE FROM LOGIN_ATTEMPT
-            WHERE UserID = user;
+            WHERE UserID = driver;
 
         DELETE FROM DRIVER_ADDRESSES
-            WHERE DriverID = user;
+            WHERE DriverID = driver;
+
+        DELETE FROM DRIVER_ORGS
+            WHERE UserID = driver;
 
         DELETE FROM DRIVER
-            WHERE UserID = user;
+            WHERE UserID = driver;
 
         DELETE FROM PASSWORD_CHANGE
-            WHERE UserID = user;
+            WHERE UserID = driver;
 
         DELETE FROM USER
-            WHERE UserID = user;
+            WHERE UserID = driver;
 
         RETURN 0;
     END;;
 
 DROP FUNCTION IF EXISTS removeSponsor;
 
-CREATE FUNCTION removeSponsor(sponsorEmail VARCHAR(50), newSponsorEmail VARCHAR(50))
+CREATE FUNCTION removeSponsor(sponsor INT, newSponsor INT)
 RETURNS INT
 MODIFIES SQL DATA
     BEGIN
-        DECLARE user INT;
-        DECLARE newSponsor INT;
-
-        SELECT getUserID(sponsorEmail) INTO user;
-        SELECT getUserID(newSponsorEmail) INTO newSponsor;
-
         UPDATE POINT_CHANGE
             SET SponsorID = newSponsor
-            WHERE SponsorID = user;
+            WHERE SponsorID = sponsor;
 
         DELETE FROM LOGIN_ATTEMPT
-            WHERE UserID = user;
+            WHERE UserID = sponsor;
 
         DELETE FROM SPONSOR
-            WHERE UserID = user;
+            WHERE UserID = sponsor;
 
         DELETE FROM PASSWORD_CHANGE
-            WHERE UserID = user;
+            WHERE UserID = sponsor;
 
         DELETE FROM USER
-            WHERE UserID = user;
+            WHERE UserID = sponsor;
 
         RETURN 0;
     END;;
@@ -629,5 +691,50 @@ READS SQL DATA
         RETURN (SELECT ProfilePicPath
                 FROM USER
                 WHERE UserID = user);
+    END;;
+
+DROP PROCEDURE IF EXISTS getPointChangeReasons;
+
+CREATE PROCEDURE getPointChangeReasons (orgNo INT)
+    BEGIN
+        SELECT ReasonID, ReasonDescription
+        FROM POINT_CHANGE_REASON
+        WHERE OrgID = orgNo;
+    END;;
+
+DROP FUNCTION IF EXISTS addPointChangeReason;
+
+CREATE FUNCTION addPointChangeReason (reason VARCHAR(100), numPoints INT, orgNo INT)
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        DECLARE newReason INT;
+
+        INSERT INTO POINT_CHANGE_REASON (ReasonDescription, NumPoints, OrgID)
+            VALUES (reason, numPoints, orgNo);
+        
+        SELECT ReasonID INTO newReason
+        FROM POINT_CHANGE_REASON
+        WHERE ReasonID = @@Identity;
+
+        RETURN newReason;
+    END;;
+
+DROP PROCEDURE IF EXISTS removePointChangeReason;
+
+CREATE PROCEDURE removePointChangeReason (reason INT)
+    BEGIN
+        DELETE FROM POINT_CHANGE_REASON
+        WHERE ReasonID = reason;
+    END;;
+
+DROP PROCEDURE IF EXISTS updatePointConversion;
+
+CREATE PROCEDURE updatePointConversion(orgNo INT, newConversion FLOAT)
+    BEGIN
+        UPDATE ORGANIZATION
+            SET
+                PointConversion = newConversion
+        WHERE OrgID = orgNo;
     END;;
 DELIMITER ;

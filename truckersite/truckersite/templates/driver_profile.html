@@ -97,7 +97,7 @@
             <div class = "col-md-9 h-100">
 
                 <p class = "setting" style = "top: 3%;"> Change Profile Picture </p>
-                <img id = "pfpsetting" src = "{{profilePic}}"> <br>
+                <img id = "pfpsetting" src = "{% static profilePic %}"> <br>
 
                 <form method = "POST" enctype="multipart/form-data" action = "{% url 'getNewDriverProfilePic'%}">
                     {% csrf_token %}
@@ -123,6 +123,10 @@
                 <p class = "setting" id = "manageaddresses" style = "margin-top: 1.5%;"> Manage Addresses </p>
                 <select id = "addresses">
                     <option value = "new"> New Address </option>
+
+                    {% for address in addresses %}
+                        <option value = {{address.id}}>{{address.addr}}</option>
+                    {% endfor %}
                 </select>
 
                 <button id = "submit" onclick = "submitAddress()"> Submit </button>
@@ -184,6 +188,9 @@
                     {% csrf_token%}
                     <select id = "default" name = 'default'>
                         <option value = "none"> Choose an Address </option>
+                        {% for address in addresses %}
+                            <option value = {{address.id}}>{{address.addr}}</option>
+                        {% endfor %}
                     </select>
                     <button class = "save" id = "savedefaultaddress"> <i class = "fa fa-save"></i> </button>
                 </form>

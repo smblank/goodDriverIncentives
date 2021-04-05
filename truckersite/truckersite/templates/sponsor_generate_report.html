@@ -66,6 +66,10 @@
                         {% csrf_token %}
                         <select id = "drivers" name = driver class = "selectpicker" multiple>
                             <option value = "all"> All Drivers </option>
+
+                            {% for driver in orgDrivers %}
+                                <option value = {{driver.id}}>{{driver.name}}</option>
+                            {% endfor %}
                         </select>
 
                         <h4> Start Date </h4>

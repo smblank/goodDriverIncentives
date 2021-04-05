@@ -34,12 +34,18 @@ CREATE TABLE ORGANIZATION
     PRIMARY KEY (OrgID),
     FOREIGN KEY (CatalogID) REFERENCES ORG_CATALOG (CatalogID));
 
+CREATE TABLE ORG_PAYMENTS
+    (PayID          INT             NOT NULL    AUTO_INCREMENT,
+    CreditCardNum   INT             NOT NULL,
+    CreditCardSec   INT             NOT NULL,
+    CreditCardDate  DATE            NOT NULL,
+    BillingAddress  VARCHAR(100)    NOT NULL,
+    OrgID           INT             NOT NULL,
+    PRIMARY KEY (PayID),
+    FOREIGN KEY (OrgID) REFERENCES ORGANIZATION (OrgID));
+
 CREATE TABLE SPONSOR
     (UserID         INT             NOT NULL,
-    CreditCardNum   INT,
-    CreditCardSec   INT,
-    CreditCardDate  DATE,
-    BillingAddress  VARCHAR(100),
     OrgID           INT             NOT NULL,
     PRIMARY KEY (UserID),
     FOREIGN KEY (UserID) REFERENCES USER (UserID),
@@ -49,9 +55,14 @@ CREATE TABLE DRIVER
     (UserID     INT         NOT NULL,
     PhoneNo     CHAR(12),
     Points      INT         NOT NULL,
-    OrgID       INT         NOT NULL,
     PRIMARY KEY (UserID),
-    FOREIGN KEY (UserID) REFERENCES USER (UserID),
+    FOREIGN KEY (UserID) REFERENCES USER (UserID));
+
+CREATE TABLE DRIVER_ORGS
+    (UserID     INT     NOT NULL,
+    OrgID       INT     NOT NULL,
+    PRIMARY KEY (UserID, OrgID),
+    FOREIGN KEY (UserID) REFERENCES DRIVER (UserID),
     FOREIGN KEY (OrgID) REFERENCES ORGANIZATION (OrgID));
 
 CREATE TABLE DRIVER_ADDRESSES
@@ -72,7 +83,8 @@ CREATE TABLE LOGIN_ATTEMPT
 
 CREATE TABLE POINT_CHANGE_REASON
     (ReasonID           INT             NOT NULL    AUTO_INCREMENT,
-    ReasonDescription   VARCHAR(100)     NOT NULL,
+    ReasonDescription   VARCHAR(100)    NOT NULL,
+    NumPoints           INT             NOT NULL,
     OrgID               INT             NOT NULL,
     PRIMARY KEY (ReasonID),
     FOREIGN KEY (OrgID) REFERENCES ORGANIZATION (OrgID));
@@ -81,7 +93,6 @@ CREATE TABLE POINT_CHANGE
     (ChangeID       INT     NOT NULL    AUTO_INCREMENT,
     ChangeDate      DATE    NOT NULL,
     ReasonID        INT     NOT NULL,
-    NumPoints       INT     NOT NULL,
     TotalPoints     INT     NOT NULL,
     DriverID        INT     NOT NULL,
     SponsorID       INT     NOT NULL,

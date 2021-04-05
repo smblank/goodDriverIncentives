@@ -68,7 +68,7 @@ def getNewDriverPassword(request):
         response = "The passwords do not match."
         return render(request, 'driver_profile.html')
     
-    if !newPass.isupper() :
+    if not newPass.isupper() :
         response = "You need a capital letter."
         return render(request, 'driver_profile.html')
     
@@ -156,7 +156,7 @@ def getNewSponsorPassword(request):
         response = "The passwords do not match."
         return render(request, 'sponsor_profile.html')
     
-    if !newPass.isupper() :
+    if not newPass.isupper() :
         response = "You need a capital letter."
         return render(request, 'sponsor_profile.html')
     
@@ -207,7 +207,7 @@ def getNewAdminPassword(request):
         response = "The passwords do not match."
         return render(request, 'admin_profile.html')
     
-    if !newPass.isupper() :
+    if not newPass.isupper() :
         response = "You need a capital letter."
         return render(request, 'admin_profile.html')
     

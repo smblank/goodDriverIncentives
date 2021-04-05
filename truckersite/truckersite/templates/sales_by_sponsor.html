@@ -65,6 +65,10 @@
                         {% csrf_token %}
                         <select id = "drivers" name = "sponsor" class = "selectpicker">
                             <option value = "all"> All Sponsors </option>
+
+                            {% for org in orgs %}
+                                <option value = "{{org.id}}">{{org.name}}</option>
+                            {% endfor %}
                         </select>
 
                         <select id = "drivers" name = "driver" class = "selectpicker">

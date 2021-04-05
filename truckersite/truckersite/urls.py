@@ -29,6 +29,9 @@ from reports import models as reportOps
 from sponsor import views as sponsorViews
 from sponsor import models as sponsorOps
 
+from orgPage import views as orgViews
+from orgPage import models as orgOps
+
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -60,6 +63,18 @@ urlpatterns = [
     path('getNewAdminPass', profileOps. getNewAdminPassword, name = 'getNewAdminPass'),
     path('adminProfile/', profileViews.adminProfile, name = 'adminProfile'),
 
+    #Organization page
+    path('orgPage/', orgViews.organizationPage, name = 'orgPage'),
+    path('getNewOrgLogo', orgOps.getNewLogo, name = "getNewOrgLogo"),
+    path('getNewPointChange', orgOps.getNewPointChange, name = 'getNewPointChange'),
+    path('updatePointConversion', orgOps.updatePointConversion, name = 'updatePointConversion'),
+    path('updatePaymentInfo', orgOps.updatePaymentInfo, name = 'updatePaymentInfo'),
+    path('addNewSponsor', orgOps.addNewSponsor, name = 'addNewSponsor'),
+    path('removeReason', orgOps.removeReason, name = 'removeReason'),
+    path('editReason', orgOps.editReason, name = 'editReason'),
+    path('removeSponsor', orgOps.removeSponsor, name = "removeSponsor"),
+    path('removeDriver', orgOps.removeDriver, name = 'removeDriver'),
+
     #Sponsor report generation
     path('sponsorReportGeneration/', reportViews.sponsorGenerateReport, name = 'sponsorReportGeneration'),
     path('getSponsorReport', reportOps.getSponsorReport, name = 'getSponsorReport'),
@@ -84,5 +99,8 @@ urlpatterns = [
     path('application/<int:applicant_id>', sponsorViews.sponsorViewApplicant, name = 'sponsorViewApplicant'),
     path('accept_applicant/<int:applicant_id>', sponsorViews.sponsorAcceptApplicant, name = 'sponsorAcceptApplicant'),
     path('reject_applicant/<int:applicant_id>', sponsorViews.sponsorRejectApplicant, name = 'sponsorRejectApplicant'),
+
+    #View as
+    path('setDriverView', sponsorOps.setDriverView, name = 'setDriverView'),
     
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
