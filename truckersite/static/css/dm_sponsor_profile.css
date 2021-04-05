@@ -24,21 +24,25 @@ body{
 
 }
 
+.col-md-3{
+    height: 100%;
+    background-color: white;
+    border-right-style: solid;
+    border-right-color: #7070707e;
+    position: fixed;
+    background-color: #2a2a2e;
+}
+
+.col-md-9{
+    margin-left: 24.5%;
+}
+
 .dropdown-menu{
     background-color: #38383d;
 }
 
 .dropdown-item{
     color: white;
-}
-
-#sidebar{
-    height: 100%;
-    width: 23.5%;
-    background-color: #2a2a2e;
-    border-right-style: solid;
-    border-right-color: #7070707e;
-    position: fixed;
 }
   
 .sectionheader{
