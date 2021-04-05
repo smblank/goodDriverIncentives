@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
-<html lang = "en-US">
-<meta charset = "UTF-8">
+<html lang="en-US">
+<meta charset="UTF-8">
 
 <head>
     <meta charset="utf-8">
@@ -25,15 +25,16 @@
 </head>
 
 <body>
-    <div class = "container-fluid">
+    <div class="container-fluid">
 
         <!-- Credit for navbar: https://getbootstrap.com/docs/4.1/components/navbar/-->
-        <nav class = "navbar navbar-expand-md navbar-light fixed-top" id = "header">
-            <ul class = "navbar-nav w-100 justify-content-between">
-                <li class = "nav-item dropdown">
-                    <a class = "nav-link dropdown-toggle" id = "menubutton" role = "button" data-toggle = "dropdown" aria-haspopup = "true" aria-expanded = "false"> Menu </a>
+        <nav class="navbar navbar-expand-md navbar-light fixed-top" id="header">
+            <ul class="navbar-nav w-100 justify-content-between">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="menubutton" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Menu </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{% url 'orgPage' %}"> Organization Page </a>
+                       <a class="dropdown-item" href="/sponsor_view_drivers"> Driver List </a>
                         <a class="dropdown-item" href="{%url 'sponsorCatalog' %}"> Catalog </a>
                         <!-- <a class="dropdown-item" href="sponsor_notifications.html"> Notifications </a> -->
                         <a class="dropdown-item" href="{% url 'sponsorReportGeneration'%}"> Generate Report </a>
@@ -47,35 +48,35 @@
                     <a class = "nav-link" href = "{% url 'sponsorDashDisplay' %}" id = "title"> Good Driver Incentive Program </a>
                 </li>
 
-                <a class = "navbar-brand" href = "{% url 'sponsorProfile'%}">
-                    <img src = "Defaultpfp.png" width = "30" height = "30">
+                <a class="navbar-brand" href="{% url 'sponsorProfile'%}">
+                    <img src="Defaultpfp.png" width="30" height="30">
                 </a>
             </ul>
         </nav>
 
-        <div class = "row">
-            <div class = "col-md-3">
-                <div id = "sidebar">
-                    <a id = "back" href = "driver_catalog.html"> <i class = "fa fa-arrow-left"></i> Catalog </a>
-                    <p id = "pointstitle"> My Points: </p>
-                    <p id = "points"> 0 </p>
+        <div class="row">
+            <div class="col-md-3">
+                <div id="sidebar">
+                    <a id="back" href="driver_catalog.html"> <i class="fa fa-arrow-left"></i> Catalog </a>
+                    <p id="pointstitle"> My Points: </p>
+                    <p id="points"> 0 </p>
                 </div>
             </div>
 
-            <div class = "col-md-9 text-right" style = "height: 900px;">
+            <div class="col-md-9 text-right" style="height: 900px;">
                 <!-- Source for Search Bar: https://getbootstrap.com/docs/4.1/components/input-group/ -->
-                <div class = "input-group" style = "width: 100%; margin: 0;">
-                    <input type = "text" class = "form-control sticky-top" placeholder = "Search" aria-label = "search" aria-describedby = "button-addon2">
-                    <div class = "input-group-append sticky-top">
-                        <button class = "btn btn-outline-secondary" type = "button" id = "search"> <i class = "fa fa-search"></i> </button>
+                <div class="input-group" style="width: 100%; margin: 0;">
+                    <input type="text" class="form-control sticky-top" placeholder="Search" aria-label="search" aria-describedby="button-addon2">
+                    <div class="input-group-append sticky-top">
+                        <button class="btn btn-outline-secondary" type="button" id="search"> <i class = "fa fa-search"></i> </button>
                     </div>
                 </div>
-                <a class = "sticky-top" id = "cart" href = "driver_cart.html"> <i class = "fa fa-shopping-cart"></i> </a>
-                
+                <a class="sticky-top" id="cart" href="driver_cart.html"> <i class="fa fa-shopping-cart"></i> </a>
+
                 <!-- Put Items Here -->
 
-                <button id = "addcart"> Add to Cart </button>
-                <button id = "addwishlist"> Add to Wishlist </button>
+                <button id="addcart"> Add to Cart </button>
+                <button id="addwishlist"> Add to Wishlist </button>
             </div>
         </div>
     </div>

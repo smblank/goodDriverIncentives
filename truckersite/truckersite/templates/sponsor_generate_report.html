@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
-<html lang = "en-US">
-<meta charset = "UTF-8">
+<html lang="en-US">
+<meta charset="UTF-8">
 
 <head>
 
@@ -25,16 +25,17 @@
 </head>
 
 <body>
-    
-    <div class = "container-fluid">
+
+    <div class="container-fluid">
 
         <!-- Credit for navbar: https://getbootstrap.com/docs/4.1/components/navbar/-->
-        <nav class = "navbar navbar-expand-md navbar-light fixed-top" id = "header">
-            <ul class = "navbar-nav w-100 justify-content-between">
-                <li class = "nav-item dropdown">
-                    <a class = "nav-link dropdown-toggle" id = "menubutton" role = "button" data-toggle = "dropdown" aria-haspopup = "true" aria-expanded = "false"> Menu </a>
+        <nav class="navbar navbar-expand-md navbar-light fixed-top" id="header">
+            <ul class="navbar-nav w-100 justify-content-between">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="menubutton" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Menu </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{% url 'orgPage' %}"> Organization Page </a>
+                       <a class="dropdown-item" href="/sponsor_view_drivers"> Driver List </a>
                         <a class="dropdown-item" href="{%url 'sponsorCatalog' %}"> Catalog </a>
                         <!-- <a class="dropdown-item" href="sponsor_notifications.html"> Notifications </a> -->
                         <a class="dropdown-item" href="{% url 'sponsorReportGeneration'%}"> Generate Report </a>
@@ -54,17 +55,17 @@
             </ul>
         </nav>
 
-        <div class = "row">
-            <div class = "col-md-3 text-left">
-                <div id = "sidebar">
-                    <h2 class = "text-center" style = "margin-top: 2%; margin-bottom: 3%;"> Generate Report</h2>
-                    <h3 class = "text-center" style = "margin-bottom: 5%;"> Driver Point Tracking </h3>
+        <div class="row">
+            <div class="col-md-3 text-left">
+                <div id="sidebar">
+                    <h2 class="text-center" style="margin-top: 2%; margin-bottom: 3%;"> Generate Report</h2>
+                    <h3 class="text-center" style="margin-bottom: 5%;"> Driver Point Tracking </h3>
 
                     <h4> Select Driver(s) </h4>
                     <!-- Source: https://stackoverflow.com/questions/50895806/bootstrap-4-multiselect-dropdown/50897096 -->
-                    <form method = "Post" action = "{% url 'getSponsorReport'%}">
+                    <form method="Post" action="{% url 'getSponsorReport'%}">
                         {% csrf_token %}
-                        <select id = "drivers" name = driver class = "selectpicker" multiple>
+                        <select id="drivers" name=d river class="selectpicker" multiple>
                             <option value = "all"> All Drivers </option>
 
                             {% for driver in orgDrivers %}
@@ -73,48 +74,47 @@
                         </select>
 
                         <h4> Start Date </h4>
-                        <input type = "text" id = "start" name = startDate placeholder = "mm/dd/yy" maxlength = "8">
+                        <input type="text" id="start" name=s tartDate placeholder="mm/dd/yy" maxlength="8">
                         <h4> End Date </h4>
-                        <input type = "text" id = "end" name = endDate placeholder = "mm/dd/yy" maxlength = "8">
-                        
-                        <button id = "generate"> Generate Report </button>
+                        <input type="text" id="end" name=e ndDate placeholder="mm/dd/yy" maxlength="8">
+
+                        <button id="generate"> Generate Report </button>
                     </form>
-                        <button id = "download"> Download Report <i class = "fa fa-download"></i> </button>
+                    <button id="download"> Download Report <i class = "fa fa-download"></i> </button>
                 </div>
             </div>
 
-            <div class = "col-md-9" id = "preview">
-                    <p>Date Range: {{startDate}} - {{endDate}}</p>
-                    {% for driver, points, changes in drivers %}
-                        <p>Driver: {{driver}}  TotalPoints: {{points}}</p>
-                        <p>Point Changes</p>
-                        <table width = "60%">
-                            <col style = "width:20%">
-                            <col style = "width:35%">
-                            <col style = "width:30%">
-                            <col style = "width:15%">
-                            <tr>
-                                <td>Date</td>
-                                <td>Change Amount</td>
-                                <td>Sponsor Responsible</td>
-                                <td>Reasoning</td>
-                            </tr>
-                        </table>
-                        {% for change in changes %}
-                                <table  width = "60%">
-                                    <col style = "width:20%">
-                                    <col style = "width:35%">
-                                    <col style = "width:30%">
-                                    <col style = "width:15%">
-                                    <tr>
-                                        <td>{{change.date}}</td>
-                                        <td>{{change.pointChange}}</td>
-                                        <td>{{change.sponsor}}</td>
-                                        <td>{{change.reason}}</td>
-                                    </tr>
-                                </table>
-                        {% endfor %}
-                    {% endfor %}
+            <div class="col-md-9" id="preview">
+                <p>Date Range: {{startDate}} - {{endDate}}</p>
+                {% for driver, points, changes in drivers %}
+                <p>Driver: {{driver}} TotalPoints: {{points}}</p>
+                <p>Point Changes</p>
+                <table width="60%">
+                    <col style="width:20%">
+                    <col style="width:35%">
+                    <col style="width:30%">
+                    <col style="width:15%">
+                    <tr>
+                        <td>Date</td>
+                        <td>Change Amount</td>
+                        <td>Sponsor Responsible</td>
+                        <td>Reasoning</td>
+                    </tr>
+                </table>
+                {% for change in changes %}
+                <table width="60%">
+                    <col style="width:20%">
+                    <col style="width:35%">
+                    <col style="width:30%">
+                    <col style="width:15%">
+                    <tr>
+                        <td>{{change.date}}</td>
+                        <td>{{change.pointChange}}</td>
+                        <td>{{change.sponsor}}</td>
+                        <td>{{change.reason}}</td>
+                    </tr>
+                </table>
+                {% endfor %} {% endfor %}
 
             </div>
         </div>

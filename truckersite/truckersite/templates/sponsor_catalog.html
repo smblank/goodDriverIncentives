@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
-<html lang = "en-US">
-<meta charset = "UTF-8">
+<html lang="en-US">
+<meta charset="UTF-8">
 
 <head>
     <meta charset="utf-8">
@@ -25,14 +25,15 @@
 </head>
 
 <body>
-    <div class = "container-fluid">
+    <div class="container-fluid">
 
-         <!-- Credit for navbar: https://getbootstrap.com/docs/4.1/components/navbar/-->
-         <nav class = "navbar navbar-expand-md navbar-light fixed-top" id = "header">
-            <ul class = "navbar-nav w-100 justify-content-between">
-                <li class = "nav-item dropdown">
-                    <a class = "nav-link dropdown-toggle" id = "menubutton" role = "button" data-toggle = "dropdown" aria-haspopup = "true" aria-expanded = "false"> Menu </a>
+        <!-- Credit for navbar: https://getbootstrap.com/docs/4.1/components/navbar/-->
+        <nav class="navbar navbar-expand-md navbar-light fixed-top" id="header">
+            <ul class="navbar-nav w-100 justify-content-between">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="menubutton" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Menu </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+<<<<<<< HEAD
                         <a class="dropdown-item" href="{% url 'orgPage' %}"> Organization Page </a>
                         <a class="dropdown-item" href="{%url 'sponsorCatalog' %}"> Catalog </a>
                         <!-- <a class="dropdown-item" href="sponsor_notifications.html"> Notifications </a> -->
@@ -45,34 +46,49 @@
 
                 <li class = "nav-item active">
                     <a class = "nav-link" href = "{% url 'sponsorDashDisplay' %}" id = "title"> Good Driver Incentive Program </a>
+=======
+                        <a class="dropdown-item" href="sponsor_organization.html"> Organization Page </a>
+                        <a class="dropdown-item" href="/sponsor_view_drivers"> Driver List </a>
+                        <a class="dropdown-item" href="sponsor_catalog.html"> Catalog </a>
+                        <a class="dropdown-item" href="sponsor_notifications.html"> Notifications </a>
+                        <a class="dropdown-item" href="sponsor_generate_report.html"> Generate Report </a>
+                        <a class="dropdown-item" href="sponsor_submit_issue.html"> Submit an Issue </a>
+                        <a class="dropdown-item" href="sponsor_view_issues.html"> Issues </a>
+                        <a class="dropdown-item" href="index.html"> Logout </a>
+                    </div>
                 </li>
 
-                <a class = "navbar-brand" href = "{% url 'sponsorProfile'%}">
-                    <img src = "Defaultpfp.png" width = "30" height = "30">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/sponsor_dash" id="title"> Good Driver Incentive Program </a>
+>>>>>>> e8d17804a4026195b9b763538943be1d49e918eb
+                </li>
+
+                <a class="navbar-brand" href="{% url 'sponsorProfile'%}">
+                    <img src="Defaultpfp.png" width="30" height="30">
                 </a>
             </ul>
         </nav>
 
-        <div class = "row">
-            <div class = "col-md-3">
-                <div id = "sidebar">
-                    <p id = "pagename"> Catalog </p>
-                    <p id = "pointstitle"> My Points: </p>
-                    <p id = "points"> 0 </p>
+        <div class="row">
+            <div class="col-md-3">
+                <div id="sidebar">
+                    <p id="pagename"> Catalog </p>
+                    <p id="pointstitle"> My Points: </p>
+                    <p id="points"> 0 </p>
 
-                    <select class = "form-control form-control-lg" id = "drivers" style = "margin-bottom: 1.5%;">
+                    <select class="form-control form-control-lg" id="drivers" style="margin-bottom: 1.5%;">
                         <option value = "none"> Select a Driver </option>
                     </select>
-                    <button id = "submit"> Submit </button>
+                    <button id="submit"> Submit </button>
                 </div>
             </div>
 
-            <div class = "col-md-9 text-right">
+            <div class="col-md-9 text-right">
                 <!-- Source for Search Bar: https://getbootstrap.com/docs/4.1/components/input-group/ -->
-                <div class = "input-group" style = "width: 100%; margin: 0;">
-                    <input id = "search" type = "text" class = "form-control" placeholder = "Search" aria-label = "search" aria-describedby = "button-addon2">
-                    <div class = "input-group-append">
-                        <button class = "btn btn-outline-secondary" type = "button" id = "search"> <i class = "fa fa-search"></i> </button>
+                <div class="input-group" style="width: 100%; margin: 0;">
+                    <input id="search" type="text" class="form-control" placeholder="Search" aria-label="search" aria-describedby="button-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="search"> <i class = "fa fa-search"></i> </button>
                     </div>
                 </div>
                 
@@ -80,23 +96,24 @@
                 {% block content %}
                 <h2> Here is the list of Items </h2>
                 {% for item in items %}
-                    <div class="view overlay">
-                        <img img src={{item.image}} width="255" height="255" alt="">
-                        <a href="/sponsor_catalog/{{item.slug}}/">
+                <div class="view overlay">
+                    <img img src={{item.image}} width="255" height="255" alt="">
+                    <a href="/sponsor_catalog/{{item.slug}}/">
                         <div class="mask rgba-white-slight"></div>
-                        </a>
-                    </div>
-                    <a href="/sponsor_catalog/{{item.slug}}/"><h4 class="font-weight-bold blue-text">
-                    <strong>${{item.name}}</strong>
-                    </h4>
                     </a>
-                  <a href="/sponsor_catalog/{{item.slug}}/"><h4 class="font-weight-bold blue-text">
-                  <strong>${{item.price}}</strong>
-                  </h4>
-                  </a>
-                  </br>
-                {% endfor %}
-                {% endblock content %}
+                </div>
+                <a href="/sponsor_catalog/{{item.slug}}/">
+                    <h4 class="font-weight-bold blue-text">
+                        <strong>${{item.name}}</strong>
+                    </h4>
+                </a>
+                <a href="/sponsor_catalog/{{item.slug}}/">
+                    <h4 class="font-weight-bold blue-text">
+                        <strong>${{item.price}}</strong>
+                    </h4>
+                </a>
+                </br>
+                {% endfor %} {% endblock content %}
             </div>
         </div>
     </div>
