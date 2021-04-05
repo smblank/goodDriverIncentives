@@ -23,7 +23,8 @@ def loginpg(request):
             request.session['email'] = email
             request.session['role'] = db.getUserType(email)
 
-
+            if request.POST.get('remember') == 'true':
+                request.session.set_expiry(0)
             
             return moveout(request)
         else:
