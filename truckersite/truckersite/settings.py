@@ -127,7 +127,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (str(BASE_DIR.joinpath('static')),)
-
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 #Media directory (files uploaded by outside user)
 MEDIA_ROOT = os.path.join(PROJECT_PATH,'truckersite/media/')
