@@ -7,9 +7,6 @@ from django.core.mail import EmailMessage
 def getDB():
     try:
         connection = connect(host = 'truckingdb.c9tkxb1tjvpp.us-east-1.rds.amazonaws.com', user = 'admin', password = 'accesstodb', database = 'DRIVER_DB', autocommit = True)
-
-        while connection is None:
-            connection = connect(host = 'truckingdb.c9tkxb1tjvpp.us-east-1.rds.amazonaws.com', user = 'admin', password = 'accesstodb', database = 'DRIVER_DB', autocommit = True)
     
     except Error as err:
         print(err)
@@ -19,6 +16,9 @@ def getDB():
 
 def getCursor(connection):
     try:
+        while connection is None:
+            connection = connect(host = 'truckingdb.c9tkxb1tjvpp.us-east-1.rds.amazonaws.com', user = 'admin', password = 'accesstodb', database = 'DRIVER_DB', autocommit = True)
+        
         cursor = connection.cursor(buffered = True)
     
     except Error as err:
@@ -1359,3 +1359,67 @@ def emailNewSponsor(sponsorEmail, password, orgNo):
     #Send email
     email = EmailMessage(subject, message, 'gooddriverprogram@gmail.com', [sponsorEmail])
     email.send()
+
+def createTempDriver(tempEmail, orgNo):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT createTempDriver(%s, %s)"
+        cursor.execute(query, (tempEmail, orgNo))
+        result = cursor.fetchone()
+
+        for tempID in result:
+            cursor.close()
+            conn.close()
+            return tempID
+
+    except Error as err:
+        print(err)
+
+def removeTempDriver(tempID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL createTempDriver(%s)"
+        cursor.execute(query, (tempID, ))
+
+        cursor.close()
+        conn.close()
+        return "Successfully deleted temporary driver"
+
+    except Error as err:
+        print(err)
+
+def createTempSponsor(tempEmail, orgNo):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT createTempSponsor(%s, %s)"
+        cursor.execute(query, (tempEmail, orgNo))
+        result = cursor.fetchone()
+
+        for tempID in result:
+            cursor.close()
+            conn.close()
+            return tempID
+
+    except Error as err:
+        print(err)
+
+def removeTempSponsor(tempID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL createTempSponsor(%s)"
+        cursor.execute(query, (tempID, ))
+
+        cursor.close()
+        conn.close()
+        return "Successfully deleted temporary Sponsor"
+
+    except Error as err:
+        print(err)

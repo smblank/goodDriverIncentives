@@ -129,6 +129,39 @@ MODIFIES SQL DATA
         RETURN newID;
     END;;
 
+DROP FUNCTION IF EXISTS createTempSponsor;
+
+CREATE FUNCTION createTempSponsor (tempEmail VARCHAR(50), organization INT)
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        DECLARE newID INT;
+
+        SELECT createSponsor('Temp Sponsor', tempEmail, 'temp', organization) INTO newID;
+
+        RETURN newID;
+    END;;
+
+DROP PROCEDURE IF EXISTS removeTempSponsor;
+
+CREATE PROCEDURE removeTempSponsor (sponsor INT)
+    BEGIN
+        DELETE FROM POINT_CHANGE
+            WHERE SponsorID = sponsor;
+
+        DELETE FROM LOGIN_ATTEMPT
+            WHERE UserID = sponsor;
+
+        DELETE FROM SPONSOR
+            WHERE UserID = sponsor;
+
+        DELETE FROM PASSWORD_CHANGE
+            WHERE UserID = sponsor;
+
+        DELETE FROM USER
+            WHERE UserID = sponsor;
+    END;;
+
 DROP PROCEDURE IF EXISTS getSponsors;
 
 CREATE PROCEDURE getSponsors (organization INT)
@@ -150,16 +183,86 @@ MODIFIES SQL DATA
         SELECT createUser(userName, userEmail, userPassword) INTO newID;
 
         IF newID > -1 THEN
-            INSERT INTO DRIVER (UserID, PhoneNo, Points)
-                VALUES (newID, phone, 0);
+            INSERT INTO DRIVER (UserID, PhoneNo)
+                VALUES (newID, phone);
             INSERT INTO DRIVER_ADDRESSES (DriverID, Address, DefaultAddr)
                 VALUES (newID, addr, False);
-            INSERT INTO DRIVER_ORGS (UserID, OrgID)
-                VALUES (newID, organization);
+            INSERT INTO DRIVER_ORGS (UserID, OrgID, Points)
+                VALUES (newID, organization, 0);
             SELECT createWishlist(newID) INTO wishID;
         END IF;
 
         RETURN newID;
+    END;;
+
+DROP FUNCTION IF EXISTS createTempDriver;
+
+CREATE FUNCTION createTempDriver(email VARCHAR(50), orgNo INT)
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        DECLARE newDriver INT;
+
+        SELECT createDriver('Temp Driver', email, 'temp', 'Temp Address', '555-555-5555', orgNo) INTO newDriver;
+
+        UPDATE DRIVER_ORGS
+            SET
+                Points = 1000
+            WHERE UserID = newDriver AND OrgID = orgNo;
+
+        RETURN newDriver;
+    END;;
+
+DROP PROCEDURE IF EXISTS removeTempDriver;
+
+CREATE PROCEDURE removeTempDriver (driverID INT)
+    BEGIN
+        DECLARE list INT;
+        DECLARE orderID INT;
+
+        SELECT ListID INTO list
+        FROM WISHLIST
+        WHERE DriverID = driver;
+
+        SELECT OrderID INTO orderID
+        FROM BELONGS_TO
+        WHERE DriverID = driver;
+
+        DELETE FROM IS_IN_WISHLIST
+            WHERE ListID = list;
+        
+        DELETE FROM WISHLIST
+            WHERE ListID = list;
+
+        DELETE FROM BELONGS_TO
+            WHERE DriverID = driver;
+
+        DELETE FROM IS_IN_ORDER
+            WHERE OrderID = orderID;
+
+        DELETE FROM DRIVER_ORDER
+            WHERE OrderID = orderID;
+
+        DELETE FROM POINT_CHANGE
+            WHERE DriverID = driver;
+
+        DELETE FROM LOGIN_ATTEMPT
+            WHERE UserID = driver;
+
+        DELETE FROM DRIVER_ADDRESSES
+            WHERE DriverID = driver;
+
+        DELETE FROM DRIVER_ORGS
+            WHERE UserID = driver;
+
+        DELETE FROM DRIVER
+            WHERE UserID = driver;
+
+        DELETE FROM PASSWORD_CHANGE
+            WHERE UserID = driver;
+
+        DELETE FROM USER
+            WHERE UserID = driver;
     END;;
 
 DROP PROCEDURE IF EXISTS getDrivers;

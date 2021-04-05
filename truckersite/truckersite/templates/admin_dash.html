@@ -49,16 +49,16 @@
                 <li class = "nav-item dropdown">
                     <a class = "nav-link dropdown-toggle" id = "menubutton" role = "button" data-toggle = "dropdown" aria-haspopup = "true" aria-expanded = "false"> Menu </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class = "dropdown-item" href = "admin_organization.html"> Organizations </a>
-                        <a class = "dropdown-item" href = "admin_notifications.html"> Notifications </a>
+                        <a class = "dropdown-item" href = "{% url 'adminOrgs' %}"> Organizations </a>
+                        <!-- <a class = "dropdown-item" href = "admin_notifications.html"> Notifications </a> -->
                         <a class = "dropdown-item" href = "{% url 'adminReportGeneration'%}"> Generate Reports </a>
-                        <a class = "dropdown-item" href = "admin_view_issues.html"> Issues </a>
-                        <a class = "dropdown-item" href = "index.html"> Logout </a>
+                        <!-- <a class = "dropdown-item" href = "admin_view_issues.html"> Issues </a> -->
+                        <a class = "dropdown-item" href = "{% url 'logout' %}"> Logout </a>
                     </div>
                 </li>
 
                 <li class = "nav-item active">
-                    <a class = "nav-link" href = "admin_dash.html" id = "title"> Good Driver Incentive Program </a>
+                    <a class = "nav-link" href = "{% url 'adminDash' %}" id = "title"> Good Driver Incentive Program </a>
                 </li>
 
                 <a class = "navbar-brand" href = "{% url 'adminProfile'%}">
@@ -70,8 +70,8 @@
         <div class = "row text-center">
             <div class = "col-md-12">
                 <h2 id = "pagename" style = "margin-bottom: 3%; margin-left: 0%;"> My Dashboard </h2>
-                <button id = "sponsorview" class = "pull-right"> Sponsor View </button> 
-                <button id = "driverview" class = "pull-right"> Driver View </button> 
+                <button id = "sponsorview" class = "pull-right" onclick = "location.href = '{% url 'adminSetSponsorView' %}'"> Sponsor View </button> 
+                <button id = "driverview" class = "pull-right" onclick = "location.href = '{% url 'adminSetDriverView' %}'"> Driver View </button> 
             </div>
         </div>
 
@@ -83,7 +83,6 @@
                 <p style = "font-size: 150%;">Admin Management: </p>
                 <select class = "form-control form-control-lg" id = "admin" style = "margin-bottom: 1.5%;">
                     <option value = "none"> Select an Admin </option>
-                    <option value = "John"> John Doe </option>
                 </select>
 
                 <button id = "remove" onclick = "removeAdmin()"> Remove Sponsor </button>

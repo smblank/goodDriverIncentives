@@ -36,6 +36,8 @@ def logoutpg(request):
     del request.session['id']
     del request.session['email']
     del request.session['role']
+    del request.session['isSponsor']
+    del request.session['isAdmin']
     
     return render(request, 'index.html')
 
@@ -44,11 +46,21 @@ def moveout(request):
     if 'loggedin' in request.session:
         print(request.session.get('role'))
         if request.session.get('role') == 'Driver':
+            request.session['isSponsor'] = False
+            request.session['isAdmin'] = False
             return render(request, 'driver_dash.html')
+
         if request.session.get('role') == 'Sponsor':
+            request.session['isSponsor'] = True
+            request.session['isAdmin'] = False
+            request.session['isViewing'] = False
             response = redirect('/sponsor_dash/')
             return response
+
         if request.session.get('role') == 'Admin':
+            request.session['isSponsor'] = False
+            request.session['isAdmin'] = True
+            request.session['isViewing'] = False
             return render(request, 'admin_dash.html')
     else:
         print('not logged in...displaying login')

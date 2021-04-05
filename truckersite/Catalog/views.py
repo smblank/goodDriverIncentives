@@ -10,6 +10,21 @@ from django.core.mail import send_mail
 
 APP_ID = 'ApurvPat-FindingS-PRD-ddc78fcfb-06024fa2'
 
+def driverCatalog(request):
+    return render(request, 'driver_catalog.html')
+
+def wishlist(request):
+    return render(request, 'wishlist.html')
+
+def driverOrderHistory(request):
+    return render(request, 'driver_order_history.html')
+
+def sponsorCatalog(request):
+    return render(request, 'sponsor_catalog.html')
+
+def driverCart(request):
+    return render(request, 'driver_cart.html')
+
 def addProducts(request):
     api = finding(appid = APP_ID, config_file = None)
     request = {'keywords': {'TV', 'Computer', 'Phone'}, 'outputSelector': 'SellerInfo',}

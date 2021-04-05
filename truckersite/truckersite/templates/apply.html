@@ -109,23 +109,6 @@
 
         <div class = "row">
             <div class = "col-md-12">
-                <h2 class = "sectionheader"> Organization Name </h2>
-            </div>
-        </div>
-
-        <div class = "row">
-            <div class = "col-md-12">
-                <div style = "margin-left: 38%; margin-bottom: 1%;">
-                    <!-- Source: https://stackoverflow.com/questions/50895806/bootstrap-4-multiselect-dropdown/50897096 -->
-                    <select id = "organization" class = "selectpicker" multiple name = "org" required>
-                        <!-- EXAMPLE: <option value = "org1"> Organization 1</option> -->
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <div class = "row">
-            <div class = "col-md-12">
                 <h2 class = "sectionheader"> Sponsor Name </h2>
             </div>
         </div>
@@ -136,9 +119,6 @@
                     <!-- Source: https://stackoverflow.com/questions/50895806/bootstrap-4-multiselect-dropdown/50897096 -->
                     <select id = "sponsor" class = "selectpicker" multiple name = "sponsor" required>
                         <!-- EXAMPLE: <option value = "spon1"> Organization 1</option> --> 
-                        <option value = "org1"> Organization 1</option>
-                        <option value = "org1"> Organization 2</option>
-                        <option value = "org1"> Organization 3</option>
                     </select>
                 </div>
             </div>
@@ -153,7 +133,7 @@
         <div class = "row">
             <div class = "col-md-12 text-right">
                 <!-- Linking another html document to a button source: https://www.w3schools.com/html/html_links.asp -->
-                <button id = "cancelapplication" onclick = "document.location = 'index.html'"> Cancel </button>
+                <button id = "cancelapplication" onclick = "location.href = '{% url 'loginScreen' %}'"> Cancel </button>
             </div>
         </div>
         

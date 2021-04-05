@@ -54,13 +54,13 @@ CREATE TABLE SPONSOR
 CREATE TABLE DRIVER
     (UserID     INT         NOT NULL,
     PhoneNo     CHAR(12),
-    Points      INT         NOT NULL,
     PRIMARY KEY (UserID),
     FOREIGN KEY (UserID) REFERENCES USER (UserID));
 
 CREATE TABLE DRIVER_ORGS
     (UserID     INT     NOT NULL,
     OrgID       INT     NOT NULL,
+    Points      INT     NOT NULL,
     PRIMARY KEY (UserID, OrgID),
     FOREIGN KEY (UserID) REFERENCES DRIVER (UserID),
     FOREIGN KEY (OrgID) REFERENCES ORGANIZATION (OrgID));

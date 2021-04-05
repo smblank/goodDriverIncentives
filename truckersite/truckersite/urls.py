@@ -29,16 +29,24 @@ from reports import models as reportOps
 from sponsor import views as sponsorViews
 from sponsor import models as sponsorOps
 
+from dashboard import views as dashViews
+from dashboard import models as dashOps
+
 from orgPage import views as orgViews
 from orgPage import models as orgOps
+
+from Catalog import views as catalogViews
+from Catalog import models as catalogOps
 
 from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
     path('',forms.login), 
+    path('loginScreen/', forms.login, name = 'loginScreen'),
     path('login', forms.loginpg, name = 'login'),
     
+    path('application/', views.application, name = 'application'),
     path('reg',views.userreggin, name = 'reg'),
 
     #Driver profile forms
@@ -74,6 +82,7 @@ urlpatterns = [
     path('editReason', orgOps.editReason, name = 'editReason'),
     path('removeSponsor', orgOps.removeSponsor, name = "removeSponsor"),
     path('removeDriver', orgOps.removeDriver, name = 'removeDriver'),
+    path('adminOrgs/', orgViews.adminOrgs, name = 'adminOrgs'),
 
     #Sponsor report generation
     path('sponsorReportGeneration/', reportViews.sponsorGenerateReport, name = 'sponsorReportGeneration'),
@@ -90,6 +99,13 @@ urlpatterns = [
     path('getDriverSales', reportOps.getDriverSales, name = 'getDriverSales'),
     path('getSponsorSales', reportOps.getSponsorSales, name = 'getSponsorSales'),
 
+    #Catalog
+    path('driverCatalog/', catalogViews.driverCatalog, name = 'driverCatalog'),
+    path('wishlist/', catalogViews.wishlist, name = 'wishlist'),
+    path('driverOrderHistory/', catalogViews.driverOrderHistory, name = 'driverOrderHistory'),
+    path('sponsorCatalog', catalogViews.sponsorCatalog, name = 'sponsorCatalog'),
+    path('driverCart', catalogViews.driverCart, name = 'driverCart'),
+
     path('driver_catalog/', product_list, name='catalog'),
     path('sponsor_catalog/', sponsor_catalog, name='catalog'),
     path('admin/', admin.site.urls),
@@ -100,7 +116,19 @@ urlpatterns = [
     path('accept_applicant/<int:applicant_id>', sponsorViews.sponsorAcceptApplicant, name = 'sponsorAcceptApplicant'),
     path('reject_applicant/<int:applicant_id>', sponsorViews.sponsorRejectApplicant, name = 'sponsorRejectApplicant'),
 
+    #Dashboards
+    path("driverDash/", dashViews.driverDash, name = 'driverDash'),
+    path('adminDash/', dashViews.adminDash, name = 'adminDash'),
+
     #View as
-    path('setDriverView', sponsorOps.setDriverView, name = 'setDriverView'),
+    path('sponSetDriverView', sponsorOps.setDriverView, name = 'sponSetDriverView'),
+    path('setOrigSponsorView', sponsorOps.setOriginalView, name = 'setOrigSponsorView'),
+    path('adminSetDriverView', dashOps.setDriverView, name = 'adminSetDriverView'),
+    path('adminSetSponsorView', dashOps.setSponsorView, name = 'adminSetSponsorView'),
+    path('revertDriverView', dashOps.revertDriverView, name = 'revertDriverView'),
+    path('revertSponsorView', dashOps.revertSponsorView, name = 'revertSponsorView'),
+
+    #Logout
+    path('logout', forms.logoutpg, name = 'logout'),
     
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

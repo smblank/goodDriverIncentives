@@ -23,7 +23,10 @@ def getSponsorReport(request):
     startDate = request.POST.get('startDate')
     endDate = request.POST.get('endDate')
 
-    orgID = db.getOrgNo(request.session['email'])
+    if (request.session['isViewing']):
+        orgID = db.getOrgNo(request.session['tempEmail'])
+    else:
+        orgID = db.getOrgNo(request.session['email'])
 
     if (driver == 'all'):
         result = db.allDriverPointChangeReport(startDate, endDate, orgID)

@@ -36,17 +36,17 @@
                     <a class="nav-link dropdown-toggle" id="menubutton" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Menu </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{% url 'orgPage' %}"> Organization Page </a>
-                        <a class="dropdown-item" href="sponsor_catalog"> Catalog </a>
-                        <a class="dropdown-item" href="sponsor_notifications.html"> Notifications </a>
+                        <a class="dropdown-item" href="{%url 'sponsorCatalog' %}"> Catalog </a>
+                        <!-- <a class="dropdown-item" href="sponsor_notifications.html"> Notifications </a> -->
                         <a class="dropdown-item" href="{% url 'sponsorReportGeneration'%}"> Generate Report </a>
-                        <a class="dropdown-item" href="sponsor_submit_issue.html"> Submit an Issue </a>
-                        <a class="dropdown-item" href="sponsor_view_issues.html"> Issues </a>
-                        <a class="dropdown-item" href="index.html"> Logout </a>
+                        <!-- <a class="dropdown-item" href="sponsor_submit_issue.html"> Submit an Issue </a>
+                        <a class="dropdown-item" href="sponsor_view_issues.html"> Issues </a> -->
+                        <a class="dropdown-item" href="{% url 'logout' %}"> Logout </a>
                     </div>
                 </li>
 
                 <li class="nav-item active">
-                    <a class="nav-link" href="sponsor_dash.html" id="title"> Good Driver Incentive Program </a>
+                    <a class="nav-link" href="{% url 'sponsorDashDisplay' %}" id="title"> Good Driver Incentive Program </a>
                 </li>
 
                 <a class="navbar-brand" href="{% url 'sponsorProfile'%}">
@@ -58,9 +58,12 @@
         <div class="row text-center">
             <div class="col-md-12">
                 <h2 id="pagename" style="margin-bottom: 3%; margin-left: 0%;"> My Dashboard </h2>
-                <button id="driverview" class="pull-right" onclick = "location.href = '{% url 'setDriverView' %}'"> Driver View </button>
-                <button id="adminview" class="pull-right" style="visibility: hidden;"> Admin View </button>
-                <!-- visibility: hidden; by deafult should only be available to admins-->
+                {% if isSponsor %}
+                    <button id="driverview" class="pull-right" onclick = "location.href = '{% url 'sponSetDriverView' %}'"> Driver View </button>
+                
+                {% elif isAdmin %}
+                    <button id="adminview" class="pull-right" onclick = "location.href = '{% url 'revertSponsorView' %}'"> Admin View </button>
+                {% endif %}
             </div>
         </div>
 

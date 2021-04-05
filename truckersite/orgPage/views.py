@@ -3,7 +3,11 @@ import dbConnectionFunctions as db
 
 # Create your views here.
 def organizationPage(request):
-    orgNo = db.getOrgNo(request.session['email'])
+    if (request.session['isViewing']):
+        orgNo = db.getOrgNo(request.session['tempEmail'])
+    else:
+        orgNo = db.getOrgNo(request.session['email'])
+        
     result = db.getPointChangeReasons(orgNo)
 
     class Reason:
@@ -60,3 +64,6 @@ def organizationPage(request):
     }
 
     return render(request, 'sponsor_organization.html', context)
+
+def adminOrgs(request):
+    return render(request, 'admin_organization.html')

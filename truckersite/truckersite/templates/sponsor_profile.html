@@ -35,21 +35,21 @@
                 <li class = "nav-item dropdown">
                     <a class = "nav-link dropdown-toggle" id = "menubutton" role = "button" data-toggle = "dropdown" aria-haspopup = "true" aria-expanded = "false"> Menu </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class = "dropdown-item" href = "sponsor_organization.html"> Organization Page </a>
-                        <a class = "dropdown-item" href = "sponsor_catalog.html"> Catalog </a>
-                        <a class = "dropdown-item" href = "sponsor_notifications.html"> Notifications </a>
-                        <a class = "dropdown-item" href = "sponsor_generate_report.html"> Generate Report </a>
-                        <a class = "dropdown-item" href = "sponsor_submit_issue.html"> Submit an Issue </a>
-                        <a class = "dropdown-item" href = "sponsor_view_issues.html"> Issues </a>
-                        <a class = "dropdown-item" href = "index.html"> Logout </a>
+                        <a class="dropdown-item" href="{% url 'orgPage' %}"> Organization Page </a>
+                        <a class="dropdown-item" href="{%url 'sponsorCatalog' %}"> Catalog </a>
+                        <!-- <a class="dropdown-item" href="sponsor_notifications.html"> Notifications </a> -->
+                        <a class="dropdown-item" href="{% url 'sponsorReportGeneration'%}"> Generate Report </a>
+                        <!-- <a class="dropdown-item" href="sponsor_submit_issue.html"> Submit an Issue </a>
+                        <a class="dropdown-item" href="sponsor_view_issues.html"> Issues </a> -->
+                        <a class="dropdown-item" href="{% url 'logout' %}"> Logout </a>
                     </div>
                 </li>
 
                 <li class = "nav-item active">
-                    <a class = "nav-link" href = "sponsor_dash.html" id = "title"> Good Driver Incentive Program </a>
+                    <a class = "nav-link" href = "{% url 'sponsorDashDisplay' %}" id = "title"> Good Driver Incentive Program </a>
                 </li>
 
-                <a class = "navbar-brand" href = "sponsor_profile.html">
+                <a class = "navbar-brand" href = "{% url 'sponsorProfile'%}">
                     <img src = "{{profilePic}}" width = "30" height = "30">
                 </a>
             </ul>

@@ -10,7 +10,11 @@ from datetime import datetime
 def getNewLogo(request):
     newLogo = request.FILES['logo']
     extension = os.path.splitext(newLogo.name)[1]
-    orgNo = db.getOrgNo(request.session['email'])
+
+    if (request.session['isViewing']):
+        orgNo = db.getOrgNo(request.session['tempEmail'])
+    else:
+        orgNo = db.getOrgNo(request.session['email'])
 
     imgPath = 'static/img/' + 'user' + str(db.getOrgName(orgNo)) + extension
     response = db.setOrgLogo(orgNo, str(db.getOrgName(orgNo)) + extension)
@@ -25,7 +29,10 @@ def getNewPointChange(request):
     numPoints = request.POST.get('numPoints')
     desc = request.POST.get('description')
 
-    orgNo = db.getOrgNo(request.session['email'])
+    if (request.session['isViewing']):
+        orgNo = db.getOrgNo(request.session['tempEmail'])
+    else:
+        orgNo = db.getOrgNo(request.session['email'])
 
     db.addPointChangeReason(desc, numPoints, orgNo)
     return views.organizationPage(request)
@@ -35,7 +42,10 @@ def updatePointConversion(request):
     pointAmt = request.POST.get('points')
 
     newConversion = float(dollarAmt) / float(pointAmt)
-    orgNo = db.getOrgNo(request.session['email'])
+    if (request.session['isViewing']):
+        orgNo = db.getOrgNo(request.session['tempEmail'])
+    else:
+        orgNo = db.getOrgNo(request.session['email'])
 
     db.updatePointConversion(orgNo, newConversion)
     return views.organizationPage(request)
@@ -56,7 +66,10 @@ def updatePaymentInfo(request):
         address += ' ' + addr2
     address += ', ' + city + ', ' + state + ' ' + zip
 
-    orgNo = db.getOrgNo(request.session['email'])
+    if (request.session['isViewing']):
+        orgNo = db.getOrgNo(request.session['tempEmail'])
+    else:
+        orgNo = db.getOrgNo(request.session['email'])
 
     db.updateOrgPayment(int(ccNum), int(ccSec), ccDate, address, orgNo, 1)
     return views.organizationPage(request)
@@ -65,7 +78,10 @@ def addNewSponsor(request):
     email = request.POST.get('email')
     name = request.POST.get('name')
 
-    orgNo = db.getOrgNo(request.session['email'])
+    if (request.session['isViewing']):
+        orgNo = db.getOrgNo(request.session['tempEmail'])
+    else:
+        orgNo = db.getOrgNo(request.session['email'])
 
     newPassword = db.getRandomPassword()
 

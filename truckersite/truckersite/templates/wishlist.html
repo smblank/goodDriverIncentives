@@ -33,20 +33,20 @@
                 <li class = "nav-item dropdown">
                     <a class = "nav-link dropdown-toggle" id = "menubutton" role = "button" data-toggle = "dropdown" aria-haspopup = "true" aria-expanded = "false"> Menu </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class = "dropdown-item" href = "driver_catalog.html"> Catalog </a>
-                        <a class = "dropdown-item" href = "wishlist.html"> Wishlist </a>
-                        <a class = "dropdown-item" href = "driver_order_history.html"> Order History </a>
-                        <a class = "dropdown-item" href = "driver_notifications.html"> Notifications </a>
-                        <a class = "dropdown-item" href = "driver_submit_issue.html"> Submit an Issue </a>
-                        <a class = "dropdown-item" href = "index.html"> Logout </a>
+                        <a class = "dropdown-item" href = "{% url 'driverCatalog'%}"> Catalog </a>
+                        <a class = "dropdown-item" href = "{% url 'wishlist'%}"> Wishlist </a>
+                        <a class = "dropdown-item" href = "{% url 'driverOrderHistory'%}"> Order History </a>
+                        <!-- <a class = "dropdown-item" href = "driver_notifications.html"> Notifications </a>
+                        <a class = "dropdown-item" href = "driver_submit_issue.html"> Submit an Issue </a> -->
+                        <a class = "dropdown-item" href = "{% url 'logout' %}"> Logout </a>
                     </div>
                 </li>
 
                 <li class = "nav-item active">
-                    <a class = "nav-link" href = "driver_dash.html" id = "title"> Good Driver Incentive Program </a>
+                    <a class = "nav-link" href = "{% url 'driverDash' %}" id = "title"> Good Driver Incentive Program </a>
                 </li>
 
-                <a class = "navbar-brand" href = "driver_profile.html">
+                <a class = "navbar-brand" href = "{% url 'driverProfile'%}">
                     <img src = "Defaultpfp.png" width = "30" height = "30">
                 </a>
             </ul>
@@ -69,7 +69,7 @@
                         <button class = "btn btn-outline-secondary" type = "button" id = "search"> <i class = "fa fa-search"></i> </button>
                     </div>
                 </div>
-                <a id = "cart" href = "driver_cart.html"> <i class = "fa fa-shopping-cart"></i> </a>
+                <a id = "cart" href = "{% url 'driverCart' %}"> <i class = "fa fa-shopping-cart"></i> </a>
                 
                 <!-- Put Items Here -->
             </div>

@@ -3,11 +3,19 @@ import dbConnectionFunctions as db
 
 # Create your views here.
 def sponsorGenerateReport(request):
-    imgPath = db.getProfilePic(request.session['email'])
+    if (request.session['isViewing']):
+        imgPath = db.getProfilePic(request.session['email'])
+    else: 
+        imgPath = db.getProfilePic(request.session['email'])
+        
     profilePic = 'http://127.0.0.1:8000/static/img/' + imgPath
 
-    org = db.getOrgNo(request.session['email'])
-    result = db.getDrivers(org)
+    if (request.session['isViewing']):
+        orgNo = db.getOrgNo(request.session['tempEmail'])
+    else:
+        orgNo = db.getOrgNo(request.session['email'])
+
+    result = db.getDrivers(orgNo)
 
     class Driver:
         def __init__(self):

@@ -54,9 +54,9 @@
         }
 
         function editDriver(){
-            if(document.getElementById("driversdp").value != "none"){
+            // if(document.getElementById("driversdp").value != "none"){
                 $('#editdriver').modal('show');
-            }
+            // }
         }
 
         function editDriverPoints(){
@@ -79,16 +79,16 @@
                 <li class = "nav-item dropdown">
                     <a class = "nav-link dropdown-toggle" id = "menubutton" role = "button" data-toggle = "dropdown" aria-haspopup = "true" aria-expanded = "false"> Menu </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class = "dropdown-item" href = "admin_organization.html"> Organizations </a>
-                        <a class = "dropdown-item" href = "admin_notifications.html"> Notifications </a>
-                        <a class = "dropdown-item" href = "admin_generate_report.html"> Generate Reports </a>
-                        <a class = "dropdown-item" href = "admin_view_issues.html"> Issues </a>
-                        <a class = "dropdown-item" href = "index.html"> Logout </a>
+                        <a class = "dropdown-item" href = "{% url 'adminOrgs' %}"> Organizations </a>
+                        <!-- <a class = "dropdown-item" href = "admin_notifications.html"> Notifications </a> -->
+                        <a class = "dropdown-item" href = "{% url 'adminReportGeneration'%}"> Generate Reports </a>
+                        <!-- <a class = "dropdown-item" href = "admin_view_issues.html"> Issues </a> -->
+                        <a class = "dropdown-item" href = "{% url 'logout' %}"> Logout </a>
                     </div>
                 </li>
 
                 <li class = "nav-item active">
-                    <a class = "nav-link" href = "admin_dash.html" id = "title"> Good Driver Incentive Program </a>
+                    <a class = "nav-link" href = "{% url 'adminDash' %}" id = "title"> Good Driver Incentive Program </a>
                 </li>
 
                 <a class = "navbar-brand" href = "{% url 'adminProfile'%}">
@@ -334,6 +334,10 @@
                                 <input type = "text" class = "editing" id = "email" style = "margin-top: 2%;" placeholder = "Email"> <br> <br>
                                 <input type = "password" class = "editing" id = "password" placeholder = "Password" style = "font-size: 110%;"> <br>
                                 <input type = "password" class = "editing" id = "confirmpassword" placeholder = "Confirm Password" style = "font-size: 110%;">
+                                <h5>Add driver to another sponsor</h5>
+                                <select class = "form-control form-control-lg" id = "orgs" name = "orgs" style = "margin-bottom: 1.5%;">
+                                    <option value = "none"> Select a Sponsor </option>
+                                </select>
                             </div>
                             <div class = "modal-footer">
                                 <button type = "button" class = "btn btn-secondary" style = "background-color: #EDA1A1; border-color: #EDA1A1; color: black;" data-dismiss = "modal"> Cancel</button>

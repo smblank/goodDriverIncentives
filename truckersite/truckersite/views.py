@@ -3,6 +3,9 @@ from truckersite.models import Uregister
 from django.contrib import messages
 
 #add reguser to settings
+def application(request):
+    return render(request, 'apply.html')
+
 def userreggin(request):
     if request.method=='POST':
         if request.get('Name') and request.get('lname') and request.get('PhoneNo') and request.get('Email') and request.get('Address') and request.get('address2') and request.get('city') and request.get('state') and request.get('zipcode') and request.get('org') and request.get('sponsor'):

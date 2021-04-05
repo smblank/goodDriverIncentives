@@ -11,7 +11,10 @@ def sponsorDashDisplay(request):
 
     driver_application_list = []
 
-    org_num = db.getOrgNo(request.session['email'])
+    if (request.session['isViewing']):
+        org_num = db.getOrgNo(request.session['tempEmail'])
+    else:
+        org_num = db.getOrgNo(request.session['email'])
 
     conn = db.getDB()
     cursor = db.getCursor(conn)
@@ -31,7 +34,7 @@ def sponsorDashDisplay(request):
     cursor.close()
     conn.close()
 
-    context = {'driver_application_list': driver_application_list}
+    context = {'driver_application_list': driver_application_list, 'isSponsor': request.session['isSponsor'], 'isAdmin': request.session['isAdmin']}
     return render(request, 'sponsor_dash.html', context)
 
 def sponsorViewApplicant(request, applicant_id):
