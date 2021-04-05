@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
-<html lang = "en-US">
-<meta charset = "UTF-8">
+<html lang="en-US">
+<meta charset="UTF-8">
 
 <head>
 
@@ -27,8 +27,8 @@
 </head>
 
 <body>
-    
-    <div class = "container-fluid">
+
+    <div class="container-fluid">
 
         <!-- Credit for navbar: https://getbootstrap.com/docs/4.1/components/navbar/-->
         <!-- Credit for navbar: https://getbootstrap.com/docs/4.1/components/navbar/-->
@@ -38,6 +38,7 @@
                     <a class="nav-link dropdown-toggle" id="menubutton" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Menu </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="sponsor_organization.html"> Organization Page </a>
+                        <a class="dropdown-item" href="/sponsor_view_drivers"> Driver List </a>
                         <a class="dropdown-item" href="sponsor_catalog"> Catalog </a>
                         <a class="dropdown-item" href="sponsor_notifications.html"> Notifications </a>
                         <a class="dropdown-item" href="{% url 'sponsorReportGeneration'%}"> Generate Report </a>
@@ -48,7 +49,7 @@
                 </li>
 
                 <li class="nav-item active">
-                    <a class="nav-link" href="sponsor_dash.html" id="title"> Good Driver Incentive Program </a>
+                    <a class="nav-link" href="/sponsor_dash" id="title"> Good Driver Incentive Program </a>
                 </li>
 
                 <a class="navbar-brand" href="{% url 'sponsorProfile'%}">
@@ -57,38 +58,38 @@
             </ul>
         </nav>
 
-        <div class = "row">
-            <div class = "col-md-3">
-                <div id = "sidebar">
-                    <a id = "back" href = "sponsor_catalog.html"> <i class = "fa fa-arrow-left"></i> Catalog </a>
-                    <p id = "pointstitle"> My Points: </p>
-                    <p id = "points"> 0 </p>
+        <div class="row">
+            <div class="col-md-3">
+                <div id="sidebar">
+                    <a id="back" href="sponsor_catalog.html"> <i class="fa fa-arrow-left"></i> Catalog </a>
+                    <p id="pointstitle"> My Points: </p>
+                    <p id="points"> 0 </p>
                 </div>
             </div>
 
-            <div class = "col-md-9 text-right">
-                <a id = "cart" href = "sponsor_cart.html"> <i class = "fa fa-shopping-cart"></i> </a>
+            <div class="col-md-9 text-right">
+                <a id="cart" href="sponsor_cart.html"> <i class="fa fa-shopping-cart"></i> </a>
                 <!-- Put Items Here -->
             </div>
         </div>
 
-        <div class = "row fixed-bottom">
-            <div class = "col-md-3"></div>
-            <div class = "col-md-9">
-                <h4> Shipping Address:  </h4>
-                <select id = "shipping">
+        <div class="row fixed-bottom">
+            <div class="col-md-3"></div>
+            <div class="col-md-9">
+                <h4> Shipping Address: </h4>
+                <select id="shipping">
                     <option value = "none"> *Default Address* </option>
                 </select>
             </div>
         </div>
 
-        <div class = "row fixed-bottom text-right">
-            <div class = "col-md-12">
-                <button id = "confirm"> Confirm </button>
-                <button id = "cancel"> Cancel </button>
+        <div class="row fixed-bottom text-right">
+            <div class="col-md-12">
+                <button id="confirm"> Confirm </button>
+                <button id="cancel"> Cancel </button>
             </div>
         </div>
-        
+
     </div>
 
 </body>

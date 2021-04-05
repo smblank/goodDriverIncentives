@@ -99,6 +99,9 @@ urlpatterns = [
     path('application/<int:applicant_id>', sponsorViews.sponsorViewApplicant, name = 'sponsorViewApplicant'),
     path('accept_applicant/<int:applicant_id>', sponsorViews.sponsorAcceptApplicant, name = 'sponsorAcceptApplicant'),
     path('reject_applicant/<int:applicant_id>', sponsorViews.sponsorRejectApplicant, name = 'sponsorRejectApplicant'),
+    path('sponsor_view_drivers/', sponsorViews.sponsorViewDrivers, name = 'sponsorViewDrivers'),
+    path('add_driver_points/<int:driver_id>', sponsorViews.sponsorAddPoints, name = 'sponsorAddPoints'),
+    path('remove_driver_points/<int:driver_id>', sponsorViews.sponsorRemovePoints, name = 'sponsorRemovePoints'),
 
     #View as
     path('setDriverView', sponsorOps.setDriverView, name = 'setDriverView'),

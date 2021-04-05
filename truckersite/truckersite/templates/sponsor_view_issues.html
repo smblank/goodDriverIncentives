@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
-<html lang = "en-US">
-<meta charset = "UTF-8">
+<html lang="en-US">
+<meta charset="UTF-8">
 
 <head>
 
@@ -26,45 +26,46 @@
 </head>
 
 <body>
-    
-    <div class = "container-fluid">
+
+    <div class="container-fluid">
 
         <!-- Credit for navbar: https://getbootstrap.com/docs/4.1/components/navbar/-->
-        <nav class = "navbar navbar-expand-md navbar-light fixed-top" id = "header">
-            <ul class = "navbar-nav w-100 justify-content-between">
-                <li class = "nav-item dropdown">
-                    <a class = "nav-link dropdown-toggle" id = "menubutton" role = "button" data-toggle = "dropdown" aria-haspopup = "true" aria-expanded = "false"> Menu </a>
+        <nav class="navbar navbar-expand-md navbar-light fixed-top" id="header">
+            <ul class="navbar-nav w-100 justify-content-between">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="menubutton" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Menu </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class = "dropdown-item" href = "sponsor_organization.html"> Organization Page </a>
-                        <a class = "dropdown-item" href = "sponsor_catalog.html"> Catalog </a>
-                        <a class = "dropdown-item" href = "sponsor_notifications.html"> Notifications </a>
-                        <a class = "dropdown-item" href = "sponsor_generate_report.html"> Generate Report </a>
-                        <a class = "dropdown-item" href = "sponsor_submit_issue.html"> Submit an Issue </a>
-                        <a class = "dropdown-item" href = "sponsor_view_issues.html"> Issues </a>
-                        <a class = "dropdown-item" href = "index.html"> Logout </a>
+                        <a class="dropdown-item" href="sponsor_organization.html"> Organization Page </a>
+                        <a class="dropdown-item" href="/sponsor_view_drivers"> Driver List </a>
+                        <a class="dropdown-item" href="sponsor_catalog.html"> Catalog </a>
+                        <a class="dropdown-item" href="sponsor_notifications.html"> Notifications </a>
+                        <a class="dropdown-item" href="sponsor_generate_report.html"> Generate Report </a>
+                        <a class="dropdown-item" href="sponsor_submit_issue.html"> Submit an Issue </a>
+                        <a class="dropdown-item" href="sponsor_view_issues.html"> Issues </a>
+                        <a class="dropdown-item" href="index.html"> Logout </a>
                     </div>
                 </li>
 
-                <li class = "nav-item active">
-                    <a class = "nav-link" href = "sponsor_dash.html" id = "title"> Good Driver Incentive Program </a>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/sponsor_dash" id="title"> Good Driver Incentive Program </a>
                 </li>
 
-                <a class = "navbar-brand" href = "{% url 'sponsorProfile'%}">
-                    <img src = "Defaultpfp.png" width = "30" height = "30">
+                <a class="navbar-brand" href="{% url 'sponsorProfile'%}">
+                    <img src="Defaultpfp.png" width="30" height="30">
                 </a>
             </ul>
         </nav>
 
-        <div class = "row text-center">
-            <div class = "col-md-12">
-                <h2 id = "pagename" style = "margin-bottom: 5%;"> Issues </h2>
+        <div class="row text-center">
+            <div class="col-md-12">
+                <h2 id="pagename" style="margin-bottom: 5%;"> Issues </h2>
             </div>
         </div>
 
-        <div class = "row">
-            <div class = "col-md-3"></div>
+        <div class="row">
+            <div class="col-md-3"></div>
 
-            <div class = "col-md-6">
+            <div class="col-md-6">
                 <!-- Templete for an open issue, if there is a better way then go for it
                 <div class = "issue">
                     <h3> Issue Subject </h2>
@@ -74,7 +75,7 @@
             </div>
 
 
-            <div class = "col-md-3"></div>
+            <div class="col-md-3"></div>
         </div>
 
     </div>
