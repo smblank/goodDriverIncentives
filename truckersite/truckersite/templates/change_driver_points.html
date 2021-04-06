@@ -15,7 +15,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
-    <title> Give Driver Points </title>
+    <title> Change Driver Points </title>
 
     <!-- Links the .css file -->
     {% load static %}
@@ -37,12 +37,12 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{% url 'orgPage' %}"> Organization Page </a>
                         <a class="dropdown-item" href="/sponsor_view_drivers"> Driver List </a>
-                        <a class="dropdown-item" href="sponsor_catalog"> Catalog </a>
-                        <a class="dropdown-item" href="sponsor_notifications.html"> Notifications </a>
+                        <a class="dropdown-item" href="{%url 'sponsorCatalog' %}"> Catalog </a>
+                        <!-- <a class="dropdown-item" href="sponsor_notifications.html"> Notifications </a> -->
                         <a class="dropdown-item" href="{% url 'sponsorReportGeneration'%}"> Generate Report </a>
-                        <a class="dropdown-item" href="sponsor_submit_issue.html"> Submit an Issue </a>
-                        <a class="dropdown-item" href="sponsor_view_issues.html"> Issues </a>
-                        <a class="dropdown-item" href="index.html"> Logout </a>
+                        <!-- <a class="dropdown-item" href="sponsor_submit_issue.html"> Submit an Issue </a>
+                        <a class="dropdown-item" href="sponsor_view_issues.html"> Issues </a> -->
+                        <a class="dropdown-item" href="{% url 'logout' %}"> Logout </a>
                     </div>
                 </li>
 
@@ -58,24 +58,24 @@
 
         <div class="row text-center">
             <div class="col-md-12">
-                <h2 id="pagename" style="margin-bottom: 3%; margin-left: 0%;"> Give Driver Points </h2>
+                <h2 id="pagename" style="margin-bottom: 3%; margin-left: 0%;"> Change Driver Points </h2>
             </div>
         </div>
 
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <form action="/add_driver_points_function" method="POST">
+                <form action="/change_driver_points/{{ driver_id }}" method="POST">
+                    {% csrf_token %}
                     <div class="form-group">
-                        <label for="driverID">Driver Name</label>
-                        <input type="hidden" id="driverID" value="">
+                        <label for="driver_id">{{ driver_name }}</label>
+                        <input type="hidden" id="driver_id" value="{{ driver_id }}">
                     </div>
                     <div class="form-group">
-                        <label for="pointsToGiveDriver">Number of points to give driver:</label>
-                        <input type="text" class="form-control" id="pointsToGiveDriver" placeholder="Points">
-                    </div>
-                    <div class="form-group">
-                        <label for="reasonForGivingPoints">Reason for giving points:</label>
-                        <textarea class="form-control" id="reasonForGivingPoints" rows="5" placeholder="Reason"></textarea>
+                        <select class="form-control" name="reason_id" id="reason_id">
+                            {% for x in reason_list %}
+                            <option value="{{ x.reason_id }}">{{ x.reason_desc }} ({{ x.reason_points }})</option>
+                            {% endfor %}
+                        </select>
                     </div>
                     <button type="submit" class="btn btn-primary mb-2">Submit</button>
                 </form>

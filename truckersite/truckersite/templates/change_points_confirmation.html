@@ -15,7 +15,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
-    <title> Remove Driver Points </title>
+    <title> Point Change Confirmation </title>
 
     <!-- Links the .css file -->
     {% load static %}
@@ -37,12 +37,12 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{% url 'orgPage' %}"> Organization Page </a>
                         <a class="dropdown-item" href="/sponsor_view_drivers"> Driver List </a>
-                        <a class="dropdown-item" href="sponsor_catalog"> Catalog </a>
-                        <a class="dropdown-item" href="sponsor_notifications.html"> Notifications </a>
+                        <a class="dropdown-item" href="{%url 'sponsorCatalog' %}"> Catalog </a>
+                        <!-- <a class="dropdown-item" href="sponsor_notifications.html"> Notifications </a> -->
                         <a class="dropdown-item" href="{% url 'sponsorReportGeneration'%}"> Generate Report </a>
-                        <a class="dropdown-item" href="sponsor_submit_issue.html"> Submit an Issue </a>
-                        <a class="dropdown-item" href="sponsor_view_issues.html"> Issues </a>
-                        <a class="dropdown-item" href="index.html"> Logout </a>
+                        <!-- <a class="dropdown-item" href="sponsor_submit_issue.html"> Submit an Issue </a>
+                        <a class="dropdown-item" href="sponsor_view_issues.html"> Issues </a> -->
+                        <a class="dropdown-item" href="{% url 'logout' %}"> Logout </a>
                     </div>
                 </li>
 
@@ -58,27 +58,23 @@
 
         <div class="row text-center">
             <div class="col-md-12">
-                <h2 id="pagename" style="margin-bottom: 3%; margin-left: 0%;"> Remove Driver Points </h2>
+                <h2 id="pagename" style="margin-bottom: 3%; margin-left: 0%;"> Point Change Confirmation </h2>
             </div>
         </div>
 
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <form action="/remove_driver_points_function" method="POST">
-                    <div class="form-group">
-                        <label for="driverID">Driver Name</label>
-                        <input type="hidden" id="driverID" value="">
-                    </div>
-                    <div class="form-group">
-                        <label for="pointsToRemoveFromDriver">Number of points to remove from driver:</label>
-                        <input type="text" class="form-control" id="pointsToRemoveFromDriver" placeholder="Points">
-                    </div>
-                    <div class="form-group">
-                        <label for="reasonForGivingPoints">Reason for removing points:</label>
-                        <textarea class="form-control" id="reasonForRemovingPoints" rows="5" placeholder="Reason"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary mb-2">Submit</button>
-                </form>
+                <h3>Driver: {{ driver_name }}</h3>
+                <h3>Email: {{ driver_email }}</h3>
+                <h3>Original Point Total: {{ original_points }}</h3>
+                <h3>Point Change: {{ point_change }}</h3>
+                <h3>New Point Total: {{ new_total }}</h3>
+                {% if successful %}
+                <h3>* points were successfully changed *</h3>
+                {% else %}
+                <h3 style="color: red;">* point change failed *</h3>
+                {% endif %}
+                <h3><a href="/sponsor_view_drivers/">Driver List</a></h3>
             </div>
         </div>
 

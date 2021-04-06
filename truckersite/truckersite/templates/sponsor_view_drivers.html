@@ -67,10 +67,7 @@
                 {{ driver.name }}
             </div>
             <div class="col-md-2">
-                <button id="driverpoints" class="btn btn-primary mb-2" style="margin-left: 12px;" onclick="location.href='/add_driver_points/{{ driver.driver_id}}'"> Add Points </button>
-            </div>
-            <div class="col-md-2">
-                <button id="driverpoints" class="btn btn-primary mb-2" style="margin-left: 8px;" onclick="location.href='/remove_driver_points/{{ driver.driver_id}}'"> Remove Points </button>
+                <button id="driverpoints" class="btn btn-primary mb-2" style="margin-left: 12px;" onclick="location.href='/change_driver_points/{{ driver.driver_id}}'"> Change Points </button>
             </div>
         </div>
         {% endfor %}

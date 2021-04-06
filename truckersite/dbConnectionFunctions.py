@@ -778,7 +778,8 @@ def adjustPoints (driverEmail, sponsorEmail, reason, amt):
 
         query = "SELECT manualPointChange(%s, %s, %s, %s, %s)"
 
-        changeDate = datetime.date.today()
+        now = datetime.now()
+        changeDate = now.strftime('%Y-%m-%d')
         cursor.execute(query, (driverEmail, sponsorEmail, reason, amt, changeDate))
         result = cursor.fetchone()
 

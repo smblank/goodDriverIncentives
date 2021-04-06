@@ -16,12 +16,13 @@ def organizationPage(request):
             desc = ''
 
     reasons = []
-
-    for (id, desc) in result:
-        tempReason = Reason()
-        tempReason.id = id
-        tempReason.desc = desc
-        reasons.append(tempReason)
+    
+    if result != None:
+        for (id, desc) in result:
+            tempReason = Reason()
+            tempReason.id = id
+            tempReason.desc = desc
+            reasons.append(tempReason)
 
     result = db.getSponsors(orgNo)
 
@@ -33,12 +34,13 @@ def organizationPage(request):
     
     sponsors = []
 
-    for (id, name, email) in result:
-        tempSponsor = Sponsor()
-        tempSponsor.id = id
-        tempSponsor.name = name
-        tempSponsor.email = email
-        sponsors.append(tempSponsor)
+    if result != None:
+        for (id, name, email) in result:
+            tempSponsor = Sponsor()
+            tempSponsor.id = id
+            tempSponsor.name = name
+            tempSponsor.email = email
+            sponsors.append(tempSponsor)
 
     result = db.getDrivers(orgNo)
 
@@ -50,12 +52,13 @@ def organizationPage(request):
     
     drivers = []
 
-    for (id, name, email) in result:
-        tempDriver = Driver()
-        tempDriver.id = id
-        tempDriver.name = name
-        tempDriver.email = email
-        drivers.append(tempDriver)
+    if result != None:
+        for (id, name, email) in result:
+            tempDriver = Driver()
+            tempDriver.id = id
+            tempDriver.name = name
+            tempDriver.email = email
+            drivers.append(tempDriver)
 
     imgPath = db.getOrgLogo(orgNo)
     logo = 'http://127.0.0.1:8000/static/img/' + imgPath
