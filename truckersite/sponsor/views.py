@@ -20,7 +20,7 @@ def sponsorDashDisplay(request):
     conn = db.getDB()
     cursor = db.getCursor(conn)
 
-    query_applicants = "SELECT * FROM APPLICANT WHERE OrgID=%s"
+    query_applicants = "SELECT * FROM APPLICANT WHERE OrgID=%s AND IsAccepted=False"
     cursor.execute(query_applicants, (org_num,))
     result = cursor.fetchall()
 
@@ -41,52 +41,70 @@ def sponsorDashDisplay(request):
 
 
 def sponsorViewApplicant(request, applicant_id):
+    conn = db.getDB()
+    cursor = db.getCursor(conn)
 
-    applicant_name = db.getUserName(db.getUserEmail(applicant_id))
+    query_applicant_name = 'SELECT * FROM APPLICANT WHERE ApplicantID = %s'
+    cursor.execute(query_applicant_name, (applicant_id,))
+    result = cursor.fetchone()
 
-    context = {'applicant_id': applicant_id, 'applicant_name': applicant_name}
+    applicant_date = result[1]
+    applicant_name = result[4]
+    applicant_email = result[5]
+    applicant_phone = result[6]
+    applicant_address = result[7]
+
+    cursor.close()
+    conn.close()
+    context = {'applicant_id': applicant_id, 'applicant_name': applicant_name, 'applicant_date': applicant_date, 'applicant_email': applicant_email,
+               'applicant_phone': applicant_phone, 'applicant_address': applicant_address}
     return render(request, 'view_application.html', context)
 
 
 def sponsorAcceptApplicant(request, applicant_id):
-    today = date.today()
+    now = datetime.datetime.now()
+    today = now.strftime('%Y-%m-%d')
 
     conn = db.getDB()
     cursor = db.getCursor(conn)
 
-    query = "SELECT Email FROM APPLICANT WHERE ApplicantID=%s"
-    cursor.execute(query, (applicant_id,))
+    query_update_applicant = 'UPDATE APPLICANT SET IsAccepted = %s, Reason = %s, ApplicantDate = %s WHERE ApplicantID = %s'
+    cursor.execute(query_update_applicant,
+                   (True, 'Sponsor Accepted', today, applicant_id,))
+
+    query_applicant_info = 'SELECT * FROM APPLICANT WHERE ApplicantID = %s'
+    cursor.execute(query_applicant_info, (applicant_id,))
     result = cursor.fetchone()
+    applicant_name = result[4]
+    applicant_email = result[5]
+    applicant_phone = result[6]
+    applicant_address = result[7]
 
-    for name in result:
-        cursor.close()
-        conn.close()
-        applicant_email = name
+    applicant_password = db.getRandomPassword()
 
-    db.acceptApplicant(applicant_email, "Sponsor Accepted",
-                       db.getRandomPassword(), today.strftime("%Y-%m-%d"))
+    if (request.session['isViewing']):
+        orgNo = db.getOrgNo(request.session['tempEmail'])
+    else:
+        orgNo = db.getOrgNo(request.session['email'])
+
+    # name, email, password, address, phone, organization
+    query_insert_driver = 'SELECT createDriver (%s, %s, %s, %s, %s, %s)'
+    cursor.execute(query_insert_driver, (applicant_name, applicant_email,
+                   applicant_password, applicant_address, applicant_phone, orgNo,))
 
     response = redirect('/sponsor_dash')
     return response
 
 
 def sponsorRejectApplicant(request, applicant_id):
-    today = date.today()
+    now = datetime.datetime.now()
+    today = now.strftime('%Y-%m-%d')
 
     conn = db.getDB()
     cursor = db.getCursor(conn)
 
-    query = "SELECT Email FROM APPLICANT WHERE ApplicantID=%s"
-    cursor.execute(query, (applicant_id,))
-    result = cursor.fetchone()
-
-    for name in result:
-        cursor.close()
-        conn.close()
-        applicant_email = name
-
-    db.rejectApplicant(applicant_email, "Sponsor Rejected",
-                       today.strftime("%Y-%m-%d"))
+    query_reject_applicant = "UPDATE APPLICANT SET Reason = %s, ApplicantDate = %s WHERE ApplicantID = %s"
+    cursor.execute(query_reject_applicant, ('Sponsor Rejected', today, applicant_id,))
 
     response = redirect('/sponsor_dash/')
     return response

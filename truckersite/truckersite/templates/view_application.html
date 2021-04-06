@@ -34,7 +34,7 @@
                     <a class="nav-link dropdown-toggle" id="menubutton" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Menu </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{% url 'orgPage' %}"> Organization Page </a>
-                       <a class="dropdown-item" href="/sponsor_view_drivers"> Driver List </a>
+                        <a class="dropdown-item" href="/sponsor_view_drivers"> Driver List </a>
                         <a class="dropdown-item" href="{%url 'sponsorCatalog' %}"> Catalog </a>
                         <!-- <a class="dropdown-item" href="sponsor_notifications.html"> Notifications </a> -->
                         <a class="dropdown-item" href="{% url 'sponsorReportGeneration'%}"> Generate Report </a>
@@ -54,10 +54,20 @@
             </ul>
         </nav>
 
-        <div class="row">
+        <div class="row text-center">
             <div class="col-md-12">
+                <h2 id="pagename" style="margin-bottom: 3%; margin-left: 0%;"> Driver Application </h2>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
                 <div id="application">
-                    {{ applicant_name }}
+                    <h3>Applicant: {{ applicant_name }}</h3>
+                    <h3>Phone Number: {{ applicant_phone }}</h3>
+                    <h3>Email: {{ applicant_email }}</h3>
+                    <h3>Address: {{ applicant_address }}</h3>
+                    <h3>Date Applied: {{ applicant_date }}</h3>
                 </div>
             </div>
         </div>
