@@ -113,8 +113,8 @@
                 <a class="settingname" href="#billingaddress"> Billing Address </a> <br>
 
                 <p class="sectionheader" style="margin-top: 6%;"> Organization Employees </p>
-                <a class="settingname" href="#orgsponsors"> Sponsors </a> <br>
-                <a class="settingname" href="#addsponsor"> Add Sponsor </a> <br>
+                <a class="settingname" href="#orgsponsors"> Sponsor Users </a> <br>
+                <a class="settingname" href="#addsponsor"> Add Sponsor User </a> <br>
                 <a class="settingname" href="#orgdrivers"> Drivers </a> <br>
 
                 <p class="sectionheader" style="margin-top: 6%;"> Catalog </p>
@@ -179,7 +179,7 @@
                     <button class="save" id="savePayment"> <i class = "fa fa-save"></i> </button>
                 </form>
 
-                <p class="setting" id="sponsors" style="margin-top: 1.5%;"> Sponsors </p>
+                <p class="setting" id="sponsors" style="margin-top: 1.5%;"> Sponsor Users </p>
                 <form method="Post" action="{% url 'removeSponsor' %}">
                     {% csrf_token %}
                     <select class="form-control form-control-lg" id="sponsorsdp" name="sponsor" style="margin-bottom: 1.5%;">
@@ -194,7 +194,7 @@
                 </form>
                 <button id="edit" onclick="editSponsor()"> Edit Sponsor Info </button>
 
-                <p class="setting" id="addsponsor" style="margin-top: 1.5%;"> Add Sponsor </p>
+                <p class="setting" id="addsponsor" style="margin-top: 1.5%;"> Add Sponsor Users</p>
                 <form method="Post" action="{% url 'addNewSponsor' %}">
                     {% csrf_token %}
                     <input type="text" class="settingtext" id="newsponsoremail" name="email" placeholder="Email"> <br>
