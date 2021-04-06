@@ -60,21 +60,21 @@
             <div class="col-md-12">
                 <h2 id="pagename" style="margin-bottom: 3%; margin-left: 0%;"> Driver List </h2>
             </div>
-
-            <div class="row" style="height: 682px;">
-                <div class="col-md-12">
-                    {% for driver in driver_list %}
-                    <div>
-                        {{ driver.name }}
-                        <button id="driverpoints" style="margin-left: 12px;" onclick="location.href='/add_driver_points/{{ driver.driver_id}}'"> Add Points </button>
-                        <button id="driverpoints" style="margin-left: 8px;" onclick="location.href='/remove_driver_points/{{ driver.driver_id}}'"> Remove Points </button>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-
         </div>
-
+        {% for driver in driver_list %}
+        <div class="row justify-content-center">
+            <div class="col-md-2">
+                {{ driver.name }}
+            </div>
+            <div class="col-md-2">
+                <button id="driverpoints" class="btn btn-primary mb-2" style="margin-left: 12px;" onclick="location.href='/add_driver_points/{{ driver.driver_id}}'"> Add Points </button>
+            </div>
+            <div class="col-md-2">
+                <button id="driverpoints" class="btn btn-primary mb-2" style="margin-left: 8px;" onclick="location.href='/remove_driver_points/{{ driver.driver_id}}'"> Remove Points </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 
 </body>
 

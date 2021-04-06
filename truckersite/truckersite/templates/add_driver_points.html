@@ -62,9 +62,23 @@
             </div>
         </div>
 
-        <div class="row" style="height: 682px;">
-            <div class="col-md-12">
-
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form action="/add_driver_points_function" method="POST">
+                    <div class="form-group">
+                        <label for="driverID">Driver Name</label>
+                        <input type="hidden" id="driverID" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="pointsToGiveDriver">Number of points to give driver:</label>
+                        <input type="text" class="form-control" id="pointsToGiveDriver" placeholder="Points">
+                    </div>
+                    <div class="form-group">
+                        <label for="reasonForGivingPoints">Reason for giving points:</label>
+                        <textarea class="form-control" id="reasonForGivingPoints" rows="5" placeholder="Reason"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                </form>
             </div>
         </div>
 
