@@ -36,7 +36,7 @@
                     <a class="nav-link dropdown-toggle" id="menubutton" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Menu </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{% url 'orgPage' %}"> Organization Page </a>
-                       <a class="dropdown-item" href="/sponsor_view_drivers"> Driver List </a>
+                        <a class="dropdown-item" href="/sponsor_view_drivers"> Driver List </a>
                         <a class="dropdown-item" href="{%url 'sponsorCatalog' %}"> Catalog </a>
                         <!-- <a class="dropdown-item" href="sponsor_notifications.html"> Notifications </a> -->
                         <a class="dropdown-item" href="{% url 'sponsorReportGeneration'%}"> Generate Report </a>
@@ -60,11 +60,8 @@
             <div class="col-md-12">
                 <h2 id="pagename" style="margin-bottom: 3%; margin-left: 0%;"> My Dashboard </h2>
                 {% if isSponsor %}
-                    <button id="driverview" class="pull-right" onclick = "location.href = '{% url 'sponSetDriverView' %}'"> Driver View </button>
-                
-                {% elif isAdmin %}
-                    <button id="adminview" class="pull-right" onclick = "location.href = '{% url 'revertSponsorView' %}'"> Admin View </button>
-                {% endif %}
+                <button id="driverview" class="pull-right" onclick="location.href = '{% url 'sponSetDriverView' %}'"> Driver View </button> {% elif isAdmin %}
+                <button id="adminview" class="pull-right" onclick="location.href = '{% url 'revertSponsorView' %}'"> Admin View </button> {% endif %}
             </div>
         </div>
 
