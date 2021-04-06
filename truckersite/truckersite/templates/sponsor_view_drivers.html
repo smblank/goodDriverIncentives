@@ -37,12 +37,12 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{% url 'orgPage' %}"> Organization Page </a>
                         <a class="dropdown-item" href="/sponsor_view_drivers"> Driver List </a>
-                        <a class="dropdown-item" href="sponsor_catalog"> Catalog </a>
-                        <a class="dropdown-item" href="sponsor_notifications.html"> Notifications </a>
+                        <a class="dropdown-item" href="{%url 'sponsorCatalog' %}"> Catalog </a>
+                        <!-- <a class="dropdown-item" href="sponsor_notifications.html"> Notifications </a> -->
                         <a class="dropdown-item" href="{% url 'sponsorReportGeneration'%}"> Generate Report </a>
-                        <a class="dropdown-item" href="sponsor_submit_issue.html"> Submit an Issue </a>
-                        <a class="dropdown-item" href="sponsor_view_issues.html"> Issues </a>
-                        <a class="dropdown-item" href="index.html"> Logout </a>
+                        <!-- <a class="dropdown-item" href="sponsor_submit_issue.html"> Submit an Issue </a>
+                        <a class="dropdown-item" href="sponsor_view_issues.html"> Issues </a> -->
+                        <a class="dropdown-item" href="{% url 'logout' %}"> Logout </a>
                     </div>
                 </li>
 
