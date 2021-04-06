@@ -81,18 +81,27 @@
             </div>
             <div class = "col-md-3">
                 <p style = "font-size: 150%;">Admin Management: </p>
-                <select class = "form-control form-control-lg" id = "admin" style = "margin-bottom: 1.5%;">
-                    <option value = "none"> Select an Admin </option>
-                </select>
+                <form method = "Post" action = "{% url 'removeAdmin' %}">
+                    {% csrf_token %}
+                    <select class = "form-control form-control-lg" id = "admin" name = "admin" style = "margin-bottom: 1.5%;">
+                        <option value = "none"> Select an Admin </option>
 
-                <button id = "remove" onclick = "removeAdmin()"> Remove Sponsor </button>
-                <button id = "edit" onclick = "editAdmin()"> Edit Sponsor Info </button>
+                        {% for admin in admins %}
+                            <option value = {{admin.id}}>{{admin.name}}</option>
+                        {% endfor %}
+                    </select>
+
+                    <button id = "remove" onclick = "removeAdmin()"> Remove Admin </button>
+                </form>
+                <button id = "edit" onclick = "editAdmin()"> Edit Admin Info </button>
 
                 <p style = "font-size: 150%;">Add New Admin</p>
-                <input type = "text" class = "newadmin" id = "email" placeholder = "Email" style = "font-size: 200%;">
-                <input type = "password" class = "newadmin" id = "password" placeholder = "Password" style = "font-size: 200%;">
-                <input type = "password" class = "newadmin" id = "confirmpassword" placeholder = "Confirm Password" style = "font-size: 200%;">
-                <button id = "add"> Add Admin </button>
+                <form method = "Post" action = "{% url 'addAdmin' %}">
+                    {% csrf_token %}
+                    <input type = "text" class = "newadmin" id = "email" name = "email" placeholder = "Email" style = "font-size: 200%;">
+                    <input type = "text" class = "newadmin" id = "name" name = name placeholder = "Name" style = "font-size: 200%;">
+                    <button id = "add"> Add Admin </button>
+                </form>
             </div>
         </div>
 

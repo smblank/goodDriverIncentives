@@ -124,7 +124,7 @@
 
             <div class="col-md-9 h-100">
                 <p class="setting" style="top: 3%;"> Change Organization Logo </p>
-                <img id="changeorglogo" src="{% static 'img/Defaultpfp.png' %}"> <br>
+                <img id="changeorglogo" src="{% static logo %}"> <br>
                 <form method="Post" enctype="multipart/form-data" action="{% url 'getNewOrgLogo' %}">
                     {% csrf_token %}
                     <input type="file" id="logo" name="logo" />

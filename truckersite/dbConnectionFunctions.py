@@ -208,7 +208,7 @@ def getDefaultAddress(email):
         conn = getDB()
         cursor = getCursor(conn)
 
-        emailExits = checkEmail(email)
+        emailExists = checkEmail(email)
 
         if emailExists == True:
             query = "SELECT getDefaultAddress(%s)"
@@ -301,7 +301,7 @@ def getDriverPoints(email):
         cursor = getCursor(conn)
 
         query = "SELECT getDrivePoints(%s)"
-        cursor.exectue(query, (email))
+        cursor.execute(query, (email,))
         result = cursor.fetchone()
 
         for points in result:
@@ -962,7 +962,7 @@ def createAdmin(name, email, password):
         conn = getDB()
         cursor = getCursor(conn)
 
-        query = "SELECT createDriver(%s, %s, %s)"
+        query = "SELECT createAdmin(%s, %s, %s)"
         cursor.execute(query, (name, email, password))
 
         cursor.close()
@@ -1067,13 +1067,13 @@ def removeSponsor (sponsorID, newSponsor):
     except Error as err:
         print(err)
 
-def removeAdmin(email):
+def removeAdmin(adminID):
     try:
         conn = getDB()
         cursor = getCursor(conn)
 
         query = "SELECT removeAdmin(%s)"
-        cursor.execute(query, (email,))
+        cursor.execute(query, (adminID,))
 
         cursor.close()
         conn.close()
@@ -1089,6 +1089,23 @@ def getProfilePic(email):
 
         query = "SELECT getProfilePic(%s)"
         cursor.execute(query, (email,))
+        result = cursor.fetchone()
+
+        for profilePic in result:
+            cursor.close()
+            conn.close()
+            return profilePic
+
+    except Error as err:
+        print(err)
+
+def getOrgLogo(orgNo):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT getOrgLogo(%s)"
+        cursor.execute(query, (orgNo,))
         result = cursor.fetchone()
 
         for profilePic in result:
@@ -1358,6 +1375,22 @@ def emailNewSponsor(sponsorEmail, password, orgNo):
 
     #Send email
     email = EmailMessage(subject, message, 'gooddriverprogram@gmail.com', [sponsorEmail])
+    email.send()
+
+def emailNewAdmin(adminEmail, password):
+    adminName = getUserName(adminEmail)
+    
+    subject = "Added as Administrator in Good Drivers Incentive Program"
+
+    message = """\
+    Welcome %s!
+    
+    Welcome to the Good Drivers Incentive Program. You have been added as a new administrator. Once you login for the first time, you'll be able to create your own password and be able to access and manage the various functions fo the application. For your first login, please use this temporary password: %s. Welcome to the Program!
+    
+    Login Link: http://ec2-3-88-207-55.compute-1.amazonaws.com/""" % (adminName, password)
+
+    #Send email
+    email = EmailMessage(subject, message, 'gooddriverprogram@gmail.com', [adminEmail])
     email.send()
 
 def createTempDriver(tempEmail, orgNo):

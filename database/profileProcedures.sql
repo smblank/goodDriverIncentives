@@ -107,7 +107,7 @@ DROP PROCEDURE IF EXISTS getAllAdmins;
 
 CREATE PROCEDURE getAllAdmins ()
     BEGIN
-        SELECT Name, Email
+        SELECT ADMINISTRATOR.UserID, Name, Email
         FROM USER, ADMINISTRATOR
         WHERE ADMINISTRATOR.UserID = USER.UserID;
     END;;
@@ -186,7 +186,7 @@ MODIFIES SQL DATA
             INSERT INTO DRIVER (UserID, PhoneNo)
                 VALUES (newID, phone);
             INSERT INTO DRIVER_ADDRESSES (DriverID, Address, DefaultAddr)
-                VALUES (newID, addr, False);
+                VALUES (newID, addr, TRUE);
             INSERT INTO DRIVER_ORGS (UserID, OrgID, Points)
                 VALUES (newID, organization, 0);
             SELECT createWishlist(newID) INTO wishID;
@@ -374,7 +374,7 @@ MODIFIES SQL DATA
 
         SELECT createCatalog() INTO catalogue;
 
-        INSERT INTO ORGANIZATION (Name, PointConversion, CatalogID) VALUES (orgName, pointRate, catalogue);
+        INSERT INTO ORGANIZATION (Name, LogoPath, PointConversion, CatalogID) VALUES (orgName, 'defaultLogo.jpg', pointRate, catalogue);
 
         SELECT OrgID INTO newID
         FROM ORGANIZATION
@@ -537,6 +537,11 @@ MODIFIES SQL DATA
         SELECT AddressID INTO addrID
         FROM DRIVER_ADDRESSES
         WHERE Address = defaultAddress AND UserID = user;
+
+        UPDATE DRIVER_ADDRESSES
+            SET
+                DefaultAddr = False
+            WHERE DefaultAddr = True;
 
         UPDATE DRIVER_ADDRESSES
             SET
@@ -752,25 +757,21 @@ MODIFIES SQL DATA
 
 DROP FUNCTION IF EXISTS removeAdmin;
 
-CREATE FUNCTION removeAdmin (adminEmail VARCHAR(50))
+CREATE FUNCTION removeAdmin (adminID INT)
 RETURNS INT
 MODIFIES SQL DATA
     BEGIN
-        DECLARE user INT;
-
-        SELECT getUserID(adminEmail) INTO user;
-
         DELETE FROM LOGIN_ATTEMPT
-            WHERE UserID = user;
+            WHERE UserID = adminID;
 
         DELETE FROM ADMINISTRATOR
-            WHERE UserID = user;
+            WHERE UserID = adminID;
 
         DELETE FROM PASSWORD_CHANGE
-            WHERE UserID = user;
+            WHERE UserID = adminID;
 
         DELETE FROM USER
-            WHERE UserID = user;
+            WHERE UserID = adminID;
 
         RETURN 0;
     END;;
@@ -794,6 +795,24 @@ READS SQL DATA
         RETURN (SELECT ProfilePicPath
                 FROM USER
                 WHERE UserID = user);
+    END;;
+
+DROP FUNCTION IF EXISTS getOrgLogo;
+
+/*Why is VARCHAR not able to be read into varaible?*/
+CREATE FUNCTION getOrgLogo(orgNo INT)
+RETURNS VARCHAR(100)
+READS SQL DATA
+    BEGIN
+        DECLARE imgPath VARCHAR(100);
+
+        SELECT LogoPath INTO imgPath
+        FROM ORGANIZATION
+        WHERE OrgID = orgNo;
+
+        RETURN (SELECT LogoPath
+                FROM ORGANIZATION
+                WHERE OrgID = orgNo);
     END;;
 
 DROP PROCEDURE IF EXISTS getPointChangeReasons;

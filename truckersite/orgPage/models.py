@@ -4,8 +4,6 @@ import os
 import dbConnectionFunctions as db
 from orgPage import views
 
-from datetime import datetime
-
 # Create your models here.
 def getNewLogo(request):
     newLogo = request.FILES['logo']
@@ -13,6 +11,8 @@ def getNewLogo(request):
 
     if (request.session['isViewing']):
         orgNo = db.getOrgNo(request.session['tempEmail'])
+    elif (request.session['isAdmin']):
+        orgNo = request.session['adminOrgChoice']
     else:
         orgNo = db.getOrgNo(request.session['email'])
 
@@ -23,7 +23,10 @@ def getNewLogo(request):
         for chunk in newLogo.chunks():
             f.write(chunk)
 
-    return views.organizationPage(request)
+    if (request.session['isAdmin']):
+        return views.adminOrgs(request)
+    else:
+        return views.organizationPage(request)
 
 def getNewPointChange(request):
     numPoints = request.POST.get('numPoints')
@@ -31,11 +34,16 @@ def getNewPointChange(request):
 
     if (request.session['isViewing']):
         orgNo = db.getOrgNo(request.session['tempEmail'])
+    elif (request.session['isAdmin']):
+        orgNo = request.session['adminOrgChoice']
     else:
         orgNo = db.getOrgNo(request.session['email'])
 
     db.addPointChangeReason(desc, numPoints, orgNo)
-    return views.organizationPage(request)
+    if (request.session['isAdmin']):
+        return views.adminOrgs(request)
+    else:
+        return views.organizationPage(request)
 
 def updatePointConversion(request):
     dollarAmt = request.POST.get('dollars')
@@ -44,11 +52,16 @@ def updatePointConversion(request):
     newConversion = float(dollarAmt) / float(pointAmt)
     if (request.session['isViewing']):
         orgNo = db.getOrgNo(request.session['tempEmail'])
+    elif (request.session['isAdmin']):
+        orgNo = request.session['adminOrgChoice']
     else:
         orgNo = db.getOrgNo(request.session['email'])
 
     db.updatePointConversion(orgNo, newConversion)
-    return views.organizationPage(request)
+    if (request.session['isAdmin']):
+        return views.adminOrgs(request)
+    else:
+        return views.organizationPage(request)
 
 def updatePaymentInfo(request):
     ccName = request.POST.get('ccName')
@@ -68,11 +81,16 @@ def updatePaymentInfo(request):
 
     if (request.session['isViewing']):
         orgNo = db.getOrgNo(request.session['tempEmail'])
+    elif (request.session['isAdmin']):
+        orgNo = request.session['adminOrgChoice']
     else:
         orgNo = db.getOrgNo(request.session['email'])
 
     db.updateOrgPayment(int(ccNum), int(ccSec), ccDate, address, orgNo, 1)
-    return views.organizationPage(request)
+    if (request.session['isAdmin']):
+        return views.adminOrgs(request)
+    else:
+        return views.organizationPage(request)
 
 def addNewSponsor(request):
     email = request.POST.get('email')
@@ -80,6 +98,8 @@ def addNewSponsor(request):
 
     if (request.session['isViewing']):
         orgNo = db.getOrgNo(request.session['tempEmail'])
+    elif (request.session['isAdmin']):
+        orgNo = request.session['adminOrgChoice']
     else:
         orgNo = db.getOrgNo(request.session['email'])
 
@@ -89,19 +109,28 @@ def addNewSponsor(request):
 
     db.emailNewSponsor(email, newPassword, orgNo)
 
-    return views.organizationPage(request)
+    if (request.session['isAdmin']):
+        return views.adminOrgs(request)
+    else:
+        return views.organizationPage(request)
 
 def removeReason(request):
     reasonID = request.POST.get('reason')
 
     db.removePointChangeReason(reasonID)    
-    return views.organizationPage(request)
+    if (request.session['isAdmin']):
+        return views.adminOrgs(request)
+    else:
+        return views.organizationPage(request)
 
 # Not fully implemented
 def editReason(request):
     reasonID = request.POST.get('reason')
     print(reasonID)
-    return views.organizationPage(request)
+    if (request.session['isAdmin']):
+        return views.adminOrgs(request)
+    else:
+        return views.organizationPage(request)
 
 def removeSponsor(request):
     sponsorID = request.POST.get('sponsor')
@@ -110,11 +139,26 @@ def removeSponsor(request):
 
     if (sponsorID != currUserID):
         db.removeSponsor(sponsorID, currUserID)
-    return views.organizationPage(request)
+    if (request.session['isAdmin']):
+        return views.adminOrgs(request)
+    else:
+        return views.organizationPage(request)
 
 def removeDriver(request):
     driverID = request.POST.get('driver')
 
     db.removeDriver(driverID)
-    return views.organizationPage(request)
+    if (request.session['isAdmin']):
+        return views.adminOrgs(request)
+    else:
+        return views.organizationPage(request)
+
+def getAdminOrgChoice(request):
+    orgChoice = request.POST.get('orgs')
+
+    request.session['adminOrgChoice'] = orgChoice
+    if (request.session['isAdmin']):
+        return views.adminOrgs(request)
+    else:
+        return views.organizationPage(request)
     

@@ -7,11 +7,20 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.utils import timezone
 from django.core.mail import send_mail
+import dbConnectionFunctions as db
 
 APP_ID = 'ApurvPat-FindingS-PRD-ddc78fcfb-06024fa2'
 
 def driverCatalog(request):
-    return render(request, 'driver_catalog.html')
+    if (request.session['isViewing']):
+        points = db.getDriverPoints(request.session['tempEmail'])
+    else:
+        points = db.getDriverPoints(request.session['email'])
+
+    context = {
+        'points': points
+    }
+    return render(request, 'driver_catalog.html', context)
 
 def wishlist(request):
     return render(request, 'wishlist.html')
@@ -23,7 +32,48 @@ def sponsorCatalog(request):
     return render(request, 'sponsor_catalog.html')
 
 def driverCart(request):
-    return render(request, 'driver_cart.html')
+    if (request.session['isViewing']):
+        points = db.getDriverPoints(request.session['tempEmail'])
+    else:
+        points = db.getDriverPoints(request.session['email'])
+
+    context = {
+        'points': points
+    }
+    return render(request, 'driver_cart.html', context)
+
+def checkout(request):
+    if (request.session['isViewing']):
+        email = request.session['tempEmail']
+    else:
+        email = request.session['email']
+
+    points = db.getDriverPoints(email)
+    
+    defaultAddr = db.getDefaultAddress(email)
+
+    result = db.getDriverAddresses(email)
+
+    class Addr:
+        def __init__(self):
+            id = -1
+            addr = ''
+    
+    addresses = []
+
+    for (id, address) in result:
+        if address == defaultAddr:
+            tempAddr = Addr()
+            tempAddr.id = id
+            tempAddr.addr = address
+            addresses.append(tempAddr)
+
+    context = {
+        'points': points,
+        'default': defaultAddr,
+        'addresses': addresses
+    }
+    return render(request, 'checkout.html', context)
 
 def addProducts(request):
     api = finding(appid = APP_ID, config_file = None)

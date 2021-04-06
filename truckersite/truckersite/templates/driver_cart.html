@@ -57,7 +57,7 @@
                 <div id = "sidebar">
                     <a id = "back" href = "{% url 'driverCatalog' %}"> <i class = "fa fa-arrow-left"></i> Catalog </a>
                     <p id = "pointstitle"> My Points: </p>
-                    <p id = "points"> 0 </p>
+                    <p id = "points"> {{points}} </p>
                 </div>
             </div>
 
@@ -65,7 +65,7 @@
                 <h2 id = "pagename"> My Cart </h2>
                 <!-- Put Items Here -->
 
-                <button id = "checkout"> Checkout </button>
+                <button id = "checkout" onclick = "location.href = '{% url 'checkout' %}'"> Checkout </button>
             </div>
         </div>
         

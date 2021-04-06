@@ -83,6 +83,7 @@ urlpatterns = [
     path('removeSponsor', orgOps.removeSponsor, name = "removeSponsor"),
     path('removeDriver', orgOps.removeDriver, name = 'removeDriver'),
     path('adminOrgs/', orgViews.adminOrgs, name = 'adminOrgs'),
+    path('getAdminOrgChoice', orgOps.getAdminOrgChoice, name = 'getAdminOrgChoice'),
 
     #Sponsor report generation
     path('sponsorReportGeneration/', reportViews.sponsorGenerateReport, name = 'sponsorReportGeneration'),
@@ -105,6 +106,7 @@ urlpatterns = [
     path('driverOrderHistory/', catalogViews.driverOrderHistory, name = 'driverOrderHistory'),
     path('sponsorCatalog', catalogViews.sponsorCatalog, name = 'sponsorCatalog'),
     path('driverCart', catalogViews.driverCart, name = 'driverCart'),
+    path('checkout', catalogViews.checkout, name = 'checkout'),
 
     path('driver_catalog/', product_list, name='catalog'),
     path('sponsor_catalog/', sponsor_catalog, name='catalog'),
@@ -122,6 +124,8 @@ urlpatterns = [
     #Dashboards
     path("driverDash/", dashViews.driverDash, name = 'driverDash'),
     path('adminDash/', dashViews.adminDash, name = 'adminDash'),
+    path("removeAdmin", dashOps.removeAdmin, name = 'removeAdmin'),
+    path('addAdmin', dashOps.addNewAdmin, name = 'addAdmin'),
 
     #View as
     path('sponSetDriverView', sponsorOps.setDriverView, name = 'sponSetDriverView'),

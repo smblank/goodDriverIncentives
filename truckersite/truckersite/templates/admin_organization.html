@@ -54,9 +54,9 @@
         }
 
         function editDriver(){
-            // if(document.getElementById("driversdp").value != "none"){
+            if(document.getElementById("driversdp").value != "none"){
                 $('#editdriver').modal('show');
-            // }
+            }
         }
 
         function editDriverPoints(){
@@ -100,10 +100,17 @@
 
         <div class = "row">
             <div class = "col-md-3">
-                <select class = "form-control form-control-lg" id = "organizations" style = "margin-bottom: 1.5%;">
-                    <option value = "none"> Select an Organization </option>
-                </select>
-                <button id = "submit"> Submit </button>
+                <form method = "Post" action = "{% url 'getAdminOrgChoice' %}">
+                    {% csrf_token %}
+                    <select class = "form-control form-control-lg" id = "organizations" name = "orgs" style = "margin-bottom: 1.5%;">
+                        <option value = "none"> Select an Organization </option>
+
+                        {% for org in orgs %}
+                            <option value = {{org.id}}>{{org.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <button id = "submit"> Submit </button>
+                </form>
 
                 <p class = "sectionheader" style = "margin-top: 6%;"> General Organization Settings </p>
                 <a class = "settingname" href = "#changeorglogo"> Change Organization Logo </a> <br>
@@ -125,63 +132,97 @@
 
             <div class = "col-md-9 h-100">
                 <p class = "setting" style = "top: 3%;"> Change Organization Logo </p>
-                <img id = "changeorglogo" src = "{% static 'img/Defaultpfp.png' %}"> <br>
-                <button id = "upload"> Upload Image </button>
+                <img id = "changeorglogo" src = "{% static logo %}"> <br>
+                <form method="Post" enctype="multipart/form-data" action="{% url 'getNewOrgLogo' %}">
+                    {% csrf_token %}
+                    <input type="file" id="logo" name="logo" />
+                    <button id="submit" type="file"> Upload Image </button>
+                </form>
 
                 <p class = "setting" id = "pointchange" style = "margin-top: 1.5%;"> Reasons for Point Changes </p>
-                <select class = "form-control form-control-lg" id = "pointchanges" style = "margin-bottom: 1.5%;">
-                    <option value = "none"> Select a Reason </option>
-                </select>
-                <button id = "remove" onclick = "remove()"> Remove Reason </button>
+                <form method="Post" action="{% url 'removeReason' %}">
+                    {% csrf_token %}
+                    <select class="form-control form-control-lg" id="pointchanges" name="reason" style="margin-bottom: 1.5%;">
+                        <option value = "none"> Select a Reason </option>
+
+                        {% for reason in reasons %}
+                            <option value = {{reason.id}}>{{reason.desc}}</option>
+                        {% endfor %}
+                    </select>
+                    <button id="remove"> Remove Reason </button>
+                </form>
                 <button id = "edit" onclick = "edit()"> Edit Reason </button>
 
                 <p class = "setting" id = "newpointchange" style = "margin-top: 1.5%;"> New Reason for Point Changes </p>
-                <input type = "text" class = "settingtext" id = "title" placeholder = "Title" style = "font-size: 200%;"> <br>
-                <input type = "text" class = "settingtext" id = "numpoints" placeholder = "Number of Points to be Added or Removed" style = "font-size: 140%;"> <br>
-                <textarea id = "newdescription" placeholder = "Description"></textarea> <br>
-                <button class = "save" id = "savepointchange"> <i class = "fa fa-save"></i> </button>
+                 <form method="Post" action="{% url 'getNewPointChange' %}">
+                    {% csrf_token %}
+                    <input type="text" class="settingtext" id="numpoints" name="numPoints" placeholder="Number of Points to be Added or Removed" style="font-size: 140%;"> <br>
+                    <textarea id="newdescription" name="description" placeholder="Description"></textarea> <br>
+                    <button class="save" id="savepointchange"> <i class = "fa fa-save"></i> </button>
+                </form>
 
                 <p class = "setting" id = "value" style = "margin-top: 1.5%;"> Point Value </p>
-                <input type = "text" class = "valuechanges" id = "dollars" placeholder = "Dollars (Ex. - 2.25)" style = "font-size: 200%;">
-                <h1 style = "margin-left: 8%;"> = </h1>
-                <input type = "text" class = "valuechanges" id = "points" placeholder = "Points (Ex. - 1.25)" style = "font-size: 200%;">
-                <button class = "save" id = "savepointchange"> <i class = "fa fa-save"></i> </button>
+                <form method="Post" action="{% url 'updatePointConversion' %}">
+                    {% csrf_token %}
+                    <input type="text" class="valuechanges" id="dollars" name="dollars" placeholder="Dollars (Ex. - 2.25)" style="font-size: 200%;">
+                    <h1 style="margin-left: 8%;"> = </h1>
+                    <input type="text" class="valuechanges" id="points" name="points" placeholder="Points (Ex. - 1.25)" style="font-size: 200%;">
+                    <button class="save" id="savepointchange"> <i class = "fa fa-save"></i> </button>
+                </form>
 
                 <p class = "setting" id = "creditcard" style = "margin-top: 1.5%;"> Credit Card </p>
-                <input type = "text" class = "settingtext" id = "name" placeholder = "Name on Card"> <br>
-                <input type = "text" class = "settingtext" id = "cardnum" placeholder = "Card Number" maxlength = "16"> <br>
-                <input type = "text" class = "settingtext" id = "securitycode" placeholder = "Security Code" maxlength = "3"> <br>
-                <input type = "text" class = "settingtext" id = "exp" placeholder = "Experation Date (mm/yy)" maxlength = "5">
-                <button class = "save" id = "savecreditcard"> <i class = "fa fa-save"></i> </button>
+                <form method="Post" action="{% url 'updatePaymentInfo' %}">
+                    {% csrf_token %}
+                    <input type="text" class="settingtext" id="name" name="ccName" placeholder="Name on Card"> <br>
+                    <input type="text" class="settingtext" id="cardnum" name="ccNum" placeholder="Card Number" maxlength="16"> <br>
+                    <input type="text" class="settingtext" id="securitycode" name="ccSec" placeholder="Security Code" maxlength="3"> <br>
+                    <input type="text" class="settingtext" id="exp" placeholder="Expiration Date (mm/yy)" name="ccDate" maxlength="5">
 
-                <p class = "setting" id = "bilingaddress" style = "margin-top: 1.5%;"> Billing Address </p>
-                <input type = "text" class = "settingtext" id = "addressline1" placeholder = "Address Line 1"> <br>
-                <input type = "text" class = "settingtext" id = "addressline2" placeholder = "Address Line 2"> <br>
-                <input type = "text" class = "settingtext" id = "city" placeholder = "City"> <br>
-                <input type = "text" class = "settingtext" id = "state"  maxlength = "2" placeholder = "State"> <br>
-                <input type = "text" class = "settingtext" maxlength = 5 placeholder = "Zip">
-                <button class = "save" id = "savebillingaddress"> <i class = "fa fa-save"></i> </button>
+                    <p class="setting" id="bilingaddress" style="margin-top: 1.5%;"> Billing Address </p>
+                    <input type="text" class="settingtext" id="addressline1" name="addr1" placeholder="Address Line 1"> <br>
+                    <input type="text" class="settingtext" id="addressline2" name="addr2" placeholder="Address Line 2"> <br>
+                    <input type="text" class="settingtext" id="city" name="city" placeholder="City"> <br>
+                    <input type="text" class="settingtext" id="state" maxlength="2" name="state" placeholder="State"> <br>
+                    <input type="text" class="settingtext" maxlength=5 name="zip" placeholder="Zip">
+                    <button class="save" id="savePayment"> <i class = "fa fa-save"></i> </button>
+                </form>
 
                 <p class = "setting" id = "sponsors" style = "margin-top: 1.5%;"> Sponsors </p>
-                <select class = "form-control form-control-lg" id = "sponsorsdp" style = "margin-bottom: 1.5%;">
-                    <option value = "none"> Select a Sponsor </option>
-                </select>
+                <form method="Post" action="{% url 'removeSponsor' %}">
+                    {% csrf_token %}
+                    <select class="form-control form-control-lg" id="sponsorsdp" name="sponsor" style="margin-bottom: 1.5%;">
+                        <option value = "none"> Select a Sponsor </option>
 
-                <button id = "remove" onclick = "removeSponsor()"> Remove Sponsor </button>
+                        {% for sponsor in sponsors %}
+                            <option value = {{sponsor.id}}>{{sponsor.name}}</option>
+                        {% endfor %}
+                    </select>
+
+                    <button id="remove"> Remove Sponsor </button>
+                </form>
                 <button id = "edit" onclick = "editSponsor()"> Edit Sponsor Info </button>
 
                 <p class = "setting" id = "addsponsor" style = "margin-top: 1.5%;"> Add Sponsor </p>
-                <input type = "text" class = "settingtext" id = "newsponsoremail" placeholder = "Email"> <br>
-                <input type = "text" class = "settingtext" id = "newsponsorpassword" placeholder = "Password"> <br>
-                <input type = "text" class = "settingtext" id = "newsponsorconfirmpassword" placeholder = "Confirm Password"> <br>
-                <button class = "save" id = "addsponsor"> Add Sponsor </button>
+                <form method="Post" action="{% url 'addNewSponsor' %}">
+                    {% csrf_token %}
+                    <input type="text" class="settingtext" id="newsponsoremail" name="email" placeholder="Email"> <br>
+                    <input type="text" class="settingtext" id="name" name="name" placeholder="Name"> <br>
+                    <button class="save" id="addsponsor"> Add Sponsor </button>
+                </form>
 
                 <p class = "setting" id = "drivers" style = "margin-top: 1.5%;"> Drivers </p>
-                <select class = "form-control form-control-lg" id = "driversdp" style = "margin-bottom: 1.5%;">
-                    <option value = "none"> Select a Driver </option>
-                </select>
+                <form method="Post" action="{% url 'removeDriver' %}">
+                    {% csrf_token %}
+                    <select class="form-control form-control-lg" id="driversdp" name="driver" style="margin-bottom: 1.5%;">
+                        <option value = "none"> Select a Driver </option>
 
-                <button id = "remove" onclick = "removeDriver()"> Remove Driver </button>
+                        {% for driver in drivers %}
+                            <option value = {{driver.id}}>{{driver.name}}</option>
+                        {% endfor %}
+                    </select>
+
+                    <button id="remove" onclick="removeDriver()"> Remove Driver </button>
+                </form>
                 <button id = "edit" onclick = "editDriver()"> Edit Driver Info </button>
                 <button id = "editpoints" onclick = "editDriverPoints()"> Edit Driver Points </button>
 
@@ -337,6 +378,10 @@
                                 <h5>Add driver to another sponsor</h5>
                                 <select class = "form-control form-control-lg" id = "orgs" name = "orgs" style = "margin-bottom: 1.5%;">
                                     <option value = "none"> Select a Sponsor </option>
+                                    
+                                    {% for org in driverOrgs %}
+                                        <option value = {{org.id}}>{{org.name}}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             <div class = "modal-footer">

@@ -58,7 +58,7 @@
                 <div id = "sidebar">
                     <a id = "back" href = "driver_catalog.html"> <i class = "fa fa-arrow-left"></i> Catalog </a>
                     <p id = "pointstitle"> My Points: </p>
-                    <p id = "points"> 0 </p>
+                    <p id = "points"> {{points}} </p>
                 </div>
             </div>
 
@@ -73,7 +73,11 @@
             <div class = "col-md-9">
                 <h4> Shipping Address:  </h4>
                 <select id = "shipping">
-                    <option value = "none"> *Default Address* </option>
+                    <option value = "default">{{default}}</option>
+
+                    {% for addr in addresses %}
+                        <option value = {{addr.id}}>{{addr.addr}}</option>
+                    {% endfor %}
                 </select>
             </div>
         </div>
