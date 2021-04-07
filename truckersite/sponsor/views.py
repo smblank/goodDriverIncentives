@@ -92,8 +92,8 @@ def sponsorAcceptApplicant(request, applicant_id):
     cursor.execute(query_insert_driver, (applicant_name, applicant_email,
                    applicant_password, applicant_address, applicant_phone, orgNo,))
 
-    response = redirect('/sponsor_dash')
-    return response
+    context = {'applicant_name': applicant_name, 'applicant_email': applicant_email, 'applicant_password': applicant_password}
+    return render(request, 'accept_applicant_confirmation.html', context)
 
 
 def sponsorRejectApplicant(request, applicant_id):
