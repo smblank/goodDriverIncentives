@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.shortcuts import render, redirect
 import dbConnectionFunctions as db
+from userProfile import views
 
 def login(request):
     return render(request, 'index.html')
@@ -67,3 +68,17 @@ def moveout(request):
         print('not logged in...displaying login')
         return render(request, 'index.html')
 
+def changepass(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        if(email != NULL && email != ''):
+            password = request.POST.get('password')
+            cpassword = request.POST.get('cpassword')
+            if(password == cpassword):
+                response = db.changePassword(email, password)
+            else:
+                messages.success(request, 'Passwords do not match')
+                return render(request, 'index.html')
+        else:
+            messages.success(request, 'Incorrect Email')
+            return render(request, 'index.html')           
