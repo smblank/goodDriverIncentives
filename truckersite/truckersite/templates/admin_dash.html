@@ -75,9 +75,21 @@
             </div>
         </div>
 
-        <div class = "row" style = "height: 682px;">
-            <div class = "col-md-6">
-                <div class = "dashinfo" style = "margin-left: 50%;"> New Notifications: </div>
+        <div class = "row h-100">
+            <div class = "col-md-3"></div>
+
+            <div class = "col-md-3">
+                <p style = "font-size: 150%;">Organization Management: </p>
+
+                <select class = "form-control form-control-lg" id = "admin" name = "admin" style = "margin-bottom: 1.5%;">
+                    <option value = "none"> Select an Organization </option>
+                </select>
+
+                <button id = "remove"> Remove Organization </button>
+
+                <p style = "font-size: 150%;">Add New Organization</p>
+                    <input type = "text" class = "newadmin" id = "orgname" placeholder = "Organization Name" style = "font-size: 200%;">
+                    <button id = "add"> Add Organization </button>
             </div>
             <div class = "col-md-3">
                 <p style = "font-size: 150%;">Admin Management: </p>
