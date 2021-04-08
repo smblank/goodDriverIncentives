@@ -71,7 +71,7 @@ def moveout(request):
 def changepass(request):
     if request.method == 'POST':
         email = request.POST.get('email')
-        if(email != NULL && email != ''):
+        if(email != None and email != ''):
             password = request.POST.get('password')
             cpassword = request.POST.get('cpassword')
             if(password == cpassword):
