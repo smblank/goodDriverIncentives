@@ -45,7 +45,7 @@ def getorgs(request):
         orgs.append(tempOrg)  
 	  
 	 
-	context = {
+    context = {
         'orgs': orgs
     }
-	return render(request, 'apply.html', context)
+    return render(request, 'apply.html', context)
