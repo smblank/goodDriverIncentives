@@ -20,7 +20,7 @@ def sponsorDashDisplay(request):
     conn = db.getDB()
     cursor = db.getCursor(conn)
 
-    query_applicants = "SELECT * FROM APPLICANT WHERE OrgID=%s AND IsAccepted=False"
+    query_applicants = "SELECT * FROM APPLICANT WHERE OrgID=%s AND Reason IS NULL"
     cursor.execute(query_applicants, (org_num,))
     result = cursor.fetchall()
 
