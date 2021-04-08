@@ -135,8 +135,8 @@
                 <img id = "changeorglogo" src = "{% static logo %}"> <br>
                 <form method="Post" enctype="multipart/form-data" action="{% url 'getNewOrgLogo' %}">
                     {% csrf_token %}
-                    <input type="file" id="logo" name="logo" />
-                    <button id="submit" type="file"> Upload Image </button>
+                    <input type="file" id="logo" name="logo" /> <br>
+                    <button id="upload" type="file"> Upload Image </button>
                 </form>
 
                 <p class = "setting" id = "pointchange" style = "margin-top: 1.5%;"> Reasons for Point Changes </p>

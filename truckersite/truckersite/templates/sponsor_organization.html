@@ -118,8 +118,8 @@
                 <a class="settingname" href="#orgdrivers"> Drivers </a> <br>
 
                 <p class="sectionheader" style="margin-top: 6%;"> Catalog </p>
-                <a class="settingname" href=# catalog> Create Catalog </a> <br>
-                <a class="settingname" href=# current> Current Catalog </a>
+                <a class="settingname" href="#catalog"> Create Catalog </a> <br>
+                <a class="settingname" href="#current"> Current Catalog </a>
             </div>
 
             <div class="col-md-9 h-100">
@@ -127,8 +127,8 @@
                 <img id="changeorglogo" src="{% static logo %}"> <br>
                 <form method="Post" enctype="multipart/form-data" action="{% url 'getNewOrgLogo' %}">
                     {% csrf_token %}
-                    <input type="file" id="logo" name="logo" />
-                    <button id="submit" type="file"> Upload Image </button>
+                    <input type="file" id="logo" name="logo" /> <br>
+                    <button id="upload" type="file"> Upload Image </button>
                 </form>
 
                 <p class="setting" id="pointchange" style="margin-top: 1.5%;"> Reasons for Point Changes </p>

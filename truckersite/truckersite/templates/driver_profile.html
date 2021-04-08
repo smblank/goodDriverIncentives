@@ -90,14 +90,6 @@
 
             </div>
 
-            {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-            
             <div class = "col-md-9 h-100">
 
                 <p class = "setting" style = "top: 3%;"> Change Profile Picture </p>
@@ -105,7 +97,7 @@
 
                 <form method = "POST" enctype="multipart/form-data" action = "{% url 'getNewDriverProfilePic'%}">
                     {% csrf_token %}
-                    <input type = "file" id = "profilePic" name = "profilePic"/>
+                    <input type = "file" id = "profilePic" name = "profilePic"/> <br>
                     <button id = "submit" type = "file"> Upload Image </button>
                 </form>
 
