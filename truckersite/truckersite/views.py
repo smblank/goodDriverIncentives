@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from truckersite.models import Uregister
 from django.contrib import messages
+import dbConnectionFunctions as db
 
 #add reguser to settings
 def application(request):
@@ -26,3 +27,25 @@ def userreggin(request):
             return render(request,'index.html')
     else:
         return render(request,'apply.html')
+
+def getorgs(request):
+    result = db.getOrgs()
+
+    class Org:
+        def __init__(self):
+            id = -1
+            name = ''
+
+    orgs = []
+
+    for (orgId, name) in result:
+        tempOrg = Org()
+        tempOrg.id = orgId
+        tempOrg.name = name
+        orgs.append(tempOrg)  
+	  
+	 
+    context = {
+        'orgs': orgs
+    }
+    return render(request, 'apply.html', context)

@@ -54,7 +54,7 @@ initial setup:
 	git clone https://S21-Team04-Lacy-Patell-Blankenship-Racel-Clemons@dev.azure.com/S21-Team04-Lacy-Patell-Blankenship-Racel-Clemons/S21-Team04-Lacy.Patel.Blankenship.Clemons.Racel/_git/S21-4910-Project
 
 	virtualenv django-env && source django-env/bin/activate
-	pip install django mysql-connector ebaysdk bs4
+	pip install django mysql-connector-python ebaysdk bs4
 
 add public ec2 elastic ip address to allowed hosts in settings.py
 

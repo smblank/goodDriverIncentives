@@ -97,7 +97,7 @@
 
                 <form method = "POST" enctype="multipart/form-data" action = "{% url 'getNewDriverProfilePic'%}">
                     {% csrf_token %}
-                    <input type = "file" id = "profilePic" name = "profilePic"/>
+                    <input type = "file" id = "profilePic" name = "profilePic"/> <br>
                     <button id = "submit" type = "file"> Upload Image </button>
                 </form>
 

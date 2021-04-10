@@ -45,7 +45,8 @@ urlpatterns = [
     path('',forms.login), 
     path('loginScreen/', forms.login, name = 'loginScreen'),
     path('login', forms.loginpg, name = 'login'),
-    
+    path('changepass',forms.changepass, name='changepass'),
+
     path('application/', views.application, name = 'application'),
     path('reg',views.userreggin, name = 'reg'),
 

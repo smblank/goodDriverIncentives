@@ -119,6 +119,9 @@
                     <!-- Source: https://stackoverflow.com/questions/50895806/bootstrap-4-multiselect-dropdown/50897096 -->
                     <select id = "sponsor" class = "selectpicker" multiple name = "sponsor" required>
                         <!-- EXAMPLE: <option value = "spon1"> Organization 1</option> --> 
+                        {% for org in orgs %}
+                            <option value = {{org.id}}>{{org.name}}</option>
+                        {% endfor %}
                     </select>
                 </div>
             </div>

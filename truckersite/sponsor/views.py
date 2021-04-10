@@ -20,7 +20,7 @@ def sponsorDashDisplay(request):
     conn = db.getDB()
     cursor = db.getCursor(conn)
 
-    query_applicants = "SELECT * FROM APPLICANT WHERE OrgID=%s AND IsAccepted=False"
+    query_applicants = "SELECT * FROM APPLICANT WHERE OrgID=%s AND Reason IS NULL"
     cursor.execute(query_applicants, (org_num,))
     result = cursor.fetchall()
 
@@ -92,8 +92,8 @@ def sponsorAcceptApplicant(request, applicant_id):
     cursor.execute(query_insert_driver, (applicant_name, applicant_email,
                    applicant_password, applicant_address, applicant_phone, orgNo,))
 
-    response = redirect('/sponsor_dash')
-    return response
+    context = {'applicant_name': applicant_name, 'applicant_email': applicant_email, 'applicant_password': applicant_password}
+    return render(request, 'accept_applicant_confirmation.html', context)
 
 
 def sponsorRejectApplicant(request, applicant_id):

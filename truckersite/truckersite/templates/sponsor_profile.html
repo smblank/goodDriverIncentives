@@ -22,6 +22,7 @@
     <!-- Links the .css file -->
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/sponsor_profile.css' %}">
+    <link rel="stylesheet" type="text/css" href="sponsor_profile.css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 
@@ -85,8 +86,8 @@
 
                 <form method="POST" enctype="multipart/form-data" action="{% url 'getNewSponsorProfilePic'%}">
                     {% csrf_token %}
-                    <input type="file" id="profilePic" name="profilePic" />
-                    <button id="submit" type="file"> Upload Image </button>
+                    <input type="file" id="profilePic" name="profilePic" /> <br>
+                    <button id="upload" type="file"> Upload Image </button>
                 </form>
 
                 <form method="Post" action="{% url 'getNewSponsorEmail'%}">
