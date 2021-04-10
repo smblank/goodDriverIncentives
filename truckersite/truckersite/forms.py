@@ -22,6 +22,7 @@ def loginpg(request):
             request.session['id'] = db.getUserID(email)
             request.session['email'] = email
             request.session['role'] = db.getUserType(email)
+            request.session['isViewing'] = False
 
             if request.POST.get('remember') == 'true':
                 request.session.set_expiry(0)
@@ -39,6 +40,7 @@ def logoutpg(request):
     del request.session['role']
     del request.session['isSponsor']
     del request.session['isAdmin']
+    del request.session['isViewing']
     
     return render(request, 'index.html')
 
@@ -54,14 +56,12 @@ def moveout(request):
         if request.session.get('role') == 'Sponsor':
             request.session['isSponsor'] = True
             request.session['isAdmin'] = False
-            request.session['isViewing'] = False
             response = redirect('/sponsor_dash/')
             return response
 
         if request.session.get('role') == 'Admin':
             request.session['isSponsor'] = False
             request.session['isAdmin'] = True
-            request.session['isViewing'] = False
             return render(request, 'admin_dash.html')
     else:
         print('not logged in...displaying login')
