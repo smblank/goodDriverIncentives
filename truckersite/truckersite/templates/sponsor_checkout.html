@@ -21,8 +21,6 @@
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/driver_cart.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/checkout.css' %}">
-    <link rel="stylesheet" type="text/css" href="driver_cart.css">
-    <link rel="stylesheet" type="text/css" href="checkout.css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 
@@ -30,7 +28,6 @@
 
     <div class="container-fluid">
 
-        <!-- Credit for navbar: https://getbootstrap.com/docs/4.1/components/navbar/-->
         <!-- Credit for navbar: https://getbootstrap.com/docs/4.1/components/navbar/-->
         <nav class="navbar navbar-expand-md navbar-light fixed-top" id="header">
             <ul class="navbar-nav w-100 justify-content-between">
@@ -77,7 +74,7 @@
             <div class="col-md-3"></div>
             <div class="col-md-9">
                 <h4> Shipping Address: </h4>
-                <select id="shipping">
+                <select class = "form-control form-control-lg" id = "shipping" style = "margin-bottom: 10%;">
                     <option value = "none"> *Default Address* </option>
                 </select>
             </div>

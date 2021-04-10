@@ -117,7 +117,8 @@
                 </form>
 
                 <p class = "setting" id = "manageaddresses" style = "margin-top: 1.5%;"> Manage Addresses </p>
-                <select id = "addresses">
+                {% csrf_token %}
+                <select class = "form-control form-control-lg" id = "addresses" name = "addresses" style = "margin-bottom: 1.5%;">
                     <option value = "new"> New Address </option>
 
                     {% for address in addresses %}
@@ -181,8 +182,8 @@
                 
                 <p class = "setting" id = "changedefaultaddress" style = "margin-top: 1.5%;"> Change Default Address </p>
                 <form method = "Post" action = "{%url 'getDriverDefaultAddr'%}">
-                    {% csrf_token%}
-                    <select id = "default" name = 'default'>
+                    {% csrf_token %}
+                    <select class = "form-control form-control-lg" id = "default" name = "default" style = "margin-bottom: 1.5%;">
                         <option value = "none"> Choose an Address </option>
                         {% for address in addresses %}
                             <option value = {{address.id}}>{{address.addr}}</option>

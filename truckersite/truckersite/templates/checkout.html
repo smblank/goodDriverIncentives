@@ -21,6 +21,8 @@
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/driver_cart.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/checkout.css' %}">
+    <link rel="stylesheet" type="text/css" href="driver_cart.css">
+    <link rel="stylesheet" type="text/css" href="checkout.css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 
@@ -72,7 +74,8 @@
             <div class = "col-md-3"></div>
             <div class = "col-md-9">
                 <h4> Shipping Address:  </h4>
-                <select id = "shipping">
+                {% csrf_token %}
+                <select class = "form-control form-control-lg" id = "shipping" style = "margin-bottom: 10%;">
                     <option value = "default">{{default}}</option>
 
                     {% for addr in addresses %}
