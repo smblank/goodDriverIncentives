@@ -166,31 +166,51 @@ def sponsorChangePoints(request, driver_id):
         conn = db.getDB()
         cursor = db.getCursor(conn)
 
-        query_driver_points = 'SELECT * FROM DRIVER INNER JOIN DRIVER_ORGS ON DRIVER.UserID = DRIVER_ORGS.UserID WHERE DRIVER.UserID = %s'
-        cursor.execute(query_driver_points, (driver_id,))
-        result = cursor.fetchone()
-        original_points = result[4]
-        print('original points: ', original_points)
-
-        query_point_value = 'SELECT * FROM POINT_CHANGE_REASON WHERE ReasonID=%s'
-        cursor.execute(query_point_value, (reason_id,))
-        result = cursor.fetchone()
-        num_points = result[2]
-
+        # get organization number
         if (request.session['isViewing']):
             orgNo = db.getOrgNo(request.session['tempEmail'])
         else:
             orgNo = db.getOrgNo(request.session['email'])
 
-        query_change_point_total = 'UPDATE DRIVER_ORGS SET Points = Points + %s WHERE UserID = %s AND OrgID = %s'
-        cursor.execute(query_change_point_total,
-                       (num_points, driver_id, orgNo))
+        # get driver information
+        query_driver_name = 'SELECT * FROM USER INNER JOIN DRIVER ON DRIVER.UserID = USER.UserID WHERE USER.UserID=%s'
+        cursor.execute(query_driver_name, (driver_id,))
+        result = cursor.fetchone()
+        driver_name = result[1]
+        driver_email = result[2]
 
+        # get current driver points
+        query_driver_points = 'SELECT * FROM DRIVER INNER JOIN DRIVER_ORGS ON DRIVER.UserID = DRIVER_ORGS.UserID WHERE DRIVER.UserID = %s'
+        cursor.execute(query_driver_points, (driver_id,))
+        result = cursor.fetchone()
+        original_points = result[4]
+
+        # get number of points based on reason id
+        query_point_value = 'SELECT * FROM POINT_CHANGE_REASON WHERE ReasonID=%s'
+        cursor.execute(query_point_value, (reason_id,))
+        result = cursor.fetchone()
+        num_points = result[2]
+
+        # check if point total would be negative
+        if original_points + num_points < 0:
+            point_message = "* point change failed, driver points can not be negative *"
+            successful = False
+            after_points = original_points
+
+            context = {'successful': successful, 'driver_name': driver_name, 'driver_email': driver_email, 'original_points': original_points, 
+            'point_change': num_points, 'new_total': after_points, 'point_message': point_message}
+            return render(request, 'change_points_confirmation.html', context)
+        
+        #change the points
+        query_change_point_total = 'UPDATE DRIVER_ORGS SET Points = Points + %s WHERE UserID = %s AND OrgID = %s'
+        cursor.execute(query_change_point_total, (num_points, driver_id, orgNo))
+
+        # find amount of points after change
         cursor.execute(query_driver_points, (driver_id,))
         result = cursor.fetchone()
         after_points = result[4]
         print('after points: ', after_points)
-
+    
         now = datetime.datetime.now()
         query_insert_point_change = 'INSERT INTO POINT_CHANGE (ChangeDate, ReasonID, TotalPoints, DriverID, SponsorID) VALUES (%s, %s, %s, %s, %s)'
         cursor.execute(query_insert_point_change, (now.strftime(
@@ -198,21 +218,17 @@ def sponsorChangePoints(request, driver_id):
 
         # check if points where added and send to confirmation page
         if original_points + num_points == after_points:
+            point_message = "* points were successfully changed *"
             successful = True
         else:
+            point_message = "* point change failed *"
             successful = False
-
-        query_driver_name = 'SELECT * FROM USER INNER JOIN DRIVER ON DRIVER.UserID = USER.UserID WHERE USER.UserID=%s'
-        cursor.execute(query_driver_name, (driver_id,))
-        result = cursor.fetchone()
-        driver_name = result[1]
-        driver_email = result[2]
 
         cursor.close()
         conn.close()
 
         context = {'successful': successful, 'driver_name': driver_name, 'driver_email': driver_email, 'original_points': original_points, 'point_change': num_points,
-                   'new_total': after_points}
+                   'new_total': after_points, 'point_message': point_message}
         return render(request, 'change_points_confirmation.html', context)
 
     else:

@@ -69,10 +69,11 @@
                 <h3>Original Point Total: {{ original_points }}</h3>
                 <h3>Point Change: {{ point_change }}</h3>
                 <h3>New Point Total: {{ new_total }}</h3>
+
                 {% if successful %}
-                <h3>* points were successfully changed *</h3>
+                <h3>{{ point_message }}</h3>
                 {% else %}
-                <h3 style="color: red;">* point change failed *</h3>
+                <h3 style="color: red;">{{ point_message }}</h3>
                 {% endif %}
                 <h3><a href="/sponsor_view_drivers/">Driver List</a></h3>
             </div>
