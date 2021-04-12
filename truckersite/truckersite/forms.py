@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 import dbConnectionFunctions as db
 from userProfile import views
+from dashboard import views as dashViews
 
 def login(request):
     return render(request, 'index.html')
@@ -52,7 +53,11 @@ def moveout(request):
         if request.session.get('role') == 'Driver':
             request.session['isSponsor'] = False
             request.session['isAdmin'] = False
-            return render(request, 'driver_dash.html')
+
+            
+            result = db.getDriverOrgs(request.session['id'])
+            request.session['orgID'] = result[0][0]
+            return dashViews.driverDash(request)
 
         if request.session.get('role') == 'Sponsor':
             request.session['isSponsor'] = True
@@ -63,7 +68,7 @@ def moveout(request):
         if request.session.get('role') == 'Admin':
             request.session['isSponsor'] = False
             request.session['isAdmin'] = True
-            return render(request, 'admin_dash.html')
+            return dashViews.adminDash(request)
     else:
         print('not logged in...displaying login')
         return render(request, 'index.html')

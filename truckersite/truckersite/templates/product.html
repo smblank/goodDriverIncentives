@@ -55,9 +55,9 @@
         <div class = "row">
             <div class = "col-md-3">
                 <div id = "sidebar">
-                    <a id = "back" href = "driver_catalog.html"> <i class = "fa fa-arrow-left"></i> Catalog </a>
+                    <a id = "back" href = "{% url 'driverCatalog' %}"> <i class = "fa fa-arrow-left"></i> Catalog </a>
                     <p id = "pointstitle"> My Points: </p>
-                    <p id = "points"> 0 </p>
+                    <p id = "points">{{points}}</p>
                 </div>
             </div>
 
@@ -69,9 +69,18 @@
                         <button class = "btn btn-outline-secondary" type = "button" id = "search"> <i class = "fa fa-search"></i> </button>
                     </div>
                 </div>
-                <a class = "sticky-top" id = "cart" href = "driver_cart.html"> <i class = "fa fa-shopping-cart"></i> </a>
+                <a class = "sticky-top" id = "cart" href = "{% url 'driverCart' %}"> <i class = "fa fa-shopping-cart"></i> </a>
                 
-                <!-- Put Items Here -->
+                <div class="view overlay">
+                        <img img src={{product.pic}} width="255" height="255" alt="" align = "left">
+                        <div class="mask rgba-white-slight"></div>
+                    </div>
+                   <h4 style = "text-align:left" class="font-weight-bold blue-text">
+                    <strong>{{product.name}}</strong>
+                    </h4>
+                  <h4 style = "text-align:left" class="font-weight-bold blue-text">
+                  <strong>{{product.price}}</strong>
+                  </h4>
 
                 <button id = "addcart"> Add to Cart </button>
                 <button id = "addwishlist"> Add to Wishlist </button>

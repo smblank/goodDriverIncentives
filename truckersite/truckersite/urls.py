@@ -89,6 +89,7 @@ urlpatterns = [
     #Sponsor report generation
     path('sponsorReportGeneration/', reportViews.sponsorGenerateReport, name = 'sponsorReportGeneration'),
     path('getSponsorReport', reportOps.getSponsorReport, name = 'getSponsorReport'),
+    path('getSponsorReportPdf', reportOps.getSponsorReportPdf, name = 'getSponsorReportPdf'),
 
     #Admin report generation
     path('adminReportGeneration/', reportViews.adminGenerateReport, name = 'adminReportGeneration'),
@@ -102,12 +103,14 @@ urlpatterns = [
     path('getSponsorSales', reportOps.getSponsorSales, name = 'getSponsorSales'),
 
     #Catalog
-    path('driverCatalog/', catalogViews.driverCatalog, name = 'driverCatalog'),
+    path('driverCatalog/', catalogViews.product_list, name = 'driverCatalog'),
     path('wishlist/', catalogViews.wishlist, name = 'wishlist'),
     path('driverOrderHistory/', catalogViews.driverOrderHistory, name = 'driverOrderHistory'),
     path('sponsorCatalog', catalogViews.sponsorCatalog, name = 'sponsorCatalog'),
+    path('productPage/<int:id>/', catalogViews.productPage, name = 'productPage'),
     path('driverCart', catalogViews.driverCart, name = 'driverCart'),
     path('checkout', catalogViews.checkout, name = 'checkout'),
+    path('addProducts', catalogViews.addProducts, name = 'addProducts'),
 
     path('driver_catalog/', product_list, name='catalog'),
     path('sponsor_catalog/', sponsor_catalog, name='catalog'),
@@ -126,6 +129,7 @@ urlpatterns = [
     path('adminDash/', dashViews.adminDash, name = 'adminDash'),
     path("removeAdmin", dashOps.removeAdmin, name = 'removeAdmin'),
     path('addAdmin', dashOps.addNewAdmin, name = 'addAdmin'),
+    path('getDriverOrg', dashOps.getDriverOrg, name = 'getDriverOrg'),
 
     #View as
     path('sponSetDriverView', sponsorOps.setDriverView, name = 'sponSetDriverView'),

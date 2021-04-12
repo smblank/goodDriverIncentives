@@ -102,10 +102,10 @@ CREATE TABLE POINT_CHANGE
     FOREIGN KEY (SponsorID) REFERENCES SPONSOR (USERID));
 
 CREATE TABLE PRODUCT
-    (ProductID              INT                 NOT NULL    AUTO_INCREMENT,
-    ProductName             VARCHAR(45)         NOT NULL,
-    ProductAvailability     VARCHAR(15)         NOT NULL,
-    Price                   FLOAT               NOT NULL,
+    (ProductID      INT                 NOT NULL,
+    ProductName     VARCHAR(45)         NOT NULL,
+    Price           FLOAT               NOT NULL,
+    ImgUrl          VARCHAR(150)        NOT NULL,
     PRIMARY KEY (ProductID));
 
 CREATE TABLE IS_IN_CATALOG
@@ -116,9 +116,9 @@ CREATE TABLE IS_IN_CATALOG
     FOREIGN KEY (ProductID) REFERENCES PRODUCT (ProductID));
 
 CREATE TABLE DRIVER_ORDER
-    (OrderID      INT       NOT NULL    AUTO_INCREMENT,
-    OrderDate     DATE      NOT NULL,
-    Completed     BOOLEAN   NOT NULL,
+    (OrderID      INT           NOT NULL    AUTO_INCREMENT,
+    OrderDate     DATE          NOT NULL,
+    Status        VARCHAR(50)   NOT NULL,
     PRIMARY KEY (OrderID));
 
 CREATE TABLE IS_IN_ORDER

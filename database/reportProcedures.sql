@@ -5,9 +5,10 @@ DROP PROCEDURE IF EXISTS indvDriverPointChangeRep;
 CREATE PROCEDURE indvDriverPointChangeRep(startDate DATE, endDate DATE, org INT, driver INT)
     BEGIN
         SELECT Name, Points, ChangeDate, NumPoints, SponsorID, ReasonDescription
-        FROM USER, DRIVER, POINT_CHANGE, POINT_CHANGE_REASON
+        FROM USER, DRIVER, DRIVER_ORGS, POINT_CHANGE, POINT_CHANGE_REASON
         WHERE ChangeDate >= startDate AND ChangeDate <= endDate 
-            AND DRIVER.OrgID = org AND DRIVER.userID = driver AND
+            AND DRIVER_ORGS.OrgID = org AND DRIVER.userID = driver AND
+            DRIVER_ORGS.UserID = driver AND
             USER.UserID = DRIVER.UserID AND
             POINT_CHANGE.DriverID = DRIVER.UserID AND
             POINT_CHANGE.ReasonID = POINT_CHANGE_REASON.ReasonID;
@@ -18,10 +19,10 @@ DROP PROCEDURE IF EXISTS allDriverPointChangeRep;
 CREATE PROCEDURE allDriverPointChangeRep(startDate DATE, endDate DATE, org INT)
     BEGIN
         SELECT Name, Points, ChangeDate, NumPoints, SponsorID, ReasonDescription
-        FROM USER, DRIVER, POINT_CHANGE, POINT_CHANGE_REASON
-        WHERE ChangeDate >= startDate AND ChangeDate <= endDate 
-            AND DRIVER.OrgID = org AND
+        FROM USER, DRIVER, DRIVER_ORGS, POINT_CHANGE, POINT_CHANGE_REASON
+        WHERE ChangeDate >= startDate AND ChangeDate <= endDate AND 
             USER.UserID = DRIVER.UserID AND
+            DRIVER_ORGS.UserID = DRIVER.UserID AND DRIVER_ORGS.OrgID = org AND
             POINT_CHANGE.DriverID = DRIVER.UserID AND
             POINT_CHANGE.ReasonID = POINT_CHANGE_REASON.ReasonID;
     END;;
@@ -144,9 +145,10 @@ DROP PROCEDURE IF EXISTS indvSponsorInvoice;
 CREATE PROCEDURE indvSponsorInvoice(startDate DATE, endDate DATE, org INT)
     BEGIN
         SELECT ORGANIZATION.Name, OrderDate, USER.Name, Price, Quantity
-        FROM ORGANIZATION, PRODUCT, USER, DRIVER, DRIVER_ORDER, IS_IN_ORDER, BELONGS_TO
+        FROM ORGANIZATION, PRODUCT, USER, DRIVER, DRIVER_ORGS, DRIVER_ORDER, IS_IN_ORDER, BELONGS_TO
         WHERE OrderDate >= startDate AND OrderDate <= endDate AND
-            ORGANIZATION.OrgID = org AND DRIVER.OrgID = org AND
+            ORGANIZATION.OrgID = org AND DRIVER_ORGS.OrgID = org AND
+            DRIVER_ORGS.UserID = DRIVER.UserID AND
             USER.UserID = DRIVER.UserID AND
             BELONGS_TO.DriverID = DRIVER.UserID AND
             BELONGS_TO.OrderID = IS_IN_ORDER.OrderID AND DRIVER_ORDER.OrderID = BELONGS_TO.OrderID AND
@@ -158,9 +160,9 @@ DROP PROCEDURE IF EXISTS allSponsorInvoice;
 CREATE PROCEDURE allSponsorInvoice(startDate DATE, endDate DATE)
     BEGIN
         SELECT ORGANIZATION.Name, OrderDate, USER.Name, Price, Quantity
-        FROM ORGANIZATION, PRODUCT, USER, DRIVER, DRIVER_ORDER, IS_IN_ORDER, BELONGS_TO
+        FROM ORGANIZATION, PRODUCT, USER, DRIVER, DRIVER_ORGS, DRIVER_ORDER, IS_IN_ORDER, BELONGS_TO
         WHERE OrderDate >= startDate AND OrderDate <= endDate AND
-            USER.UserID = DRIVER.UserID AND
+            USER.UserID = DRIVER.UserID AND DRIVER_ORGS.UserID = DRIVER.UserID AND DRIVER_ORGS.OrgID = ORGANIZATION.OrgID AND
             BELONGS_TO.DriverID = DRIVER.UserID AND
             BELONGS_TO.OrderID = IS_IN_ORDER.OrderID AND DRIVER_ORDER.OrderID = BELONGS_TO.OrderID AND
             PRODUCT.ProductID = IS_IN_ORDER.ProductID;
@@ -180,12 +182,12 @@ DROP PROCEDURE IF EXISTS pointChangeRep;
 CREATE PROCEDURE pointChangeRep(startDate DATE, endDate DATE)
     BEGIN
         SELECT USER.Name, ChangeDate, ORGANIZATION.Name, NumPoints, ReasonDescription
-        FROM USER, DRIVER, ORGANIZATION, POINT_CHANGE, POINT_CHANGE_REASON
+        FROM USER, DRIVER, DRIVER_ORGS, ORGANIZATION, POINT_CHANGE, POINT_CHANGE_REASON
         WHERE ChangeDate >= startDate AND ChangeDate <= endDate AND
-                USER.UserID = DRIVER.UserID AND
-                DRIVER.OrgID = ORGANIZATION.OrgID AND
+                USER.UserID = DRIVER.UserID AND DRIVER_ORGS.UserID = DRIVER.UserID AND
+                DRIVER_ORGS.OrgID = ORGANIZATION.OrgID AND
                 POINT_CHANGE.DriverID = DRIVER.UserID AND
-                POINT_CHANGE.ReasonID = POINT_CHANGE_REASON.ReasonDescription;
+                POINT_CHANGE.ReasonID = POINT_CHANGE_REASON.ReasonID;
     END;;
 
 DROP PROCEDURE IF EXISTS passwordChangeRep;
@@ -202,7 +204,7 @@ DROP PROCEDURE IF EXISTS loginAttemptsRep;
 
 CREATE PROCEDURE loginAttemptsRep(startDate DATE, endDate DATE)
     BEGIN
-        SELECT Email, AttemptDate, Succeeded
+        SELECT Email, AttemptDate, Suceeded
         FROM USER, LOGIN_ATTEMPT
         WHERE USER.UserID = LOGIN_ATTEMPT.UserID;
     END;;

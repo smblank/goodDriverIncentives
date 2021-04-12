@@ -1,8 +1,7 @@
 from django.shortcuts import render
 import dbConnectionFunctions as db
 
-# Create your views here.
-def sponsorGenerateReport(request):
+def getSponsorContext(request):
     if (request.session['isViewing']):
         imgPath = db.getProfilePic(request.session['email'])
     else: 
@@ -36,25 +35,10 @@ def sponsorGenerateReport(request):
         'profilePic': profilePic,
         'orgDrivers': drivers
     }
-    return render(request, 'sponsor_generate_report.html', context)
+    
+    return context
 
-def adminGenerateReport(request):
-    imgPath = db.getProfilePic(request.session['email'])
-    profilePic = 'http://127.0.0.1:8000/static/img/' + imgPath
-    context = {
-        'profilePic': profilePic
-    }
-    return render(request, 'admin_generate_report.html', context)
-
-def auditLog(request):
-    imgPath = db.getProfilePic(request.session['email'])
-    profilePic = 'http://127.0.0.1:8000/static/img/' + imgPath
-    context = {
-        'profilePic': profilePic
-    }
-    return render(request, 'audit_log.html', context)
-
-def invoice(request):
+def getInvoiceContext(request):
     imgPath = db.getProfilePic(request.session['email'])
     profilePic = 'http://127.0.0.1:8000/static/img/' + imgPath
 
@@ -77,6 +61,32 @@ def invoice(request):
         'profilePic': profilePic,
         'listOrgs': orgs
     }
+
+    return context
+
+# Create your views here.
+def sponsorGenerateReport(request):
+    context = getSponsorContext(request)
+    return render(request, 'sponsor_generate_report.html', context)
+
+def adminGenerateReport(request):
+    imgPath = db.getProfilePic(request.session['email'])
+    profilePic = 'http://127.0.0.1:8000/static/img/' + imgPath
+    context = {
+        'profilePic': profilePic
+    }
+    return render(request, 'admin_generate_report.html', context)
+
+def auditLog(request):
+    imgPath = db.getProfilePic(request.session['email'])
+    profilePic = 'http://127.0.0.1:8000/static/img/' + imgPath
+    context = {
+        'profilePic': profilePic
+    }
+    return render(request, 'audit_log.html', context)
+
+def invoice(request):
+    context = getInvoiceContext(request)
     return render(request, 'invoice.html', context)
 
 def driverSales(request):
