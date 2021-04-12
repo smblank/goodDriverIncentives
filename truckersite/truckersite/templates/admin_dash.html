@@ -81,15 +81,26 @@
             <div class = "col-md-3">
                 <p style = "font-size: 150%;">Organization Management: </p>
 
-                <select class = "form-control form-control-lg" id = "admin" name = "admin" style = "margin-bottom: 1.5%;">
-                    <option value = "none"> Select an Organization </option>
-                </select>
+                <form method = "Post" action = "{% url 'removeOrg' %}">
+                    {% csrf_token %}
+                    <select class = "form-control form-control-lg" id = "org" name = "orgID" style = "margin-bottom: 1.5%;">
+                        <option value = "none"> Select an Organization </option>
 
-                <button id = "remove"> Remove Organization </button>
+                        {% for org in orgs %}
+                            <option value = {{org.id}}>{{org.name}}</option>
+                        {% endfor %}
+                    </select>
+
+                    <button id = "remove"> Remove Organization </button>
+                </form>
 
                 <p style = "font-size: 150%;">Add New Organization</p>
-                    <input type = "text" class = "newadmin" id = "orgname" placeholder = "Organization Name" style = "font-size: 200%;">
+                <form method = "Post" action = "{% url 'addOrg' %}">
+                    {% csrf_token %}
+                    <input type = "text" class = "newadmin" id = "orgname" name = "name" placeholder = "Organization Name" style = "font-size: 200%;">
                     <button id = "add"> Add Organization </button>
+                </form>
+
             </div>
             <div class = "col-md-3">
                 <p style = "font-size: 150%;">Admin Management: </p>

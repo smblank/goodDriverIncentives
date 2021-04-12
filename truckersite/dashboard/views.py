@@ -23,8 +23,6 @@ def driverDash(request):
         tempOrg.name = name
         orgs.append(tempOrg)
 
-    print(orgs)
-
     if (request.session['isViewing']):
         email = request.session['tempEmail']
         org = db.getOrgNo(request.session['email'])
@@ -65,8 +63,24 @@ def adminDash(request):
         tempAdmin.name = name
         admins.append(tempAdmin)
 
+    result = db.getOrgs()
+
+    class Org:
+        def __init__(self):
+            id = -1
+            name = ''
+        
+    orgs = []
+
+    for (id, name) in result:
+        tempOrg = Org()
+        tempOrg.id = id
+        tempOrg.name = name
+        orgs.append(tempOrg)
+
     context = {
-        'admins': admins
+        'admins': admins,
+        'orgs': orgs
     }
 
     return render(request, "admin_dash.html", context)

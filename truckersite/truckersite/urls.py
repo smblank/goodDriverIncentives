@@ -85,6 +85,9 @@ urlpatterns = [
     path('removeDriver', orgOps.removeDriver, name = 'removeDriver'),
     path('adminOrgs/', orgViews.adminOrgs, name = 'adminOrgs'),
     path('getAdminOrgChoice', orgOps.getAdminOrgChoice, name = 'getAdminOrgChoice'),
+    path('getNewCatalogKeyword', orgOps.getNewCatalogKeyword, name = "getNewCatalogKeyword"),
+    path('removeCatalogKeyword/<int:wordID>/', orgOps.removeCatalogKeyword, name = 'removeCatalogKeyword'),
+    path('createCatalog', orgOps.createCatalog, name = 'createCatalog'),
 
     #Sponsor report generation
     path('sponsorReportGeneration/', reportViews.sponsorGenerateReport, name = 'sponsorReportGeneration'),
@@ -106,14 +109,11 @@ urlpatterns = [
     path('driverCatalog/', catalogViews.product_list, name = 'driverCatalog'),
     path('wishlist/', catalogViews.wishlist, name = 'wishlist'),
     path('driverOrderHistory/', catalogViews.driverOrderHistory, name = 'driverOrderHistory'),
-    path('sponsorCatalog', catalogViews.sponsorCatalog, name = 'sponsorCatalog'),
-    path('productPage/<int:id>/', catalogViews.productPage, name = 'productPage'),
+    path('sponsorCatalog', catalogViews.sponsor_catalog, name = 'sponsorCatalog'),
+    path('productPage/<str:id>/', catalogViews.productPage, name = 'productPage'),
     path('driverCart', catalogViews.driverCart, name = 'driverCart'),
     path('checkout', catalogViews.checkout, name = 'checkout'),
     path('addProducts', catalogViews.addProducts, name = 'addProducts'),
-
-    path('driver_catalog/', product_list, name='catalog'),
-    path('sponsor_catalog/', sponsor_catalog, name='catalog'),
     path('admin/', admin.site.urls),
 
     #Sponsor
@@ -130,6 +130,8 @@ urlpatterns = [
     path("removeAdmin", dashOps.removeAdmin, name = 'removeAdmin'),
     path('addAdmin', dashOps.addNewAdmin, name = 'addAdmin'),
     path('getDriverOrg', dashOps.getDriverOrg, name = 'getDriverOrg'),
+    path('addOrg', dashOps.addOrg, name = 'addOrg'),
+    path('removeOrg', dashOps.removeOrg, name = 'removeOrg'),
 
     #View as
     path('sponSetDriverView', sponsorOps.setDriverView, name = 'sponSetDriverView'),

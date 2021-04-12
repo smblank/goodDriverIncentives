@@ -63,11 +63,27 @@ def organizationPage(request):
     imgPath = db.getOrgLogo(orgNo)
     logo = 'http://127.0.0.1:8000/static/img/' + imgPath
 
+    result = db.getKeywords(orgNo)
+
+    class Keyword:
+        def __init__(self):
+            id = -1
+            word = ''
+    
+    keywords = []
+
+    for (id, word) in result:
+        tempWord = Keyword()
+        tempWord.id = id
+        tempWord.word = word
+        keywords.append(tempWord)
+
     context = {
         'reasons': reasons,
         'sponsors': sponsors,
         'drivers': drivers,
-        'logo': logo
+        'logo': logo,
+        'keywords': keywords
     }
 
     return render(request, 'sponsor_organization.html', context)
@@ -143,12 +159,33 @@ def adminOrgs(request):
         imgPath = db.getOrgLogo(orgNo)
         logo = 'http://127.0.0.1:8000/static/img/' + imgPath
 
+
+        result = db.getProductsInCatalog(orgNo)
+
+        class Product:
+            def __init__(self):
+                id = -1
+                name = ''
+                price = ''
+                pic = ''
+        
+        products = []
+
+        for (id, name, price, img) in result:
+            tempProduct = Product()
+            tempProduct.id = id
+            tempProduct.name = name
+            tempProduct.price = price
+            tempProduct.pic = img
+            products.append(tempProduct)
+
         context = {
             'reasons': reasons,
             'sponsors': sponsors,
             'drivers': drivers,
             'orgs': orgs,
-            'logo': logo
+            'logo': logo,
+            'items': products
         }
     
     else:

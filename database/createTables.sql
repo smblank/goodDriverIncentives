@@ -34,6 +34,13 @@ CREATE TABLE ORGANIZATION
     PRIMARY KEY (OrgID),
     FOREIGN KEY (CatalogID) REFERENCES ORG_CATALOG (CatalogID));
 
+CREATE TABLE CATALOG_KEYWORDS
+    (WordID     INT             NOT NULL    AUTO_INCREMENT,
+    CatalogID   INT             NOT NULL,
+    Keyword     VARCHAR(20)     NOT NULL,
+    PRIMARY KEY (WordID),
+    FOREIGN KEY (CatalogID) REFERENCES ORGANIZATION (CatalogID));
+
 CREATE TABLE ORG_PAYMENTS
     (PayID          INT             NOT NULL    AUTO_INCREMENT,
     CreditCardNum   INT             NOT NULL,
@@ -102,15 +109,15 @@ CREATE TABLE POINT_CHANGE
     FOREIGN KEY (SponsorID) REFERENCES SPONSOR (USERID));
 
 CREATE TABLE PRODUCT
-    (ProductID      INT                 NOT NULL,
-    ProductName     VARCHAR(45)         NOT NULL,
+    (ProductID      CHAR(12)            NOT NULL,
+    ProductName     VARCHAR(100)        NOT NULL,
     Price           FLOAT               NOT NULL,
-    ImgUrl          VARCHAR(150)        NOT NULL,
+    ImgUrl          VARCHAR(200)        NOT NULL,
     PRIMARY KEY (ProductID));
 
 CREATE TABLE IS_IN_CATALOG
-    (CatalogID      INT     NOT NULL,
-    ProductID       INT     NOT NULL,
+    (CatalogID      INT          NOT NULL,
+    ProductID       CHAR(12)     NOT NULL,
     PRIMARY KEY (CatalogID, ProductID),
     FOREIGN KEY (CatalogID) REFERENCES ORG_CATALOG (CatalogID),
     FOREIGN KEY (ProductID) REFERENCES PRODUCT (ProductID));
@@ -122,16 +129,16 @@ CREATE TABLE DRIVER_ORDER
     PRIMARY KEY (OrderID));
 
 CREATE TABLE IS_IN_ORDER
-    (OrderID        INT     NOT NULL,
-    ProductID       INT     NOT NULL,
-    Quantity        INT     NOT NULL,
+    (OrderID        INT         NOT NULL,
+    ProductID       CHAR(12)    NOT NULL,
+    Quantity        INT         NOT NULL,
     PRIMARY KEY (OrderID, ProductID),
     FOREIGN KEY (OrderID) REFERENCES DRIVER_ORDER (OrderID),
     FOREIGN KEY (ProductID) REFERENCES PRODUCT (ProductID));
 
 CREATE TABLE BELONGS_TO
     (DriverID     INT     NOT NULL,
-    OrderID     INT     NOT NULL,
+    OrderID       INT     NOT NULL,
     PRIMARY KEY (DriverID, OrderID),
     FOREIGN KEY (DriverID) REFERENCES DRIVER (UserID),
     FOREIGN KEY (OrderID) REFERENCES DRIVER_ORDER (OrderID));
@@ -143,8 +150,8 @@ CREATE TABLE WISHLIST
     FOREIGN KEY (DriverID) REFERENCES DRIVER (UserID));
 
 CREATE TABLE IS_IN_WISHLIST
-    (ProductID      INT     NOT NULL,
-    ListID          INT     NOT NULL,
+    (ProductID      CHAR(12)     NOT NULL,
+    ListID          INT         NOT NULL,
     PRIMARY KEY (ProductID, ListID),
     FOREIGN KEY (ProductID) REFERENCES PRODUCT (ProductID),
     FOREIGN KEY (ListID) REFERENCES WISHLIST (ListID));

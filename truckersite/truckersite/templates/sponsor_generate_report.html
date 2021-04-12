@@ -65,7 +65,7 @@
                     <!-- Source: https://stackoverflow.com/questions/50895806/bootstrap-4-multiselect-dropdown/50897096 -->
                     <form method="Post" action="{% url 'getSponsorReport'%}">
                         {% csrf_token %}
-                        <select id="drivers" name=d river class="selectpicker" multiple>
+                        <select id="drivers" name= "driver" class="selectpicker">
                             <option value = "all"> All Drivers </option>
 
                             {% for driver in orgDrivers %}
@@ -74,26 +74,26 @@
                         </select>
 
                         <h4> Start Date </h4>
-                        <input type="text" id="start" name=s tartDate placeholder="mm/dd/yy" maxlength="8">
+                        <input type="text" id="start" name= "startDate" placeholder="mm/dd/yy" maxlength="8">
                         <h4> End Date </h4>
-                        <input type="text" id="end" name=e ndDate placeholder="mm/dd/yy" maxlength="8">
+                        <input type="text" id="end" name= "endDate" placeholder="mm/dd/yy" maxlength="8">
 
-                        <button id="generate"> Generate Report </button>
+                        <button id="generate" name = "generate"> Generate Report </button>
+                        <button id="download" name = "download" onclick = "window.open('{% url 'getSponsorReportPdf' %}')"> Download Report <i class = "fa fa-download"></i> </button>
                     </form>
-                    <button id="download"> Download Report <i class = "fa fa-download"></i> </button>
                 </div>
             </div>
 
             <div class="col-md-9" id="preview">
                 <p>Date Range: {{startDate}} - {{endDate}}</p>
                 {% for driver, points, changes in drivers %}
-                <p>Driver: {{driver}} TotalPoints: {{points}}</p>
+                <p>Driver: {{driver}} Total Points: {{points}}</p>
                 <p>Point Changes</p>
-                <table width="60%">
+                <table width="70%">
                     <col style="width:20%">
                     <col style="width:35%">
                     <col style="width:30%">
-                    <col style="width:15%">
+                    <col style="width:50%">
                     <tr>
                         <td>Date</td>
                         <td>Change Amount</td>
@@ -102,19 +102,21 @@
                     </tr>
                 </table>
                 {% for change in changes %}
-                <table width="60%">
-                    <col style="width:20%">
-                    <col style="width:35%">
-                    <col style="width:30%">
-                    <col style="width:15%">
-                    <tr>
-                        <td>{{change.date}}</td>
-                        <td>{{change.pointChange}}</td>
-                        <td>{{change.sponsor}}</td>
-                        <td>{{change.reason}}</td>
-                    </tr>
-                </table>
-                {% endfor %} {% endfor %}
+                    <table width="70%">
+                        <col style="width:20%">
+                        <col style="width:35%">
+                        <col style="width:30%">
+                        <col style="width:50%">
+                        <tr>
+                            <td>{{change.date}}</td>
+                            <td>{{change.pointChange}}</td>
+                            <td>{{change.sponsor}}</td>
+                            <td>{{change.reason}}</td>
+                        </tr>
+                    </table>
+                {% endfor %} 
+                <br>
+            {% endfor %}
 
             </div>
         </div>
