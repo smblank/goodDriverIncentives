@@ -123,6 +123,7 @@ urlpatterns = [
     path('reject_applicant/<int:applicant_id>', sponsorViews.sponsorRejectApplicant, name = 'sponsorRejectApplicant'),
     path('sponsor_view_drivers/', sponsorViews.sponsorViewDrivers, name = 'sponsorViewDrivers'),
     path('change_driver_points/<int:driver_id>', sponsorViews.sponsorChangePoints, name = 'sponsorChangePoints'),
+    path('sponsor_application_list/', sponsorViews.sponsorApplicationList, name = 'sponsorApplicationList'),
 
     #Dashboards
     path("driverDash/", dashViews.driverDash, name = 'driverDash'),
