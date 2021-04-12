@@ -295,14 +295,15 @@ def getUserEmail(id):
     except Error as err:
         print(err)
 
-def getDriverPoints(email):
+def getDriverPoints(email, orgID):
     try:
         conn = getDB()
         cursor = getCursor(conn)
 
-        query = "SELECT getDrivePoints(%s)"
-        cursor.execute(query, (email,))
+        query = "SELECT getDriverPoints(%s, %s)"
+        cursor.execute(query, (email, orgID))
         result = cursor.fetchone()
+
 
         for points in result:
             cursor.close()
@@ -396,6 +397,22 @@ def getOrgLogo(orgNo):
     except Error as err:
         print(err)
 
+def getProductsInCatalog(org):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL getProductsInCatalog(%s)"
+        cursor.execute(query, (org,))
+        result = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+        return result
+
+    except Error as err:
+        print(err)
+
 def checkIsInCatalog (productID, catalogID):
     try:
         conn = getDB()
@@ -428,7 +445,7 @@ def addToCatalog (productID, catalogID):
     except Error as err:
         print(err)
 
-def removeToCatalog (productID, catalogID):
+def removeFromCatalog (productID, catalogID):
     try:
         conn = getDB()
         cursor = getCursor(conn)
@@ -529,6 +546,22 @@ def removeFromOrder (orderID, productID):
     except Error as err:
         print(err)
 
+def getDriverOrders(driver, orgNo):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL getDriverOrders(%s, %s)"
+        cursor.execute(query, (driver, orgNo,))
+        result = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+        return result
+    
+    except Error as err:
+        print(err)
+
 def updateQuantityInOrder (orderID, productID, newAmt):
     try:
         conn = getDB()
@@ -608,6 +641,35 @@ def checkIsInWishlist (driverID, productID):
     except Error as err:
         print(err)
 
+def createProduct (id, name, price, img):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+        
+        query = "SELECT createProduct(%s, %s, %s, %s)"
+        cursor.execute(query, (id, name, price, img))
+
+        cursor.close()
+        conn.close()
+        return "Product successfully created"
+    except Error as err:
+        print(err)
+
+def getProduct (id):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL getProduct(%s)"
+        cursor.execute(query, (id,))
+        result = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+        return result
+    except Error as err:
+        print(err)
+
 def updatePrice (productID, newPrice):
     try:
         conn = getDB()
@@ -619,21 +681,6 @@ def updatePrice (productID, newPrice):
         cursor.close()
         conn.close()
         return "Product price successfully updated"
-
-    except Error as err:
-        print(err)
-
-def updateAvailability (productID, newAvailability):
-    try:
-        conn = getDB()
-        cursor = getCursor(conn)
-
-        query = "SELECT updateAvailability(%s, %s)"
-        cursor.execute(query, (productID, newAvailability,))
-
-        cursor.close()
-        conn.close()
-        return "Product availability successfully updated"
 
     except Error as err:
         print(err)
@@ -651,57 +698,6 @@ def getProductName (productID):
             cursor.close()
             conn.close()
             return productName
-
-    except Error as err:
-        print(err)
-
-def getProductImage (productID):
-    try:
-        conn = getDB()
-        cursor = getCursor(conn)
-
-        query = "SELECT getProductImage(%s)"
-        cursor.execute(query, (productID,))
-        result = cursor.fetchone()
-
-        for productImage in result:
-            cursor.close()
-            conn.close()
-            return productImage
-
-    except Error as err:
-        print(err)
-
-def getProductDescription (productID):
-    try:
-        conn = getDB()
-        cursor = getCursor(conn)
-
-        query = "SELECT getProductDescription(%s)"
-        cursor.execute(query, (productID,))
-        result = cursor.fetchone()
-
-        for productDesc in result:
-            cursor.close()
-            conn.close()
-            return productDesc
-
-    except Error as err:
-        print(err)
-
-def getProductAvailability (productID):
-    try:
-        conn = getDB()
-        cursor = getCursor(conn)
-
-        query = "SELECT getProductAvailability(%s)"
-        cursor.execute(query, (productID,))
-        result = cursor.fetchone()
-
-        for productAvailability in result:
-            cursor.close()
-            conn.close()
-            return productAvailability
 
     except Error as err:
         print(err)
@@ -917,8 +913,9 @@ def getDriverOrgs (driverID):
         cursor = getCursor(conn)
 
         query = "CALL getDriverOrgs(%s)"
-        cursor.execute(query, (driverID))
+        cursor.execute(query, (driverID,))
         result = cursor.fetchall()
+
         
         cursor.close()
         conn.close()
@@ -1139,8 +1136,11 @@ def indvDriverPointChangeReport(startDate, endDate, orgID, driverID):
         conn = getDB()
         cursor = getCursor(conn)
 
+        start = datetime.strptime(startDate, '%m/%d/%y').date()
+        end = datetime.strptime(endDate, '%m/%d/%y').date()
+
         query = "CALL indvDriverPointChangeRep(%s, %s, %s, %s)"
-        cursor.execute(query, (startDate, endDate, orgID, driverID))
+        cursor.execute(query, (start, end, orgID, driverID))
         result = cursor.fetchall()
 
         cursor.close()
@@ -1174,8 +1174,11 @@ def indvSponsorSaleReport(startDate, endDate, detailed, driverID, orgID):
         conn = getDB()
         cursor = getCursor(conn)
 
+        start = datetime.strptime(startDate, '%m/%d/%y').date()
+        end = datetime.strptime(endDate, '%m/%d/%y').date()
+
         query = "CALL indvSponsorSaleRep(%s, %s, %s, %s, %s)"
-        cursor.execute(query, (startDate, endDate, detailed, driverID, orgID))
+        cursor.execute(query, (start, end, detailed, driverID, orgID))
         result = cursor.fetchall()
 
         cursor.close()
@@ -1190,8 +1193,11 @@ def allSponsorSaleReport(startDate, endDate, detailed):
         conn = getDB()
         cursor = getCursor(conn)
 
+        start = datetime.strptime(startDate, '%m/%d/%y').date()
+        end = datetime.strptime(endDate, '%m/%d/%y').date()
+
         query = "CALL allSponsorSaleRep(%s, %s, %s)"
-        cursor.execute(query, (startDate, endDate, detailed))
+        cursor.execute(query, (start, end, detailed))
         result = cursor.fetchall()
 
         cursor.close()
@@ -1206,8 +1212,11 @@ def driverSaleReport(startDate, endDate, detailed, orgID, driverID):
         conn = getDB()
         cursor = getCursor(conn)
 
+        start = datetime.strptime(startDate, '%m/%d/%y').date()
+        end = datetime.strptime(endDate, '%m/%d/%y').date()
+
         query = "CALL driverSaleRep(%s, %s, %s, %s, %s)"
-        cursor.execute(query, (startDate, endDate, detailed, orgID, driverID))
+        cursor.execute(query, (start, end, detailed, orgID, driverID))
         result = cursor.fetchall()
 
         cursor.close()
@@ -1222,8 +1231,11 @@ def indvSponsorInvoice(startDate, endDate, orgID):
         conn = getDB()
         cursor = getCursor(conn)
 
+        start = datetime.strptime(startDate, '%m/%d/%y').date()
+        end = datetime.strptime(endDate, '%m/%d/%y').date()
+
         query = "CALL indvSponsorInvoice(%s, %s, %s)"
-        cursor.execute(query, (startDate, endDate, orgID))
+        cursor.execute(query, (start, end, orgID))
         result = cursor.fetchall()
 
         cursor.close()
@@ -1238,8 +1250,11 @@ def allSponsorInvoice(startDate, endDate):
         conn = getDB()
         cursor = getCursor(conn)
 
+        start = datetime.strptime(startDate, '%m/%d/%y').date()
+        end = datetime.strptime(endDate, '%m/%d/%y').date()
+
         query = "CALL allSponsorInvoice(%s, %s)"
-        cursor.execute(query, (startDate, endDate))
+        cursor.execute(query, (start, end))
         result = cursor.fetchall()
 
         cursor.close()
@@ -1254,8 +1269,11 @@ def driverApplicationsReport(startDate, endDate):
         conn = getDB()
         cursor = getCursor(conn)
 
+        start = datetime.strptime(startDate, '%m/%d/%y').date()
+        end = datetime.strptime(endDate, '%m/%d/%y').date()
+
         query = "CALL driverApplicationsRep(%s, %s)"
-        cursor.execute(query, (startDate, endDate))
+        cursor.execute(query, (start, end))
         result = cursor.fetchall()
 
         cursor.close()
@@ -1270,9 +1288,14 @@ def pointChangeReport(startDate, endDate):
         conn = getDB()
         cursor = getCursor(conn)
 
+        start = datetime.strptime(startDate, '%m/%d/%y').date()
+        end = datetime.strptime(endDate, '%m/%d/%y').date()
+
         query = "CALL pointChangeRep(%s, %s)"
-        cursor.execute(query, (startDate, endDate))
+        cursor.execute(query, (start, end))
         result = cursor.fetchall()
+
+        print(result)
 
         cursor.close()
         conn.close()
@@ -1286,8 +1309,11 @@ def passwordChangeReport(startDate, endDate):
         conn = getDB()
         cursor = getCursor(conn)
 
+        start = datetime.strptime(startDate, '%m/%d/%y').date()
+        end = datetime.strptime(endDate, '%m/%d/%y').date()
+
         query = "CALL passwordChangeRep(%s, %s)"
-        cursor.execute(query, (startDate, endDate))
+        cursor.execute(query, (start, end))
         result = cursor.fetchall()
 
         cursor.close()
@@ -1302,8 +1328,11 @@ def loginAttemptsReport(startDate, endDate):
         conn = getDB()
         cursor = getCursor(conn)
 
+        start = datetime.strptime(startDate, '%m/%d/%y').date()
+        end = datetime.strptime(endDate, '%m/%d/%y').date()
+
         query = "CALL loginAttemptsRep(%s, %s)"
-        cursor.execute(query, (startDate, endDate))
+        cursor.execute(query, (start, end))
         result = cursor.fetchall()
 
         cursor.close()

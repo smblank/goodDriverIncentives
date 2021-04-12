@@ -2,7 +2,7 @@ DELIMITER ;;
 
 DROP FUNCTION IF EXISTS getDriverPoints;
 
-CREATE FUNCTION getDriverPoints(driverEmail VARCHAR(50))
+CREATE FUNCTION getDriverPoints(driverEmail VARCHAR(50), orgID INT)
 RETURNS INT
 READS SQL DATA
     BEGIN
@@ -12,28 +12,37 @@ READS SQL DATA
         SELECT getUserID(driverEmail) INTO driver;
 
         SELECT Points INTO pointTotal
-        FROM DRIVER
-        WHERE UserID = driver;
+        FROM DRIVER_ORGS
+        WHERE UserID = driver AND OrgID = orgID;
 
         RETURN pointTotal;
     END;;
 
 DROP FUNCTION IF EXISTS createProduct;
 
-CREATE FUNCTION createProduct (name VARCHAR(45), price FLOAT)
+CREATE FUNCTION createProduct (id INT, name VARCHAR(45), price FLOAT, img VARCHAR(150))
 RETURNS INT
 MODIFIES SQL DATA
     BEGIN
         DECLARE newProduct INT;
 
-        INSERT INTO PRODUCT (ProductName, Price)
-        VALUES (name, price);
+        INSERT INTO PRODUCT (ProductID, ProductName, Price, ImgUrl)
+        VALUES (id, name, price, img);
 
         SELECT ProductId INTO newProduct
         FROM PRODUCT
         WHERE ProductID = @@Identity;
 
         RETURN newProduct;
+    END;;
+
+DROP PROCEDURE IF EXISTS getProduct;
+
+CREATE PROCEDURE getProduct (id INT)
+    BEGIN
+        SELECT ProductName, Price, ImgUrl
+        FROM PRODUCT
+        WHERE ProductID = id;
     END;;
 
 DROP FUNCTION IF EXISTS isInCatalog;
@@ -51,6 +60,16 @@ READS SQL DATA
         ) INTO inCatalog;
 
         RETURN inCatalog;
+    END;;
+
+DROP PROCEDURE IF EXISTS getProductsInCatalog;
+
+CREATE PROCEDURE getProductsInCatalog(org INT)
+    BEGIN
+        SELECT PRODUCT.ProductID, ProductName, Price, ImgUrl
+        FROM PRODUCT, IS_IN_CATALOG, ORGANIZATION
+        WHERE ORGANIZATION.CatalogID = IS_IN_CATALOG.CatalogID AND
+                PRODUCT.ProductID = IS_IN_CATALOG.ProductID;
     END;;
 
 DROP FUNCTION IF EXISTS addToCatalog;
@@ -107,7 +126,7 @@ MODIFIES SQL DATA
     BEGIN
         DECLARE newID INT;
 
-        INSERT INTO DRIVER_ORDER (OrderDate, Completed) VALUES (dateCreated, FALSE);
+        INSERT INTO DRIVER_ORDER (OrderDate, Status) VALUES (dateCreated, 'In-Progress');
 
         SELECT OrderID INTO newID
         FROM DRIVER_ORDER
@@ -139,7 +158,7 @@ MODIFIES SQL DATA
         UPDATE DRIVER_ORDER
             SET
                 OrderDate = completeDate,
-                Completed = TRUE
+                Status = 'Delivered'
             WHERE OrderID = orderID;
 
             RETURN 0;
@@ -183,6 +202,18 @@ MODIFIES SQL DATA
         DELETE FROM IS_IN_ORDER WHERE OrderID = orderID AND ProductID = product;
 
         RETURN orderExists;
+    END;;
+
+DROP PROCEDURE IF EXISTS getDriverOrders;
+
+CREATE PROCEDURE getDriverOrders(driver INT, org INT)
+    BEGIN
+        SELECT DRIVER_ORDER.OrderID, OrderDate, ProductName, Quantity, Price, Status
+        FROM DRIVER_ORDER, IS_IN_ORDER, BELONGS_TO, PRODUCT
+        WHERE BELONGS_TO.DriverID = driver AND
+                BELONGS_TO.OrderID = DRIVER_ORDER.OrderID  AND IS_IN_ORDER.OrderID = BELONGS_TO.OrderID AND
+                IS_IN_ORDER.ProductID = PRODUCT.ProductID AND
+                Status != 'In-Progress';
     END;;
 
 DROP FUNCTION IF EXISTS updateQuantity;

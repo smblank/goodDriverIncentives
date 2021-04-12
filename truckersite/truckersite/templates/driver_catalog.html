@@ -70,6 +70,8 @@
                     </div>
                 </div>
                 <a id = "cart" href = "{% url 'driverCart' %}"> <i class = "fa fa-shopping-cart"></i> </a>
+
+                <a href = "{% url 'addProducts' %}">Temp Add Products</a>
                 
                 <!-- Put Items Here -->
                 <section class="text-center mb-4">
@@ -77,19 +79,18 @@
                 <h2> Here is the list of Items </h2>
                 {% for item in items %}
                     <div class="view overlay">
-                        <img img src={{item.image}} width="255" height="255" alt="">
-                        <a href="/driver_catalog/{{item.slug}}/">
+                        <img img src={{item.pic}} width="255" height="255" alt="">
+                        <a href="{% url 'productPage' item.id %}">
                         <div class="mask rgba-white-slight"></div>
                         </a>
                     </div>
-                    <a href="/driver_catalog/{{item.slug}}/"><h4 class="font-weight-bold blue-text">
+                    <a href="{% url 'productPage' item.id %}"><h4 class="font-weight-bold blue-text">
                     <strong>${{item.name}}</strong>
                     </h4>
                     </a>
-                  <a href="/driver_catalog/{{item.slug}}/"><h4 class="font-weight-bold blue-text">
+                  <h4 class="font-weight-bold blue-text">
                   <strong>${{item.price}}</strong>
                   </h4>
-                  </a>
                   </br>
                 {% endfor %}
                 {% endblock content %}

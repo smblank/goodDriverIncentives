@@ -5,6 +5,11 @@ from sponsor import views as spon
 
 # Create your models here.
 
+def getDriverOrg(request):
+    orgID = request.POST.get('driverOrg')
+    request.session['orgID'] = orgID
+    return views.driverDash(request)
+
 def removeAdmin(request):
     admin = request.POST.get('admin')
 

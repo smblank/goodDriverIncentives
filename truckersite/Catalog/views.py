@@ -1,5 +1,6 @@
 from ebaysdk import finding
 from ebaysdk.finding import Connection as finding
+from ebaysdk.shopping import Connection as shopping
 from bs4 import BeautifulSoup
 from .models import Product, OrderedProduct, Order
 from django.template.defaultfilters import random, slugify
@@ -7,15 +8,36 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.utils import timezone
 from django.core.mail import send_mail
+from django.conf import settings
 import dbConnectionFunctions as db
 
 APP_ID = 'ApurvPat-FindingS-PRD-ddc78fcfb-06024fa2'
 
+def exists(list, element):
+    for elem in list:
+        if elem == element:
+            return True
+        
+    return False
+
+def find(list, element):
+    index = 0
+    for elem in list:
+        if elem == element:
+            return index
+        index += 1
+
+    return -1
+
 def driverCatalog(request):
     if (request.session['isViewing']):
-        points = db.getDriverPoints(request.session['tempEmail'])
+        email = request.session['tempEmail']
+        org = db.getOrgNo(email)
     else:
-        points = db.getDriverPoints(request.session['email'])
+        email = request.session['email']
+        org = request.session['orgID']
+    
+    points = db.getDriverPoints(email, org)
 
     context = {
         'points': points
@@ -23,19 +45,83 @@ def driverCatalog(request):
     return render(request, 'driver_catalog.html', context)
 
 def wishlist(request):
-    return render(request, 'wishlist.html')
+    if (request.session['isViewing']):
+        email = request.session['tempEmail']
+        org = db.getOrgNo(email)
+    else:
+        email = request.session['email']
+        org = request.session['orgID']
+    
+    points = db.getDriverPoints(email, org)
+
+    context = {
+        'points': points
+    }
+    return render(request, 'wishlist.html', context)
 
 def driverOrderHistory(request):
-    return render(request, 'driver_order_history.html')
+    if (request.session['isViewing']):
+        driverID = db.getUserID(request.session['tempEmail'])
+        org = db.getOrgNo(request.session['tempEmail'])
+    else:
+        driverID = db.getUserID(request.session['email'])
+        org = request.session['orgID']
+    
+    result = db.getDriverOrders(driverID, org)
+
+    class Product:
+        def __init__(self):
+            name = ''
+            price = 0
+            qty = 0
+
+    class Order:
+        def __init__(self):
+            id = -1
+            date = '00/00/0000'
+            self.totalCost = 0
+            self.products = []
+            status = ''
+
+    orderIds = []
+    orders = []
+
+    for (orderID, date, productName, qty, price, status) in result:
+        if (not exists(orderIds, orderID)):
+            tempOrder = Order()
+            tempOrder.id = orderID
+            tempOrder.date = date
+            tempOrder.status = status
+            orders.append(tempOrder)
+
+            orderIds.append(orderID)
+
+        i = find(orderIds, orderID)
+        tempProduct = Product()
+        tempProduct.name = productName
+        tempProduct.price = price
+        tempProduct.qty = qty
+        orders[i].products.append(tempProduct)
+        orders[i].totalCost += price * qty
+
+    context = {
+        'orders': orders
+    }        
+
+    return render(request, 'driver_order_history.html', context)
 
 def sponsorCatalog(request):
     return render(request, 'sponsor_catalog.html')
 
 def driverCart(request):
     if (request.session['isViewing']):
-        points = db.getDriverPoints(request.session['tempEmail'])
+        email = request.session['tempEmail']
+        org = db.getOrgNo(email)
     else:
-        points = db.getDriverPoints(request.session['email'])
+        email = request.session['email']
+        org = request.session['orgID']
+    
+    points = db.getDriverPoints(email, org)
 
     context = {
         'points': points
@@ -45,10 +131,12 @@ def driverCart(request):
 def checkout(request):
     if (request.session['isViewing']):
         email = request.session['tempEmail']
+        org = db.getOrgNo(email)
     else:
         email = request.session['email']
-
-    points = db.getDriverPoints(email)
+        org = request.session['orgID']
+    
+    points = db.getDriverPoints(email, org)
     
     defaultAddr = db.getDefaultAddress(email)
 
@@ -75,6 +163,38 @@ def checkout(request):
     }
     return render(request, 'checkout.html', context)
 
+def productPage(request, id):
+    if (request.session['isViewing']):
+        email = request.session['tempEmail']
+        org = db.getOrgNo(email)
+    else:
+        email = request.session['email']
+        org = request.session['orgID']
+    
+    points = db.getDriverPoints(email, org)
+
+    class Product:
+        def __init__(self):
+            id = -1
+            name = ''
+            price = 0
+            pic = ''
+
+    result = db.getProduct(id)
+
+    product = Product()
+    product.id = id
+    product.name = result[0]
+    product.price = result[1]
+    product.pic = result[2]
+
+    context = {
+        'points': points,
+        'product': product
+    }
+
+    return render(request, 'product.html', context)
+
 def addProducts(request):
     api = finding(appid = APP_ID, config_file = None)
     request = {'keywords': {'TV', 'Computer', 'Phone'}, 'outputSelector': 'SellerInfo',}
@@ -84,21 +204,74 @@ def addProducts(request):
     items = soup.find_all('item')
     
     for item in items:
+        id_temp = int(item.itemid.string)
         name_tmp = item.title.string.lower().strip()
         price_tmp = float(item.currentprice.string)
         image_tmp = item.viewitemurl.string.lower()
+        db.createProduct(id_temp, name_tmp, price_tmp, image_tmp)
         #cat = item.categoryname.string.lower()
-        Product.objects.create(name = name_tmp, price = price_tmp, image = image_tmp)
+        # Product.objects.create(name = name_tmp, price = price_tmp, image = image_tmp)
+        
+
+    return driverCatalog(request)
 
 def product_list(request):
+    if (request.session['isViewing']):
+        org = db.getOrgNo(request.session['tempEmail'])
+    else:
+        org = request.session['orgID']
+
+    result = db.getProductsInCatalog(org)
+
+    class Product:
+        def __init__(self):
+            id = -1
+            name = ''
+            price = ''
+            pic = ''
+    
+    products = []
+
+    for (id, name, price, img) in result:
+        tempProduct = Product()
+        tempProduct.id = id
+        tempProduct.name = name
+        tempProduct.price = price
+        tempProduct.pic = img
+        products.append(tempProduct)
+
     context = {
-        'items': Product.objects.all()
+        'items': products
     }
     return render(request, "driver_catalog.html", context)
 
 def sponsor_catalog(request):
+    if (request.session['isViewing']):
+        org = db.getOrgNo(request.session['tempEmail'])
+    else:
+        org = db.getOrgNo(request.session['email'])
+
+    result = db.getProductsInCatalog(org)
+
+    class Product:
+        def __init__(self):
+            id = -1
+            name = ''
+            price = ''
+            pic = ''
+    
+    products = []
+
+    for (id, name, price, img) in result:
+        tempProduct = Product()
+        tempProduct.id = id
+        tempProduct.name = name
+        tempProduct.price = price
+        tempProduct.pic = img
+        products.append(tempProduct)
+
     context = {
-        'items': Product.objects.all()
+        'items': products
     }
     return render(request, "sponsor_catalog.html", context)
 
