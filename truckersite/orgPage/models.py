@@ -3,6 +3,7 @@ from django.shortcuts import render
 import os
 import dbConnectionFunctions as db
 from orgPage import views
+from Catalog import views as CatalogViews
 
 # Create your models here.
 def getNewLogo(request):
@@ -161,4 +162,29 @@ def getAdminOrgChoice(request):
         return views.adminOrgs(request)
     else:
         return views.organizationPage(request)
+
+def getNewCatalogKeyword(request):
+    newKeyword = request.POST.get('keyword')
+
+    if request.session['isViewing']:
+        orgNo = db.getOrgNo(request.session['tempEmail'])
+    else:
+        orgNo = db.getOrgNo(request.session['email'])
+    
+    db.addKeyword(orgNo, newKeyword)
+    return views.organizationPage(request)
+
+def removeCatalogKeyword(request, wordID):
+    if request.session['isViewing']:
+        orgNo = db.getOrgNo(request.session['tempEmail'])
+    else:
+        orgNo = db.getOrgNo(request.session['email'])
+
+    db.removeKeyword(orgNo, wordID)
+    return views.organizationPage(request)
+
+def createCatalog(request):
+    CatalogViews.addProducts(request)
+        
+    return views.organizationPage(request)
     

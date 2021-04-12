@@ -126,7 +126,6 @@
                 <a class = "settingname" href = "#orgdrivers"> Drivers </a> <br>
             
                 <p class = "sectionheader" style = "margin-top: 6%;"> Catalog </p>
-                <a class = "settingname" href = #catalog> Create Catalog </a> <br>
                 <a class = "settingname" href = #current> Current Catalog </a>
             </div>
 
@@ -226,21 +225,27 @@
                 <button id = "edit" onclick = "editDriver()"> Edit Driver Info </button>
                 <button id = "editpoints" onclick = "editDriverPoints()"> Edit Driver Points </button>
 
-                <p class = "setting" id = "catalog" style = "margin-top: 1.5%;"> Create Catalog </p>
-                <!-- Source for Search Bar: https://getbootstrap.com/docs/4.1/components/input-group/ -->
-                <div class = "input-group" style = "width: 100%; margin-bottom: 2%;">
-                    <input type = "text" class = "form-control" placeholder = "Enter Keywords to Filter Your Catalog" aria-label = "search" aria-describedby = "button-addon2">
-                    <div class = "input-group-append">
-                        <button class = "btn btn-outline-secondary" type = "button" id = "search"> Enter </button>
-                    </div>
-                </div>
-
-                <button id = "create"> Create Catalog </button>
                 <p class = "setting" id = "current" style = "margin-top: 1.5%;"> Current Catalog </p>
-                <!-- As keywords are entered display them below the button; template below-->
-                <!-- <div>
-                    <h5>Keyword <span> <button class = "delete"> <i class = "fa fa-window-close"></i> </button> </span></h5>
-                </div> -->
+                <section class = "text-center mb-4">
+                {% block content %}
+                <h2> Here is the list of Items </h2>
+                {% for item in items %}
+                <div class="view overlay">
+                    <img img src={{item.pic}} width="255" height="255" alt="">
+                    <a href="{% url 'productPage' item.id %}">
+                        <div class="mask rgba-white-slight"></div>
+                    </a>
+                </div>
+                <a href="{% url 'productPage' item.id %}">
+                    <h4 class="font-weight-bold blue-text">
+                        <strong>{{item.name}}</strong>
+                    </h4>
+                </a>
+                    <h4 class="font-weight-bold blue-text">
+                        <strong>${{item.price}}</strong>
+                    </h4>
+                </br>
+                {% endfor %} {% endblock content %}
                 
 
                 <!-- Modal source: https://getbootstrap.com/docs/4.1/components/modal/ -->

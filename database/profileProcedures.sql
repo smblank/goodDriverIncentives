@@ -383,6 +383,30 @@ MODIFIES SQL DATA
         RETURN newID;
     END;;
 
+DROP PROCEDURE IF EXISTS removeOrg;
+
+CREATE PROCEDURE removeOrg (orgNo INT)
+    BEGIN
+        DECLARE catalogue INT;
+
+        SELECT CatalogID INTO catalogue
+        FROM ORGANIZATION
+        WHERE OrgID = orgNo;
+
+        DELETE FROM APPLICANT
+        WHERE OrgID = orgNo;
+
+        DELETE FROM IS_IN_CATALOG
+        WHERE CatalogID = catalogue;
+
+        DELETE FROM POINT_CHANGE_REASON
+        WHERE OrgID = orgNo;
+
+        DELETE FROM ORGANIZATION
+        WHERE OrgID = orgNo;
+
+    END;;
+
 DROP PROCEDURE IF EXISTS getOrgs;
 
 CREATE PROCEDURE getOrgs()

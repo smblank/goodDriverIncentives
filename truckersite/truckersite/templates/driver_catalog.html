@@ -83,10 +83,9 @@
                             <div class="mask rgba-white-slight"></div>
                         </a>
                     </div>
-                    <a href="{% url 'productPage' item.id %}">
-                        <h4 class="font-weight-bold blue-text">
-                            <strong>${{item.name}}</strong>
-                        </h4>
+                    <a href="{% url 'productPage' item.id %}"><h4 class="font-weight-bold blue-text">
+                    <strong>{{item.name}}</strong>
+                    </h4>
                     </a>
                     <h4 class="font-weight-bold blue-text">
                         <strong>${{item.price}}</strong>

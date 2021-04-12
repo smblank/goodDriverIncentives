@@ -29,21 +29,6 @@ def find(list, element):
 
     return -1
 
-def driverCatalog(request):
-    if (request.session['isViewing']):
-        email = request.session['tempEmail']
-        org = db.getOrgNo(email)
-    else:
-        email = request.session['email']
-        org = request.session['orgID']
-    
-    points = db.getDriverPoints(email, org)
-
-    context = {
-        'points': points
-    }
-    return render(request, 'driver_catalog.html', context)
-
 def wishlist(request):
     if (request.session['isViewing']):
         email = request.session['tempEmail']
@@ -109,9 +94,6 @@ def driverOrderHistory(request):
     }        
 
     return render(request, 'driver_order_history.html', context)
-
-def sponsorCatalog(request):
-    return render(request, 'sponsor_catalog.html')
 
 def driverCart(request):
     if (request.session['isViewing']):
@@ -190,30 +172,45 @@ def productPage(request, id):
 
     context = {
         'points': points,
-        'product': product
+        'product': product,
+        'isSponsor': request.session['isSponsor'],
+        'isAdmin': request.session['isAdmin']
     }
 
     return render(request, 'product.html', context)
 
 def addProducts(request):
     api = finding(appid = APP_ID, config_file = None)
-    request = {'keywords': {'TV', 'Computer', 'Phone'}, 'outputSelector': 'SellerInfo',}
-    response = api.execute('findItemsByKeywords', request)
-    soup = BeautifulSoup(response.content, 'lxml')
+
+    if request.session['isViewing']:
+        orgNo = db.getOrgNo(request.session['tempEmail'])
+    else:
+        orgNo = db.getOrgNo(request.session['email'])
+
+    result = db.getKeywords(orgNo)
+    keywords = []
+
+    for (id, keyword) in result:
+        keywords.append(keyword)
+    
+    apiRequest = {'keywords': keywords, 'outputSelector': 'SellerInfo',}
+    apiResponse = api.execute('findItemsByKeywords', apiRequest)
+    soup = BeautifulSoup(apiResponse.content, 'lxml')
     #entries = int (soup.find('totalentries').text)
     items = soup.find_all('item')
+
+    db.clearCatalog(orgNo)
     
     for item in items:
-        id_temp = int(item.itemid.string)
-        name_tmp = item.title.string.lower().strip()
+        id_temp = item.itemid.string
+        name_tmp = item.title.string
         price_tmp = float(item.currentprice.string)
-        image_tmp = item.viewitemurl.string.lower()
+        image_tmp = item.viewitemurl.string
         db.createProduct(id_temp, name_tmp, price_tmp, image_tmp)
+
+        db.addToCatalog(id_temp, orgNo)
         #cat = item.categoryname.string.lower()
         # Product.objects.create(name = name_tmp, price = price_tmp, image = image_tmp)
-        
-
-    return driverCatalog(request)
 
 def product_list(request):
     if (request.session['isViewing']):

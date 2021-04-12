@@ -20,8 +20,8 @@ READS SQL DATA
 
 DROP FUNCTION IF EXISTS createProduct;
 
-CREATE FUNCTION createProduct (id INT, name VARCHAR(45), price FLOAT, img VARCHAR(150))
-RETURNS INT
+CREATE FUNCTION createProduct (id CHAR(12), name VARCHAR(100), price FLOAT, img VARCHAR(250))
+RETURNS CHAR(12)
 MODIFIES SQL DATA
     BEGIN
         DECLARE newProduct INT;
@@ -38,7 +38,7 @@ MODIFIES SQL DATA
 
 DROP PROCEDURE IF EXISTS getProduct;
 
-CREATE PROCEDURE getProduct (id INT)
+CREATE PROCEDURE getProduct (id CHAR(12))
     BEGIN
         SELECT ProductName, Price, ImgUrl
         FROM PRODUCT
@@ -74,23 +74,35 @@ CREATE PROCEDURE getProductsInCatalog(org INT)
 
 DROP FUNCTION IF EXISTS addToCatalog;
 
-CREATE FUNCTION addToCatalog (product INT, catalogue INT)
+CREATE FUNCTION addToCatalog (product CHAR(12), org INT)
 RETURNS BOOLEAN
 MODIFIES SQL DATA
     BEGIN
         DECLARE productExists BOOLEAN;
+        DECLARE catalogue INT;
 
-        SELECT EXISTS (
-            SELECT ProductID
-            FROM PRODUCT
-            WHERE ProductID = product
-        ) INTO productExists;
+        SELECT CatalogID INTO catalogue
+        FROM ORGANIZATION
+        WHERE OrgID = org;
 
-        IF productExists <> FALSE THEN
-            INSERT INTO IS_IN_CATALOG (CatalogID, ProductID) VALUES (catalogue, product);
-        END IF;
+        
+        INSERT INTO IS_IN_CATALOG (CatalogID, ProductID) VALUES (catalogue, product);
 
         RETURN productExists;
+    END;;
+
+DROP PROCEDURE IF EXISTS clearCatalog;
+
+CREATE PROCEDURE clearCatalog(orgNo INT)
+    BEGIN
+        DECLARE catalogue INT;
+
+        SELECT CatalogID INTO catalogue
+        FROM ORGANIZATION
+        WHERE OrgID = orgNo;
+
+        DELETE FROM IS_IN_CATALOG
+        WHERE CatalogID = catalogue;
     END;;
 
 DROP FUNCTION IF EXISTS removeFromCatalog;
@@ -361,11 +373,11 @@ MODIFIES SQL DATA
 
 DROP FUNCTION IF EXISTS getProductName;
 
-CREATE FUNCTION getProductName (product INT)
-RETURNS VARCHAR(45)
+CREATE FUNCTION getProductName (product CHAR(12))
+RETURNS VARCHAR(100)
 READS SQL DATA
     BEGIN
-        DECLARE productName VARCHAR(45);
+        DECLARE productName VARCHAR(100);
 
         SELECT ProductName INTO productName
         FROM PRODUCT
@@ -376,11 +388,11 @@ READS SQL DATA
 
 DROP FUNCTION IF EXISTS getProductImage;
 
-CREATE FUNCTION getProductImage (product INT)
-RETURNS VARBINARY(256)
+CREATE FUNCTION getProductImage (product CHAR(12))
+RETURNS VARCHAR(200)
 READS SQL DATA
     BEGIN
-        DECLARE productImage VARBINARY(256);
+        DECLARE productImage VARCHAR(200);
 
         SELECT ProductImage INTO productImage
         FROM PRODUCT
@@ -406,22 +418,9 @@ READS SQL DATA
 
 DROP FUNCTION IF EXISTS getProductAvailability;
 
-CREATE FUNCTION getProductAvailability (product INT)
-RETURNS VARCHAR(15)
-READS SQL DATA
-    BEGIN
-        DECLARE productAvailability VARCHAR(15);
-
-        SELECT ProductAvailability INTO productAvailability
-        FROM PRODUCT
-        WHERE ProductID = product;
-
-        RETURN productAvailability;
-    END;;
-
 DROP FUNCTION IF EXISTS getProductPrice;
 
-CREATE FUNCTION getProductPrice (product INT)
+CREATE FUNCTION getProductPrice (product CHAR(12))
 RETURNS FLOAT
 READS SQL DATA
     BEGIN
@@ -513,6 +512,57 @@ CREATE PROCEDURE updateOrgPayment (ccNum INT, ccSec INT, ccDate DATE, billAddr V
         WHERE PayID = payID AND OrgID = organization;
     END;;
 
+DROP PROCEDURE IF EXISTS getKeywords;
 
+CREATE PROCEDURE getKeywords(org INT)
+READS SQL DATA
+    BEGIN
+        DECLARE catalogue INT;
+
+        SELECT CatalogID INTO catalogue
+        FROM ORGANIZATION
+        WHERE OrgID = org;
+
+        SELECT WordID, Keyword
+        FROM CATALOG_KEYWORDS
+        WHERE CatalogID = catalogue;
+    END;;
+
+DROP FUNCTION IF EXISTS addKeyword;
+
+CREATE FUNCTION addKeyword (org INT, newKeyword VARCHAR(20))
+RETURNS INT
+MODIFIES SQL DATA
+    BEGIN
+        DECLARE newWord INT;
+        DECLARE catalogue INT;
+
+        SELECT CatalogID INTO catalogue
+        FROM ORGANIZATION
+        WHERE OrgID = org;
+
+        INSERT INTO CATALOG_KEYWORDS (CatalogID, Keyword)
+            VALUES (catalogue, newKeyword);
+
+        SELECT WordID INTO newWord
+        FROM CATALOG_KEYWORDS
+        WHERE WordID = @@Identity;
+
+        RETURN newWord;
+    END;;
+
+DROP PROCEDURE IF EXISTS removeKeyword;
+
+CREATE PROCEDURE removeKeyword (org INT, word INT)
+    BEGIN
+        DECLARE catalogue INT;
+
+        SELECT CatalogID INTO catalogue
+        FROM ORGANIZATION
+        WHERE OrgID = org;
+
+        DELETE FROM CATALOG_KEYWORDS
+            WHERE CatalogID = catalogue AND WordID = word;
+    END;;
 
 DELIMITER ;

@@ -58,13 +58,6 @@
             <div class="col-md-3">
                 <div id="sidebar">
                     <p id="pagename"> Catalog </p>
-                    <p id="pointstitle"> My Points: </p>
-                    <p id="points"> 0 </p>
-
-                    <select class="form-control form-control-lg" id="drivers" style="margin-bottom: 1.5%;">
-                        <option value = "none"> Select a Driver </option>
-                    </select>
-                    <button id="submit"> Submit </button>
                 </div>
             </div>
 
@@ -78,25 +71,24 @@
                 </div>
                 
                 <!-- Put Items Here -->
+                <section class = "text-center mb-4">
                 {% block content %}
                 <h2> Here is the list of Items </h2>
                 {% for item in items %}
                 <div class="view overlay">
-                    <img img src={{item.image}} width="255" height="255" alt="">
-                    <a href="/sponsor_catalog/{{item.slug}}/">
+                    <img img src={{item.pic}} width="255" height="255" alt="">
+                    <a href="{% url 'productPage' item.id %}">
                         <div class="mask rgba-white-slight"></div>
                     </a>
                 </div>
-                <a href="/sponsor_catalog/{{item.slug}}/">
+                <a href="{% url 'productPage' item.id %}">
                     <h4 class="font-weight-bold blue-text">
-                        <strong>${{item.name}}</strong>
+                        <strong>{{item.name}}</strong>
                     </h4>
                 </a>
-                <a href="/sponsor_catalog/{{item.slug}}/">
                     <h4 class="font-weight-bold blue-text">
                         <strong>${{item.price}}</strong>
                     </h4>
-                </a>
                 </br>
                 {% endfor %} {% endblock content %}
             </div>

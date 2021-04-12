@@ -29,6 +29,20 @@ def addNewAdmin(request):
 
     return views.adminDash(request)
 
+def addOrg(request):
+    newOrgName = request.POST.get('name')
+
+    db.createOrg(newOrgName)
+
+    return views.adminDash(request)
+
+def removeOrg (request):
+    orgNo = request.POST.get('orgID')
+
+    db.removeOrg(orgNo)
+
+    return views.adminDash(request)
+
 def setDriverView(request):
     tempEmail = 'temp@email.com'
     request.session['tempEmail'] = tempEmail

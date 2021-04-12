@@ -28,36 +28,70 @@
     <div class = "container-fluid">
 
         <!-- Credit for navbar: https://getbootstrap.com/docs/4.1/components/navbar/-->
-        <nav class = "navbar navbar-expand-md navbar-light fixed-top" style = "margin-bottom: 1%;" id = "header">
-            <ul class = "navbar-nav w-100 justify-content-between">
-                <li class = "nav-item dropdown">
-                    <a class = "nav-link dropdown-toggle" id = "menubutton" role = "button" data-toggle = "dropdown" aria-haspopup = "true" aria-expanded = "false"> Menu </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class = "dropdown-item" href = "{% url 'driverCatalog'%}"> Catalog </a>
-                        <a class = "dropdown-item" href = "{% url 'wishlist'%}"> Wishlist </a>
-                        <a class = "dropdown-item" href = "{% url 'driverOrderHistory'%}"> Order History </a>
-                        <!-- <a class = "dropdown-item" href = "driver_notifications.html"> Notifications </a>
-                        <a class = "dropdown-item" href = "driver_submit_issue.html"> Submit an Issue </a> -->
-                        <a class = "dropdown-item" href = "{% url 'logout' %}"> Logout </a>
+        {% if not isSponsor and not isAdmin %}
+            <nav class = "navbar navbar-expand-md navbar-light fixed-top" style = "margin-bottom: 1%;" id = "header">
+                <ul class = "navbar-nav w-100 justify-content-between">
+                    <li class = "nav-item dropdown">
+                        <a class = "nav-link dropdown-toggle" id = "menubutton" role = "button" data-toggle = "dropdown" aria-haspopup = "true" aria-expanded = "false"> Menu </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class = "dropdown-item" href = "{% url 'driverCatalog'%}"> Catalog </a>
+                            <a class = "dropdown-item" href = "{% url 'wishlist'%}"> Wishlist </a>
+                            <a class = "dropdown-item" href = "{% url 'driverOrderHistory'%}"> Order History </a>
+                            <!-- <a class = "dropdown-item" href = "driver_notifications.html"> Notifications </a>
+                            <a class = "dropdown-item" href = "driver_submit_issue.html"> Submit an Issue </a> -->
+                            <a class = "dropdown-item" href = "{% url 'logout' %}"> Logout </a>
+        
+        {% else %}
+            <nav class="navbar navbar-expand-md navbar-light fixed-top" id="header">
+                <ul class="navbar-nav w-100 justify-content-between">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="menubutton" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Menu </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{% url 'orgPage' %}"> Organization Page </a>
+                            <a class="dropdown-item" href="/sponsor_view_drivers"> Driver List </a>
+                            <a class="dropdown-item" href="{%url 'sponsorCatalog' %}"> Catalog </a>
+                            <!-- <a class="dropdown-item" href="sponsor_notifications.html"> Notifications </a> -->
+                            <a class="dropdown-item" href="{% url 'sponsorReportGeneration'%}"> Generate Report </a>
+                            <!-- <a class="dropdown-item" href="sponsor_submit_issue.html"> Submit an Issue </a>
+                            <a class="dropdown-item" href="sponsor_view_issues.html"> Issues </a> -->
+                            <a class="dropdown-item" href="{% url 'logout' %}"> Logout </a>
+        {% endif %}
                     </div>
                 </li>
 
                 <li class = "nav-item active">
-                    <a class = "nav-link" href = "{% url 'driverDash' %}" id = "title"> Good Driver Incentive Program </a>
+                    {% if not isSponsor and not isAdmin %}
+                        <a class = "nav-link" href = "{% url 'driverDash' %}" id = "title"> Good Driver Incentive Program </a>
+
+                    {% else %}
+                        <a class = "nav-link" href = "{% url 'sponsorDashDisplay' %}" id = "title"> Good Driver Incentive Program </a>
+                    {% endif %}
                 </li>
 
-                <a class = "navbar-brand" href = "{% url 'driverProfile'%}">
-                    <img src = "Defaultpfp.png" width = "30" height = "30">
-                </a>
+                {% if not isSponsor and not isAdmin %}
+                    <a class = "navbar-brand" href = "{% url 'driverProfile'%}">
+                        <img src = "Defaultpfp.png" width = "30" height = "30">
+                    </a>
+                {% else %}
+                    <a class = "navbar-brand" href = "{% url 'sponsorProfile'%}">
+                        <img src = "Defaultpfp.png" width = "30" height = "30">
+                    </a>
+                {% endif %}
             </ul>
         </nav>
 
         <div class = "row">
             <div class = "col-md-3">
                 <div id = "sidebar">
-                    <a id = "back" href = "{% url 'driverCatalog' %}"> <i class = "fa fa-arrow-left"></i> Catalog </a>
-                    <p id = "pointstitle"> My Points: </p>
-                    <p id = "points">{{points}}</p>
+                    {% if not isAdmin and not isSponsor %}
+                        <a id = "back" href = "{% url 'driverCatalog' %}"> <i class = "fa fa-arrow-left"></i> Catalog </a>
+
+                        <p id = "pointstitle"> My Points: </p>
+                        <p id = "points">{{points}}</p>
+
+                    {% else %}
+                        <a id = "back" href = "{% url 'sponsorCatalog' %}"> <i class = "fa fa-arrow-left"></i> Catalog </a>
+                    {% endif %}
                 </div>
             </div>
 
@@ -69,7 +103,10 @@
                         <button class = "btn btn-outline-secondary" type = "button" id = "search"> <i class = "fa fa-search"></i> </button>
                     </div>
                 </div>
-                <a class = "sticky-top" id = "cart" href = "{% url 'driverCart' %}"> <i class = "fa fa-shopping-cart"></i> </a>
+
+                {% if not isAdmin and not isSponsor %}
+                        <a class = "sticky-top" id = "cart" href = "{% url 'driverCart' %}"> <i class = "fa fa-shopping-cart"></i> </a>
+                {% endif %}
                 
                 <div class="view overlay">
                         <img img src={{product.pic}} width="255" height="255" alt="" align = "left">
@@ -82,8 +119,10 @@
                   <strong>{{product.price}}</strong>
                   </h4>
 
-                <button id = "addcart"> Add to Cart </button>
-                <button id = "addwishlist"> Add to Wishlist </button>
+                {% if not isAdmin and not isSponsor %}
+                    <button id = "addcart"> Add to Cart </button>
+                    <button id = "addwishlist"> Add to Wishlist </button>
+                {% endif %}
             </div>
         </div>
     </div>

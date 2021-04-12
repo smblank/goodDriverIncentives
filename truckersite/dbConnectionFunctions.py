@@ -7,6 +7,9 @@ from django.core.mail import EmailMessage
 def getDB():
     try:
         connection = connect(host = 'truckingdb.c9tkxb1tjvpp.us-east-1.rds.amazonaws.com', user = 'admin', password = 'accesstodb', database = 'DRIVER_DB', autocommit = True)
+
+        while connection is None:
+            connection = connect(host = 'truckingdb.c9tkxb1tjvpp.us-east-1.rds.amazonaws.com', user = 'admin', password = 'accesstodb', database = 'DRIVER_DB', autocommit = True)
     
     except Error as err:
         print(err)
@@ -16,10 +19,10 @@ def getDB():
 
 def getCursor(connection):
     try:
-        while connection is None:
-            connection = connect(host = 'truckingdb.c9tkxb1tjvpp.us-east-1.rds.amazonaws.com', user = 'admin', password = 'accesstodb', database = 'DRIVER_DB', autocommit = True)
-        
         cursor = connection.cursor(buffered = True)
+
+        while cursor is None:
+            cursor = connection.cursor(buffered = True)
     
     except Error as err:
         print(err)
@@ -430,17 +433,32 @@ def checkIsInCatalog (productID, catalogID):
     except Error as err:
         print(err)
 
-def addToCatalog (productID, catalogID):
+def addToCatalog (productID, orgNo):
     try:
         conn = getDB()
         cursor = getCursor(conn)
 
         query = "SELECT addToCatalog(%s, %s)"
-        cursor.execute(query, (productID, catalogID,))
+        cursor.execute(query, (productID, orgNo,))
 
         cursor.close()
         conn.close()
         return "Product successfuly added to catalog"
+    
+    except Error as err:
+        print(err)
+
+def clearCatalog(orgNo):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL clearCatalog(%s)"
+        cursor.execute(query, (orgNo,))
+
+        cursor.close()
+        conn.close()
+        return "Catalog cleared"
     
     except Error as err:
         print(err)
@@ -645,9 +663,11 @@ def createProduct (id, name, price, img):
     try:
         conn = getDB()
         cursor = getCursor(conn)
+
+        name = 'Test Product'
         
         query = "SELECT createProduct(%s, %s, %s, %s)"
-        cursor.execute(query, (id, name, price, img))
+        cursor.execute(query, (id, name, price, img, ))
 
         cursor.close()
         conn.close()
@@ -826,6 +846,38 @@ def getRandomPassword():
         randPassword = randPassword + random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits)
 
     return randPassword
+
+def createOrg(name):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT createOrg(%s, %s)"
+        cursor.execute(query, (name, 0.01))
+        result = cursor.fetchone()
+
+        for orgNo in result:
+            cursor.close()
+            conn.close()
+            return orgNo
+
+    except Error as err:
+        print(err)
+
+def removeOrg(orgNo):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL removeOrg(%s)"
+        cursor.execute(query, (orgNo, ))
+        
+        cursor.close()
+        conn.close()
+        return "Organization delted"
+
+    except Error as err:
+        print(err)
 
 def getOrgNo (userEmail):
     try:
@@ -1513,6 +1565,54 @@ def removeTempSponsor(tempID):
         cursor.close()
         conn.close()
         return "Successfully deleted temporary Sponsor"
+
+    except Error as err:
+        print(err)
+
+def getKeywords(org):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL getKeywords(%s)"
+        cursor.execute(query, (org, ))
+        result = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+        return result
+
+    except Error as err:
+        print(err)
+
+def addKeyword(org, keyword):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT addKeyword(%s, %s)"
+        cursor.execute(query, (org, keyword))
+        result = cursor.fetchone()
+
+        for wordID in result:
+            cursor.close()
+            conn.close()
+            return wordID
+
+    except Error as err:
+        print(err)
+
+def removeKeyword(org, wordID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL removeKeyword(%s, %s)"
+        cursor.execute(query, (org, wordID))
+
+        cursor.close()
+        conn.close()
+        return "Keyword successfully removed"
 
     except Error as err:
         print(err)
