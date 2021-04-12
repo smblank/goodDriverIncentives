@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 import dbConnectionFunctions as db
 import datetime
 
-
 def sponsorDashDisplay(request):
 
     class driver_applicant:
@@ -56,6 +55,7 @@ def sponsorViewApplicant(request, applicant_id):
 
     cursor.close()
     conn.close()
+
     context = {'applicant_id': applicant_id, 'applicant_name': applicant_name, 'applicant_date': applicant_date, 'applicant_email': applicant_email,
                'applicant_phone': applicant_phone, 'applicant_address': applicant_address}
     return render(request, 'view_application.html', context)
@@ -92,6 +92,11 @@ def sponsorAcceptApplicant(request, applicant_id):
     cursor.execute(query_insert_driver, (applicant_name, applicant_email,
                    applicant_password, applicant_address, applicant_phone, orgNo,))
 
+    cursor.close()
+    conn.close()
+
+    db.emailNewDriver(applicant_email, applicant_password)
+
     context = {'applicant_name': applicant_name, 'applicant_email': applicant_email, 'applicant_password': applicant_password}
     return render(request, 'accept_applicant_confirmation.html', context)
 
@@ -105,6 +110,16 @@ def sponsorRejectApplicant(request, applicant_id):
 
     query_reject_applicant = "UPDATE APPLICANT SET Reason = %s, ApplicantDate = %s WHERE ApplicantID = %s"
     cursor.execute(query_reject_applicant, ('Sponsor Rejected', today, applicant_id,))
+
+    query_applicant_info = 'SELECT * FROM APPLICANT WHERE ApplicantID = %s'
+    cursor.execute(query_applicant_info, (applicant_id,))
+    result = cursor.fetchone()
+    applicant_email = result[5]
+
+    cursor.close()
+    conn.close()
+
+    db.emailRejectedDriver(applicant_email)
 
     response = redirect('/sponsor_dash/')
     return response

@@ -1353,26 +1353,56 @@ def emailNewDriver(driverEmail, password):
     message = """\
     Welcome %s!
     
-    Congratualations! You've been accepted into the Good Dirvers Incentive Program. Once you login for the first time, you'll be able to create your own password and start earning points. For your first login, please use this temporary password: %s. Welcome to the Program!
+    Congratualations! You've been accepted into the Good Driver Incentive Program. Once you login for the first time, you'll be able to create your own password and start earning points. For your first login, please use this temporary password: %s. Welcome to the Program!
     
-    Login Link: http://ec2-3-88-207-55.compute-1.amazonaws.com/""" % (driverName,password)
+    Login Link: http://ec2-23-23-99-117.compute-1.amazonaws.com/""" % (driverName,password)
 
     #Send email
     email = EmailMessage(subject, message, 'gooddriverprogram@gmail.com', [driverEmail])
     email.send()
 
+def emailRejectedDriver(driverEmail):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+        driverName = getUserName(driverEmail)
+
+        query = "SELECT * FROM APPLICANT WHERE Email=%s"
+        cursor.execute(query, (driverEmail,))
+        result = cursor.fetchone()
+
+        if result != None:
+            driverName = result[4]
+
+        cursor.close()
+        conn.close()
+        
+        subject = "Rejected from the Good Driver Incentive Program"
+
+        message = """\
+        Hello %s!
+        
+        We regret to inform you that you have been rejected from the Good Driver Incentive Program.""" % (driverName)
+
+        #Send email
+        email = EmailMessage(subject, message, 'gooddriverprogram@gmail.com', [driverEmail])
+        email.send()
+    
+    except Error as err:
+        print(err)
+
 def emailNewSponsor(sponsorEmail, password, orgNo):
     sponsorName = getUserName(sponsorEmail)
     orgName = getOrgName(orgNo)
     
-    subject = "Added as Sponsor User in Good Drivers Incentive Program"
+    subject = "Added as Sponsor User in Good Driver Incentive Program"
 
     message = """\
     Welcome %s!
     
-    Welcome to the Good Drivers Incentive Program. You have been added as a new sponsor user for %s. Once you login for the first time, you'll be able to create your own password and be able to access and update the information pertaining to your sponsor. For your first login, please use this temporary password: %s. Welcome to the Program!
+    Welcome to the Good Driver Incentive Program. You have been added as a new sponsor user for %s. Once you login for the first time, you'll be able to create your own password and be able to access and update the information pertaining to your sponsor. For your first login, please use this temporary password: %s. Welcome to the Program!
     
-    Login Link: http://ec2-3-88-207-55.compute-1.amazonaws.com/""" % (sponsorName, orgName, password)
+    Login Link: http://ec2-23-23-99-117.compute-1.amazonaws.com/""" % (sponsorName, orgName, password)
 
     #Send email
     email = EmailMessage(subject, message, 'gooddriverprogram@gmail.com', [sponsorEmail])
@@ -1381,14 +1411,14 @@ def emailNewSponsor(sponsorEmail, password, orgNo):
 def emailNewAdmin(adminEmail, password):
     adminName = getUserName(adminEmail)
     
-    subject = "Added as Administrator in Good Drivers Incentive Program"
+    subject = "Added as Administrator in Good Driver Incentive Program"
 
     message = """\
     Welcome %s!
     
-    Welcome to the Good Drivers Incentive Program. You have been added as a new administrator. Once you login for the first time, you'll be able to create your own password and be able to access and manage the various functions fo the application. For your first login, please use this temporary password: %s. Welcome to the Program!
+    Welcome to the Good Driver Incentive Program. You have been added as a new administrator. Once you login for the first time, you'll be able to create your own password and be able to access and manage the various functions fo the application. For your first login, please use this temporary password: %s. Welcome to the Program!
     
-    Login Link: http://ec2-3-88-207-55.compute-1.amazonaws.com/""" % (adminName, password)
+    Login Link: http://ec2-23-23-99-117.compute-1.amazonaws.com/""" % (adminName, password)
 
     #Send email
     email = EmailMessage(subject, message, 'gooddriverprogram@gmail.com', [adminEmail])
