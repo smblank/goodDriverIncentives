@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 import dbConnectionFunctions as db
 import datetime
 
-
 def sponsorDashDisplay(request):
 
     class driver_applicant:
@@ -56,6 +55,7 @@ def sponsorViewApplicant(request, applicant_id):
 
     cursor.close()
     conn.close()
+
     context = {'applicant_id': applicant_id, 'applicant_name': applicant_name, 'applicant_date': applicant_date, 'applicant_email': applicant_email,
                'applicant_phone': applicant_phone, 'applicant_address': applicant_address}
     return render(request, 'view_application.html', context)
@@ -92,6 +92,11 @@ def sponsorAcceptApplicant(request, applicant_id):
     cursor.execute(query_insert_driver, (applicant_name, applicant_email,
                    applicant_password, applicant_address, applicant_phone, orgNo,))
 
+    cursor.close()
+    conn.close()
+
+    db.emailNewDriver(applicant_email, applicant_password)
+
     context = {'applicant_name': applicant_name, 'applicant_email': applicant_email, 'applicant_password': applicant_password}
     return render(request, 'accept_applicant_confirmation.html', context)
 
@@ -105,6 +110,16 @@ def sponsorRejectApplicant(request, applicant_id):
 
     query_reject_applicant = "UPDATE APPLICANT SET Reason = %s, ApplicantDate = %s WHERE ApplicantID = %s"
     cursor.execute(query_reject_applicant, ('Sponsor Rejected', today, applicant_id,))
+
+    query_applicant_info = 'SELECT * FROM APPLICANT WHERE ApplicantID = %s'
+    cursor.execute(query_applicant_info, (applicant_id,))
+    result = cursor.fetchone()
+    applicant_email = result[5]
+
+    cursor.close()
+    conn.close()
+
+    db.emailRejectedDriver(applicant_email)
 
     response = redirect('/sponsor_dash/')
     return response
@@ -151,53 +166,69 @@ def sponsorChangePoints(request, driver_id):
         conn = db.getDB()
         cursor = db.getCursor(conn)
 
-        query_driver_points = 'SELECT * FROM DRIVER INNER JOIN DRIVER_ORGS ON DRIVER.UserID = DRIVER_ORGS.UserID WHERE DRIVER.UserID = %s'
-        cursor.execute(query_driver_points, (driver_id,))
-        result = cursor.fetchone()
-        original_points = result[4]
-        print('original points: ', original_points)
-
-        query_point_value = 'SELECT * FROM POINT_CHANGE_REASON WHERE ReasonID=%s'
-        cursor.execute(query_point_value, (reason_id,))
-        result = cursor.fetchone()
-        num_points = result[2]
-
+        # get organization number
         if (request.session['isViewing']):
             orgNo = db.getOrgNo(request.session['tempEmail'])
         else:
             orgNo = db.getOrgNo(request.session['email'])
 
-        query_change_point_total = 'UPDATE DRIVER_ORGS SET Points = Points + %s WHERE UserID = %s AND OrgID = %s'
-        cursor.execute(query_change_point_total,
-                       (num_points, driver_id, orgNo))
-
-        cursor.execute(query_driver_points, (driver_id,))
-        result = cursor.fetchone()
-        after_points = result[4]
-        print('after points: ', after_points)
-
-        now = datetime.datetime.now()
-        query_insert_point_change = 'INSERT INTO POINT_CHANGE (ChangeDate, ReasonID, TotalPoints, DriverID, SponsorID) VALUES (%s, %s, %s, %s, %s)'
-        cursor.execute(query_insert_point_change, (now.strftime(
-            '%Y-%m-%d'), reason_id, after_points, driver_id, request.session['id'],))
-
-        # check if points where added and send to confirmation page
-        if original_points + num_points == after_points:
-            successful = True
-        else:
-            successful = False
-
+        # get driver information
         query_driver_name = 'SELECT * FROM USER INNER JOIN DRIVER ON DRIVER.UserID = USER.UserID WHERE USER.UserID=%s'
         cursor.execute(query_driver_name, (driver_id,))
         result = cursor.fetchone()
         driver_name = result[1]
         driver_email = result[2]
 
+        # get current driver points
+        query_driver_points = 'SELECT * FROM DRIVER INNER JOIN DRIVER_ORGS ON DRIVER.UserID = DRIVER_ORGS.UserID WHERE DRIVER.UserID = %s'
+        cursor.execute(query_driver_points, (driver_id,))
+        result = cursor.fetchone()
+        original_points = result[4]
+
+        # get number of points based on reason id
+        query_point_value = 'SELECT * FROM POINT_CHANGE_REASON WHERE ReasonID=%s'
+        cursor.execute(query_point_value, (reason_id,))
+        result = cursor.fetchone()
+        num_points = result[2]
+
+        # check if point total would be negative
+        if original_points + num_points < 0:
+            point_message = "* point change failed, driver points can not be negative *"
+            successful = False
+            after_points = original_points
+
+            context = {'successful': successful, 'driver_name': driver_name, 'driver_email': driver_email, 'original_points': original_points, 
+            'point_change': num_points, 'new_total': after_points, 'point_message': point_message}
+            return render(request, 'change_points_confirmation.html', context)
+        
+        #change the points
+        query_change_point_total = 'UPDATE DRIVER_ORGS SET Points = Points + %s WHERE UserID = %s AND OrgID = %s'
+        cursor.execute(query_change_point_total, (num_points, driver_id, orgNo))
+
+        # find amount of points after change
+        cursor.execute(query_driver_points, (driver_id,))
+        result = cursor.fetchone()
+        after_points = result[4]
+        print('after points: ', after_points)
+
+        # check if points where added and send to confirmation page
+        if original_points + num_points == after_points:
+            point_message = "* points were successfully changed *"
+            successful = True
+            
+            now = datetime.datetime.now()
+            query_insert_point_change = 'INSERT INTO POINT_CHANGE (ChangeDate, ReasonID, TotalPoints, DriverID, SponsorID) VALUES (%s, %s, %s, %s, %s)'
+            cursor.execute(query_insert_point_change, (now.strftime(
+                '%Y-%m-%d'), reason_id, after_points, driver_id, request.session['id'],))
+        else:
+            point_message = "* point change failed *"
+            successful = False
+    
         cursor.close()
         conn.close()
 
         context = {'successful': successful, 'driver_name': driver_name, 'driver_email': driver_email, 'original_points': original_points, 'point_change': num_points,
-                   'new_total': after_points}
+                   'new_total': after_points, 'point_message': point_message}
         return render(request, 'change_points_confirmation.html', context)
 
     else:
