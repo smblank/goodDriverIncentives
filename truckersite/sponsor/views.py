@@ -210,20 +210,20 @@ def sponsorChangePoints(request, driver_id):
         result = cursor.fetchone()
         after_points = result[4]
         print('after points: ', after_points)
-    
-        now = datetime.datetime.now()
-        query_insert_point_change = 'INSERT INTO POINT_CHANGE (ChangeDate, ReasonID, TotalPoints, DriverID, SponsorID) VALUES (%s, %s, %s, %s, %s)'
-        cursor.execute(query_insert_point_change, (now.strftime(
-            '%Y-%m-%d'), reason_id, after_points, driver_id, request.session['id'],))
 
         # check if points where added and send to confirmation page
         if original_points + num_points == after_points:
             point_message = "* points were successfully changed *"
             successful = True
+            
+            now = datetime.datetime.now()
+            query_insert_point_change = 'INSERT INTO POINT_CHANGE (ChangeDate, ReasonID, TotalPoints, DriverID, SponsorID) VALUES (%s, %s, %s, %s, %s)'
+            cursor.execute(query_insert_point_change, (now.strftime(
+                '%Y-%m-%d'), reason_id, after_points, driver_id, request.session['id'],))
         else:
             point_message = "* point change failed *"
             successful = False
-
+    
         cursor.close()
         conn.close()
 
