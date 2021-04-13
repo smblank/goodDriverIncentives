@@ -22,6 +22,12 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/driver_dash.css'%}">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
+    <script>
+        function getDriverOrg() {
+            document.getElementByID("getDriverOrg").submit();
+        }
+    </script>
+
 </head>
 
 <body>
@@ -59,7 +65,9 @@
                  <div class = "dropdown pull-right" style = "margin-top: 1%;">
                     <button class = "btn btn-secondary dropdown-toggle" type = "button" id = "organizstions" data-toggle = "dropdown" aria-haspopup = "true" aria-expanded = "false"> My Organizations </button>
                     <div class = "dropdown-menu" aria-labelledby = "dropdownMenuButton">
-                      <!-- Example <a class="dropdown-item" href="#">Action</a> -->
+                            {% for org in driverOrgs %}
+                                <a class="dropdown-item" href = "{% url 'setDriverOrg' org.id %}" id = "driverOrg" name = "driverOrg" value = {{org.id}}>{{org.name}}</a>
+                            {% endfor %}
                     </div>
                 </div>
 
@@ -69,7 +77,7 @@
 
         <div class = "row text-center">
             <div class = "col-md-12">
-                <h2 id = "displaypoints"> 0 points </h2>
+                <h2 id = "displaypoints">{{points}} points </h2>
             </div>
         </div>
 
