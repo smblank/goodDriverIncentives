@@ -1,8 +1,10 @@
-<!DOCTYPE html> {% load static %}
+<!DOCTYPE html>
+
 <html lang="en-US">
 <meta charset="UTF-8">
 
 <head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
@@ -13,17 +15,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
-
-    <title> Catalog </title>
+    <title> Point History </title>
 
     <!-- Links the .css file -->
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/driver_catalog.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/driver_dash.css'%}">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
 </head>
 
 <body>
+
     <div class="container-fluid">
 
         <!-- Credit for navbar: https://getbootstrap.com/docs/4.1/components/navbar/-->
@@ -52,50 +54,29 @@
             </ul>
         </nav>
 
-        <div class="row">
-            <div class="col-md-3">
-                <div id="sidebar">
-                    <p id="pagename"> Catalog </p>
-                    <p id="pointstitle"> My Points: </p>
-                    <p id="points"> {{ points }} </p>
-                </div>
-            </div>
-
-            <div class="col-md-9 text-right">
-                <!-- Source for Search Bar: https://getbootstrap.com/docs/4.1/components/input-group/ -->
-                <div class="input-group" style="width: 100%; margin: 0;">
-                    <input type="text" class="form-control" placeholder="Search" aria-label="search" aria-describedby="button-addon2">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" id="search"> <i class = "fa fa-search"></i> </button>
+        <div class="row text-center">
+            <div class="col-md-12">
+                <!-- Dropdown source: https://getbootstrap.com/docs/4.1/components/dropdowns/ -->
+                <div class="dropdown pull-right" style="margin-top: 1%;">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="organizstions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> My Organizations </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <!-- Example <a class="dropdown-item" href="#">Action</a> -->
                     </div>
                 </div>
-                <a id="cart" href="{% url 'driverCart' %}"> <i class="fa fa-shopping-cart"></i> </a>
 
-                <a href="{% url 'addProducts' %}">Temp Add Products</a>
-
-                <!-- Put Items Here -->
-                <section class="text-center mb-4">
-                    {% block content %}
-                    <h2> Here is the list of Items </h2>
-                    {% for item in items %}
-                    <div class="view overlay">
-                        <img img src={{item.pic}} width="255" height="255" alt="">
-                        <a href="{% url 'productPage' item.id %}">
-                            <div class="mask rgba-white-slight"></div>
-                        </a>
-                    </div>
-                    <a href="{% url 'productPage' item.id %}">
-                        <h4 class="font-weight-bold blue-text">
-                            <strong>{{item.name}}</strong>
-                        </h4>
-                    </a>
-                    <h4 class="font-weight-bold blue-text">
-                        <strong>${{item.price}}</strong>
-                    </h4>
-                    </br>
-                    {% endfor %} {% endblock content %}
+                <h2 id="pagename"> Point History </h2>
             </div>
         </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                {% for reason in reason_list %}
+                <p>{{ reason.date }} - {{ reason.points }} - {{ reason.desc }}</p>
+                {% endfor %}
+                <p>Total: {{ num_points }}</p>
+            </div>
+        </div>
+
     </div>
 
 </body>
