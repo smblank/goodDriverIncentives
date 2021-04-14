@@ -63,20 +63,23 @@
 
         <div class = "row text-center">
             <div class = "col-md-12">
-                <h3 id = "user" style = "margin-bottom: 3%;"> User (sponsor, admin) - Name (Jane Doe) </h3>
+                <h3 id = "user" style = "margin-bottom: 3%;"> {{userType}} - {{userName}} </h3>
             </div>
         </div>
 
         <div class = "row text-center">
             <div class = "col-md-12">
                 <h4 style = "margin-left: -16%;"> Email </h4>
-                <input class = "fields" type = "text" id = "email" maxlength = "100" placeholder = "User's Current Email"> <br>
-                <button class = "save" id = "saveemail"> <i class = "fa fa-save"></i> </button>
+                <form method = "Post" action = "{% url 'sponsorEditUser' userID %}">
+                    {% csrf_token %}
+                    <input class = "fields" type = "text" id = "email" maxlength = "100" placeholder = "User's Current Email"> <br>
+                    <button class = "save" id = "saveemail"> <i class = "fa fa-save"></i> </button>
 
-                <h4 style = "margin-left: -13%;"> Password </h4>
-                <input class = "fields" type = "password" id = "password" maxlength = "100" placeholder = "Password"> <br>
-                <input class = "fields" type = "password" id = "confirmpassword" maxlength = "100" placeholder = "Confirm Password"> <br>
-                <button class = "save" id = "savepassword"> <i class = "fa fa-save"></i> </button>
+                    <h4 style = "margin-left: -13%;"> Password </h4>
+                    <input class = "fields" type = "password" id = "password" maxlength = "100" placeholder = "Password"> <br>
+                    <input class = "fields" type = "password" id = "confirmpassword" maxlength = "100" placeholder = "Confirm Password"> <br>
+                    <button class = "save" id = "savepassword"> <i class = "fa fa-save"></i> </button>
+                </form>
             </div>
         </div>
 </body>

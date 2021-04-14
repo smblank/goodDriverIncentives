@@ -71,19 +71,14 @@ READS SQL DATA
         RETURN id;
     END;;
 
-DROP FUNCTION IF EXISTS getUserEmail;
+DROP PROCEDURE IF EXISTS getUserEmail;
 
-CREATE FUNCTION getUserEmail (id INT)
-RETURNS VARCHAR(50)
+CREATE PROCEDURE getUserEmail (id INT)
 READS SQL DATA
     BEGIN
-        DECLARE email VARCHAR(50);
-
-        SELECT Email INTO email
+        SELECT Email
         FROM USER
         WHERE UserID = id;
-
-        RETURN email;
     END;;
 
 DROP FUNCTION IF EXISTS createAdmin;
@@ -283,6 +278,15 @@ CREATE PROCEDURE getDriverOrgs (driver INT)
         FROM DRIVER_ORGS, ORGANIZATION
         WHERE DRIVER_ORGS.OrgID = ORGANIZATION.OrgID AND
             DRIVER_ORGS.UserID = driver;
+    END;;
+
+DROP PROCEDURE IF EXISTS addDriverOrg;
+
+CREATE PROCEDURE addDriverOrg (driver INT, newOrg INT)
+MODIFIES SQL DATA
+    BEGIN
+        INSERT INTO DRIVER_ORGS (UserID, OrgID, Points)
+            VALUES (driver, newOrg, 0);
     END;;
 
 DROP FUNCTION IF EXISTS createApplicant;
@@ -872,6 +876,17 @@ CREATE PROCEDURE removePointChangeReason (reason INT)
     BEGIN
         DELETE FROM POINT_CHANGE_REASON
         WHERE ReasonID = reason;
+    END;;
+
+DROP PROCEDURE IF EXISTS updatePointChangeReason;
+
+CREATE PROCEDURE updatePointChangeReason (reason INT, newDesc VARCHAR(100), points FLOAT)
+    BEGIN
+        UPDATE POINT_CHANGE_REASON
+            SET
+                ReasonDescription = newDesc,
+                NumPoints = points
+            WHERE ReasonID = reason;
     END;;
 
 DROP PROCEDURE IF EXISTS updatePointConversion;

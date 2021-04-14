@@ -218,3 +218,56 @@ def getDriverOrgs(request):
     }
         
     return render(request, 'admin_organization.html', context)
+
+def adminEditUser(request, userID):
+    email = db.getUserEmail(userID)
+    userType = db.getUserType(email)
+
+    if userType == "Driver":
+        isDriver = True
+    else:
+        isDriver = False
+
+    orgs = []
+    
+    if isDriver:
+        result = db.getOrgs()
+
+        class Org:
+            def __init__(self):
+                id = -1
+                name = ''
+            
+        for (id, name) in result:
+            tempOrg = Org()
+            tempOrg.id = id
+            tempOrg.name = name
+            orgs.append(tempOrg)
+    
+    context = {
+        'userType': userType,
+        'isDriver': isDriver,
+        'userName': db.getUserName(email),
+        'orgs': orgs,
+        'userID': userID
+    }
+        
+    return render(request, 'admin_edit_user.html', context)
+
+def sponsorEditUser(request, userID):
+    email = db.getUserEmail(userID)
+    userType = db.getUserType(email)
+
+    if userType == "Driver":
+        isDriver = True
+    else:
+        isDriver = False
+    
+    context = {
+        'userType': userType,
+        'isDriver': isDriver,
+        'userName': db.getUserName(email),
+        'userID': userID
+    }
+
+    return render(request, 'sponsor_edit_user.html', context)

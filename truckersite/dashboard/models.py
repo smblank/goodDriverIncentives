@@ -5,8 +5,7 @@ from sponsor import views as spon
 
 # Create your models here.
 
-def getDriverOrg(request):
-    orgID = request.POST.get('driverOrg')
+def setDriverOrg(request, orgID):
     request.session['orgID'] = orgID
     return views.driverDash(request)
 

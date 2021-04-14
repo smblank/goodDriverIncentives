@@ -115,44 +115,111 @@ def addNewSponsor(request):
     else:
         return views.organizationPage(request)
 
-def removeReason(request):
-    reasonID = request.POST.get('reason')
-
-    db.removePointChangeReason(reasonID)    
-    if (request.session['isAdmin']):
-        return views.adminOrgs(request)
-    else:
-        return views.organizationPage(request)
-
-# Not fully implemented
 def editReason(request):
     reasonID = request.POST.get('reason')
-    print(reasonID)
-    if (request.session['isAdmin']):
-        return views.adminOrgs(request)
-    else:
-        return views.organizationPage(request)
 
-def removeSponsor(request):
+    if reasonID != 'none':
+        if 'remove' in request.session:
+            db.removePointChangeReason(reasonID)
+
+            if (request.session['isAdmin']):
+                return views.adminOrgs(request)
+            else:
+                return views.organizationPage(request)
+
+        elif 'edit' in request.session:
+            return views.editReason(request, reasonID)
+    
+    else:
+        if (request.session['isAdmin']):
+            return views.adminOrgs(request)
+        else:
+            return views.organizationPage(request)
+
+def editSponsor(request):
     sponsorID = request.POST.get('sponsor')
 
-    currUserID = db.getUserID(request.session['email'])
+    if sponsorID != 'none':
+        if 'remove' in request.POST:
+            if (request.session['isSponsor']):
+                currUserID = db.getUserID(request.session['email'])
+                if (sponsorID != currUserID):
+                    db.removeSponsor(sponsorID, currUserID)
 
-    if (sponsorID != currUserID):
-        db.removeSponsor(sponsorID, currUserID)
-    if (request.session['isAdmin']):
-        return views.adminOrgs(request)
+                return views.organizationPage(request)
+            else:
+                db.removeSponsor(sponsorID, 1)
+                return views.adminOrgs(request)
+
+        elif 'edit' in request.POST:
+            if (request.session['isSponsor']):
+                return views.sponsorEditUser(request, sponsorID)
+            else:
+                return views.adminEditUser(request,sponsorID)
     else:
-        return views.organizationPage(request)
+        if (request.session['isAdmin']):
+            return views.adminOrgs(request)
+        else:
+            return views.organizationPage(request)
 
-def removeDriver(request):
+def editDriver(request):
     driverID = request.POST.get('driver')
 
-    db.removeDriver(driverID)
-    if (request.session['isAdmin']):
-        return views.adminOrgs(request)
+    if driverID != 'none':
+        if 'remove' in request.POST:
+            if (request.session['isSponsor']):
+                db.removeDriver(driverID)
+                return views.organizationPage(request)
+            else:
+                db.removeDriver(driverID)
+                return views.adminOrgs(request)
+
+        elif 'edit' in request.POST:
+            if (request.session['isSponsor']):
+                return views.sponsorEditUser(request, driverID)
+            else:
+                return views.adminEditUser(request,driverID)
     else:
-        return views.organizationPage(request)
+        if (request.session['isAdmin']):
+            return views.adminOrgs(request)
+        else:
+            return views.organizationPage(request)
+
+def adminEditUser(request, userID):
+    newEmail = request.POST.get('email')
+    password = request.POST.get('pass1')
+    confirmPass = request.POST.get('pass2')
+    orgID = request.POST.get('org')
+
+    email = db.getUserEmail(userID)
+
+    if newEmail != '':
+        db.updateEmail(newEmail, email)
+
+    if password != '' and confirmPass != '':
+        if password == confirmPass:
+            db.updatePassword(email, password)
+
+    if orgID != 'none':
+        db.addDriverOrg(userID, orgID)
+    return views.adminOrgs(request)
+
+def sponsorEditUser(request, userID):
+    newEmail = request.POST.get('email')
+    password = request.POST.get('pass1')
+    confirmPass = request.POST.get('pass2')
+    orgID = request.POST.get('org')
+
+    email = db.getUserEmail(userID)
+
+    if newEmail != '':
+        db.updateEmail(newEmail, email)
+
+    if password != '' and confirmPass != '':
+        if password == confirmPass:
+            db.updatePassword(email, password)
+
+    return views.organizationPage(request)
 
 def getAdminOrgChoice(request):
     orgChoice = request.POST.get('orgs')
@@ -187,4 +254,3 @@ def createCatalog(request):
     CatalogViews.addProducts(request)
         
     return views.organizationPage(request)
-    

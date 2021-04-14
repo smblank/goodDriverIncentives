@@ -79,15 +79,20 @@ urlpatterns = [
     path('updatePointConversion', orgOps.updatePointConversion, name = 'updatePointConversion'),
     path('updatePaymentInfo', orgOps.updatePaymentInfo, name = 'updatePaymentInfo'),
     path('addNewSponsor', orgOps.addNewSponsor, name = 'addNewSponsor'),
-    path('removeReason', orgOps.removeReason, name = 'removeReason'),
     path('editReason', orgOps.editReason, name = 'editReason'),
-    path('removeSponsor', orgOps.removeSponsor, name = "removeSponsor"),
-    path('removeDriver', orgOps.removeDriver, name = 'removeDriver'),
+    path('editSponsor', orgOps.editSponsor, name = "editSponsor"),
+    path('editDriver', orgOps.editDriver, name = 'editDriver'),
     path('adminOrgs/', orgViews.adminOrgs, name = 'adminOrgs'),
     path('getAdminOrgChoice', orgOps.getAdminOrgChoice, name = 'getAdminOrgChoice'),
     path('getNewCatalogKeyword', orgOps.getNewCatalogKeyword, name = "getNewCatalogKeyword"),
     path('removeCatalogKeyword/<int:wordID>/', orgOps.removeCatalogKeyword, name = 'removeCatalogKeyword'),
     path('createCatalog', orgOps.createCatalog, name = 'createCatalog'),
+
+    #Edit existsing users
+    path('adminEditUserPage/<int:userID>', orgViews.adminEditUser, name = 'adminEditUserPage'),
+    path('adminEditUser/<int:userID>', orgOps.adminEditUser, name = 'adminEditUser'),
+    path('sponsorEditUser/<int:userID>', orgOps.sponsorEditUser, name = 'adminEditUser'),
+
 
     #Sponsor report generation
     path('sponsorReportGeneration/', reportViews.sponsorGenerateReport, name = 'sponsorReportGeneration'),
@@ -129,7 +134,7 @@ urlpatterns = [
     path('adminDash/', dashViews.adminDash, name = 'adminDash'),
     path("removeAdmin", dashOps.removeAdmin, name = 'removeAdmin'),
     path('addAdmin', dashOps.addNewAdmin, name = 'addAdmin'),
-    path('getDriverOrg', dashOps.getDriverOrg, name = 'getDriverOrg'),
+    path('setDriverOrg/<int:orgID>', dashOps.setDriverOrg, name = 'setDriverOrg'),
     path('addOrg', dashOps.addOrg, name = 'addOrg'),
     path('removeOrg', dashOps.removeOrg, name = 'removeOrg'),
 
