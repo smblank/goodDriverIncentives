@@ -286,7 +286,7 @@ def getUserEmail(id):
         conn = getDB()
         cursor = getCursor(conn)
 
-        query = "SELECT getUserEmail(%s)"
+        query = "CALL getUserEmail(%s)"
         cursor.execute(query, (id,))
         result = cursor.fetchone()
 
@@ -787,6 +787,21 @@ def removePointChangeReason (reason):
     except Error as err:
         print(err)
 
+def updatePointChangeReason (reason, newDesc, newPoints):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL updatePointChangeReason(%s, %s, %s)"
+        cursor.execute(query, (reason, newDesc, newPoints))
+
+        cursor.close()
+        conn.close()
+        return "Point change reason successfully changed"
+    
+    except Error as err:
+        print(err)
+
 def adjustPoints (driverEmail, sponsorEmail, reason, amt):
     try:
         conn = getDB()
@@ -972,6 +987,21 @@ def getDriverOrgs (driverID):
         cursor.close()
         conn.close()
         return result
+
+    except Error as err:
+        print(err)
+
+def addDriverOrg (driverID, newOrg):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL addDriverOrg(%s, %s)"
+        cursor.execute(query, (driverID, newOrg))
+        
+        cursor.close()
+        conn.close()
+        return "Successfully added driver to org"
 
     except Error as err:
         print(err)

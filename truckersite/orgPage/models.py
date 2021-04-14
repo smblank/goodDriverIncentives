@@ -119,7 +119,7 @@ def editReason(request):
     reasonID = request.POST.get('reason')
 
     if reasonID != 'none':
-        if 'remove' in request.session:
+        if 'remove' in request.POST:
             db.removePointChangeReason(reasonID)
 
             if (request.session['isAdmin']):
@@ -127,8 +127,11 @@ def editReason(request):
             else:
                 return views.organizationPage(request)
 
-        elif 'edit' in request.session:
-            return views.editReason(request, reasonID)
+        elif 'edit' in request.POST:
+            if request.session['isAdmin']:
+                return views.adminEditReason(request, reasonID)
+            else:
+                return views.sponsorEditReason(request, reasonID)
     
     else:
         if (request.session['isAdmin']):
@@ -220,6 +223,20 @@ def sponsorEditUser(request, userID):
             db.updatePassword(email, password)
 
     return views.organizationPage(request)
+
+def sponsorUpdateReason(request, reasonID):
+    points = request.POST.get('points')
+    desc = request.POST.get('description')
+
+    db.updatePointChangeReason(reasonID, desc, points)
+    return views.organizationPage(request)
+
+def adminUpdateReason(request, reasonID):
+    points = request.POST.get('points')
+    desc = request.POST.get('description')
+
+    db.updatePointChangeReason(reasonID, desc, points)
+    return views.adminOrgs(request)
 
 def getAdminOrgChoice(request):
     orgChoice = request.POST.get('orgs')

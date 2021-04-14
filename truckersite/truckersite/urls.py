@@ -94,6 +94,9 @@ urlpatterns = [
     path('adminEditUser/<int:userID>', orgOps.adminEditUser, name = 'adminEditUser'),
     path('sponsorEditUser/<int:userID>', orgOps.sponsorEditUser, name = 'adminEditUser'),
 
+    path('adminEditReason/<int:reasonID>', orgOps.adminUpdateReason, name = 'adminEditReason'),
+    path('sponsorEditReason/<int:reasonID>', orgOps.sponsorUpdateReason, name = 'sponsorEditReason'),
+
 
     #Sponsor report generation
     path('sponsorReportGeneration/', reportViews.sponsorGenerateReport, name = 'sponsorReportGeneration'),

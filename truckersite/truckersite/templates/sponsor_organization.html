@@ -133,7 +133,7 @@
                 </form>
 
                 <p class="setting" id="pointchange" style="margin-top: 1.5%;"> Reasons for Point Changes </p>
-                <form method="Post" action="{% url 'removeReason' %}">
+                <form method="Post" action="{% url 'editReason' %}">
                     {% csrf_token %}
                     <select class="form-control form-control-lg" id="pointchanges" name="reason" style="margin-bottom: 1.5%;">
                         <option value = "none"> Select a Reason </option>
@@ -142,9 +142,9 @@
                             <option value = {{reason.id}}>{{reason.desc}}</option>
                         {% endfor %}
                     </select>
-                    <button id="remove"> Remove Reason </button>
+                    <button id="remove" name = "remove"> Remove Reason </button>
+                    <button id="edit" name = "edit"> Edit Reason </button>
                 </form>
-                <button id="edit" onclick="edit()"> Edit Reason </button>
 
                 <p class="setting" id="newpointchange" style="margin-top: 1.5%;"> New Reason for Point Changes </p>
                 <form method="Post" action="{% url 'getNewPointChange' %}">
@@ -181,7 +181,7 @@
                 </form>
 
                 <p class="setting" id="sponsors" style="margin-top: 1.5%;"> Sponsor Users </p>
-                <form method="Post" action="{% url 'removeSponsor' %}">
+                <form method="Post" action="{% url 'editSponsor' %}">
                     {% csrf_token %}
                     <select class="form-control form-control-lg" id="sponsorsdp" name="sponsor" style="margin-bottom: 1.5%;">
                         <option value = "none"> Select a Sponsor </option>
@@ -192,8 +192,8 @@
                     </select>
 
                     <button id="remove"> Remove Sponsor </button>
+                    <button id="edit"> Edit Sponsor Info </button>
                 </form>
-                <button id="edit" onclick="editSponsor()"> Edit Sponsor Info </button>
 
                 <p class="setting" id="addsponsor" style="margin-top: 1.5%;"> Add Sponsor Users</p>
                 <form method="Post" action="{% url 'addNewSponsor' %}">
@@ -204,7 +204,7 @@
                 </form>
 
                 <p class="setting" id="drivers" style="margin-top: 1.5%;"> Drivers </p>
-                <form method="Post" action="{% url 'removeDriver' %}">
+                <form method="Post" action="{% url 'editDriver' %}">
                     {% csrf_token %}
                     <select class="form-control form-control-lg" id="driversdp" name="driver" style="margin-bottom: 1.5%;">
                         <option value = "none"> Select a Driver </option>
@@ -214,10 +214,10 @@
                         {% endfor %}
                     </select>
 
-                    <button id="remove" onclick="removeDriver()"> Remove Driver </button>
+                    <button id="remove" name = "remove"> Remove Driver </button>
+                    <button id="edit" name = "edit"> Edit Driver Info </button>
+                    <button id="editpoints" name = "points"> Edit Driver Points </button>
                 </form>
-                <button id="edit" onclick="editDriver()"> Edit Driver Info </button>
-                <button id="editpoints" onclick="editDriverPoints()"> Edit Driver Points </button>
 
                 <p class="setting" id="catalog" style="margin-top: 1.5%;"> Create Catalog </p>
                 <!-- Source for Search Bar: https://getbootstrap.com/docs/4.1/components/input-group/ -->

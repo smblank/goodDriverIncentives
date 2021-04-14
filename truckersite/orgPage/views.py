@@ -195,30 +195,6 @@ def adminOrgs(request):
 
     return render(request, 'admin_organization.html', context)
 
-def getDriverOrgs(request):
-    driverId = 1
-
-    result = db.getDriverOrgs(driverID)
-
-    class DriverOrg:
-        def __init__(self):
-            id = -1
-            name = ''
-    
-    driverOrgs = []
-
-    for (id, name) in result:
-        tempOrg = DriverOrg()
-        tempOrg.id = id
-        tempOrg.name = name
-        driverOrgs.append(tempOrg)
-
-    context = {
-        'driverOrgs': driverOrgs
-    }
-        
-    return render(request, 'admin_organization.html', context)
-
 def adminEditUser(request, userID):
     email = db.getUserEmail(userID)
     userType = db.getUserType(email)
@@ -271,3 +247,17 @@ def sponsorEditUser(request, userID):
     }
 
     return render(request, 'sponsor_edit_user.html', context)
+
+def sponsorEditReason(request, reasonID):
+    context = {
+        'reasonID': reasonID
+    }
+
+    return render(request, 'sponsor_edit_reason.html', context)
+
+def adminEditReason(request, reasonID):
+    context = {
+        'reasonID': reasonID
+    }
+    
+    return render(request, 'admin_edit_reason.html', context)
