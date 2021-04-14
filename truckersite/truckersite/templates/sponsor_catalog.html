@@ -35,6 +35,7 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{% url 'orgPage' %}"> Organization Page </a>
                         <a class="dropdown-item" href="/sponsor_view_drivers"> Driver List </a>
+                        <a class="dropdown-item" href="/sponsor_application_list">Application List</a>
                         <a class="dropdown-item" href="{%url 'sponsorCatalog' %}"> Catalog </a>
                         <!-- <a class="dropdown-item" href="sponsor_notifications.html"> Notifications </a> -->
                         <a class="dropdown-item" href="{% url 'sponsorReportGeneration'%}"> Generate Report </a>
@@ -44,8 +45,8 @@
                     </div>
                 </li>
 
-                <li class = "nav-item active">
-                    <a class = "nav-link" href = "{% url 'sponsorDashDisplay' %}" id = "title"> Good Driver Incentive Program </a>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'sponsorDashDisplay' %}" id="title"> Good Driver Incentive Program </a>
                 </li>
 
                 <a class="navbar-brand" href="{% url 'sponsorProfile'%}">
@@ -69,28 +70,28 @@
                         <button class="btn btn-outline-secondary" type="button" id="search"> <i class = "fa fa-search"></i> </button>
                     </div>
                 </div>
-                
+
                 <!-- Put Items Here -->
-                <section class = "text-center mb-4">
-                {% block content %}
-                <h2> Here is the list of Items </h2>
-                {% for item in items %}
-                <div class="view overlay">
-                    <img img src={{item.pic}} width="255" height="255" alt="">
+                <section class="text-center mb-4">
+                    {% block content %}
+                    <h2> Here is the list of Items </h2>
+                    {% for item in items %}
+                    <div class="view overlay">
+                        <img img src={{item.pic}} width="255" height="255" alt="">
+                        <a href="{% url 'productPage' item.id %}">
+                            <div class="mask rgba-white-slight"></div>
+                        </a>
+                    </div>
                     <a href="{% url 'productPage' item.id %}">
-                        <div class="mask rgba-white-slight"></div>
+                        <h4 class="font-weight-bold blue-text">
+                            <strong>{{item.name}}</strong>
+                        </h4>
                     </a>
-                </div>
-                <a href="{% url 'productPage' item.id %}">
-                    <h4 class="font-weight-bold blue-text">
-                        <strong>{{item.name}}</strong>
-                    </h4>
-                </a>
                     <h4 class="font-weight-bold blue-text">
                         <strong>${{item.price}}</strong>
                     </h4>
-                </br>
-                {% endfor %} {% endblock content %}
+                    </br>
+                    {% endfor %} {% endblock content %}
             </div>
         </div>
     </div>

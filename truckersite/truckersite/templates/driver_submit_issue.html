@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
-<html lang = "en-US">
-<meta charset = "UTF-8">
+<html lang="en-US">
+<meta charset="UTF-8">
 
 <head>
 
@@ -25,89 +25,90 @@
 </head>
 
 <body>
-    
-    <div class = "container-fluid">
+
+    <div class="container-fluid">
 
         <!-- Credit for navbar: https://getbootstrap.com/docs/4.1/components/navbar/-->
-        <nav class = "navbar navbar-expand-md navbar-light fixed-top" style = "margin-bottom: 1%;" id = "header">
-            <ul class = "navbar-nav w-100 justify-content-between">
-                <li class = "nav-item dropdown">
-                    <a class = "nav-link dropdown-toggle" id = "menubutton" role = "button" data-toggle = "dropdown" aria-haspopup = "true" aria-expanded = "false"> Menu </a>
+        <nav class="navbar navbar-expand-md navbar-light fixed-top" style="margin-bottom: 1%;" id="header">
+            <ul class="navbar-nav w-100 justify-content-between">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="menubutton" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Menu </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class = "dropdown-item" href = "driver_catalog.html"> Catalog </a>
-                        <a class = "dropdown-item" href = "wishlist.html"> Wishlist </a>
-                        <a class = "dropdown-item" href = "driver_order_history.html"> Order History </a>
-                        <a class = "dropdown-item" href = "driver_notifications.html"> Notifications </a>
-                        <a class = "dropdown-item" href = "driver_submit_issue.html"> Submit an Issue </a>
-                        <a class = "dropdown-item" href = "index.html"> Logout </a>
+                        <a class="dropdown-item" href="driver_catalog.html"> Catalog </a>
+                        <a class="dropdown-item" href="wishlist.html"> Wishlist </a>
+                        <a class="dropdown-item" href="/driver_point_history"> Point History </a>
+                        <a class="dropdown-item" href="driver_order_history.html"> Order History </a>
+                        <a class="dropdown-item" href="driver_notifications.html"> Notifications </a>
+                        <a class="dropdown-item" href="driver_submit_issue.html"> Submit an Issue </a>
+                        <a class="dropdown-item" href="index.html"> Logout </a>
                     </div>
                 </li>
 
-                <li class = "nav-item active">
-                    <a class = "nav-link" href = "driver_dash.html" id = "title"> Good Driver Incentive Program </a>
+                <li class="nav-item active">
+                    <a class="nav-link" href="driver_dash.html" id="title"> Good Driver Incentive Program </a>
                 </li>
 
-                <a class = "navbar-brand" href = "driver_profile.html">
-                    <img src = "Defaultpfp.png" width = "30" height = "30">
+                <a class="navbar-brand" href="driver_profile.html">
+                    <img src="Defaultpfp.png" width="30" height="30">
                 </a>
             </ul>
         </nav>
 
-        <div class = "row">
-            <div class = "col-md-10 text-center">
-                <h2 style = "margin-left: 20%;"> Submit Issue </h2>
-                
+        <div class="row">
+            <div class="col-md-10 text-center">
+                <h2 style="margin-left: 20%;"> Submit Issue </h2>
+
             </div>
 
-            <div class = "col-md-2 text-right">
+            <div class="col-md-2 text-right">
                 <h2> My Points: </h2>
                 <h2> 0 </h2>
             </div>
         </div>
 
-        <div class = "row text-center">
-            <div class = "col-md-3"></div>
-            <div class = "col-md-6">
+        <div class="row text-center">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
                 <!-- Source: https://getbootstrap.com/docs/4.1/components/forms/ -->
-                <div class = "form-group">
-                    <select class = "form-control" id = "to">
+                <div class="form-group">
+                    <select class="form-control" id="to">
                         <option> To: </option>
                     </select>
                 </div>
             </div>
-            <div class = "col-md-3"></div>
+            <div class="col-md-3"></div>
         </div>
 
-        <div class = "row text-left">
-            <div class = "col-md-3"></div>
-            <div class = "col-md-6">
-                <input type = "text" id = "subject" placeholder = "Subject">
+        <div class="row text-left">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <input type="text" id="subject" placeholder="Subject">
             </div>
-            <div class = "col-md-3"></div>
+            <div class="col-md-3"></div>
         </div>
 
-        <div class = "row text-center" style = "height: 500px;">
-            <div class = "col-md-3"></div>
-            <div class = "col-md-6">
-                <textarea id = "description" placeholder = "Description"></textarea>
+        <div class="row text-center" style="height: 500px;">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <textarea id="description" placeholder="Description"></textarea>
             </div>
-            <div class = "col-md-3"></div>
+            <div class="col-md-3"></div>
         </div>
 
-        <div class = "row text-right">
-            <div class = "col-md-3"></div>
-            <div class = "col-md-6">
-                <button id = "submit"> Submit </button>
+        <div class="row text-right">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <button id="submit"> Submit </button>
             </div>
-            <div class = "col-md-3"></div>
+            <div class="col-md-3"></div>
         </div>
 
-        <div class = "row text-right">
-            <div class = "col-md-3"></div>
-            <div class = "col-md-6">
-                <button id = "cancel"> Cancel </button>
+        <div class="row text-right">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <button id="cancel"> Cancel </button>
             </div>
-            <div class = "col-md-3"></div>
+            <div class="col-md-3"></div>
         </div>
 
     </div>

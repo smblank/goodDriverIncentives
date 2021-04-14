@@ -81,6 +81,7 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{% url 'orgPage' %}"> Organization Page </a>
                         <a class="dropdown-item" href="/sponsor_view_drivers"> Driver List </a>
+                        <a class="dropdown-item" href="/sponsor_application_list">Application List</a>
                         <a class="dropdown-item" href="{%url 'sponsorCatalog' %}"> Catalog </a>
                         <!-- <a class="dropdown-item" href="sponsor_notifications.html"> Notifications </a> -->
                         <a class="dropdown-item" href="{% url 'sponsorReportGeneration'%}"> Generate Report </a>
@@ -220,22 +221,22 @@
 
                 <p class="setting" id="catalog" style="margin-top: 1.5%;"> Create Catalog </p>
                 <!-- Source for Search Bar: https://getbootstrap.com/docs/4.1/components/input-group/ -->
-                <form method = "Post" action = "{% url 'getNewCatalogKeyword' %}">
+                <form method="Post" action="{% url 'getNewCatalogKeyword' %}">
                     {% csrf_token %}
                     <div class="input-group" style="width: 100%; margin-bottom: 2%;">
-                        <input type="text" class="form-control" placeholder="Enter Keywords to Filter Your Catalog" aria-label="search" aria-describedby="button-addon2" name = "keyword">
+                        <input type="text" class="form-control" placeholder="Enter Keywords to Filter Your Catalog" aria-label="search" aria-describedby="button-addon2" name="keyword">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" type="submit" id="search"> Enter </button>
                         </div>
                     </div>
                 </form>
 
-                <a href = "{% url 'createCatalog' %}"><button id="create"> Create Catalog </button></a>
+                <a href="{% url 'createCatalog' %}"><button id="create"> Create Catalog </button></a>
                 <p class="setting" id="current" style="margin-top: 1.5%;"> Current Catalog Keywords</p>
                 <!-- As keywords are entered display them below the button; template below-->
                 <div>
                     {% for keyword in keywords %}
-                        <h5>{{keyword.word}} <span> 
+                    <h5>{{keyword.word}} <span> 
                         <a href = "{% url 'removeCatalogKeyword' keyword.id %}"><button class = "delete"> <i class = "fa fa-window-close"></i> </button> </a></span></h5>
                     {% endfor %}
                 </div>

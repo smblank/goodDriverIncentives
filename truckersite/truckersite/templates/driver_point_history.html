@@ -15,13 +15,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
-    <title> Issues </title>
+    <title> Point History </title>
 
     <!-- Links the .css file -->
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/view_issue.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/driver_dash.css'%}">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-
 
 </head>
 
@@ -30,28 +29,26 @@
     <div class="container-fluid">
 
         <!-- Credit for navbar: https://getbootstrap.com/docs/4.1/components/navbar/-->
-        <nav class="navbar navbar-expand-md navbar-light fixed-top" id="header">
+        <nav class="navbar navbar-expand-md navbar-light fixed-top" style="margin-bottom: 1%;" id="header">
             <ul class="navbar-nav w-100 justify-content-between">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="menubutton" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Menu </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="sponsor_organization.html"> Organization Page </a>
-                        <a class="dropdown-item" href="/sponsor_view_drivers"> Driver List </a>
-                        <a class="dropdown-item" href="/sponsor_application_list">Application List</a>
-                        <a class="dropdown-item" href="sponsor_catalog.html"> Catalog </a>
-                        <a class="dropdown-item" href="sponsor_notifications.html"> Notifications </a>
-                        <a class="dropdown-item" href="sponsor_generate_report.html"> Generate Report </a>
-                        <a class="dropdown-item" href="sponsor_submit_issue.html"> Submit an Issue </a>
-                        <a class="dropdown-item" href="sponsor_view_issues.html"> Issues </a>
-                        <a class="dropdown-item" href="index.html"> Logout </a>
+                        <a class="dropdown-item" href="{% url 'driverCatalog'%}"> Catalog </a>
+                        <a class="dropdown-item" href="{% url 'wishlist'%}"> Wishlist </a>
+                        <a class="dropdown-item" href="/driver_point_history"> Point History </a>
+                        <a class="dropdown-item" href="{% url 'driverOrderHistory'%}"> Order History </a>
+                        <!-- <a class = "dropdown-item" href = "driver_notifications.html"> Notifications </a>
+                        <a class = "dropdown-item" href = "driver_submit_issue.html"> Submit an Issue </a> -->
+                        <a class="dropdown-item" href="{% url 'logout' %}"> Logout </a>
                     </div>
                 </li>
 
                 <li class="nav-item active">
-                    <a class="nav-link" href="/sponsor_dash" id="title"> Good Driver Incentive Program </a>
+                    <a class="nav-link" href="{% url 'driverDash' %}" id="title"> Good Driver Incentive Program </a>
                 </li>
 
-                <a class="navbar-brand" href="{% url 'sponsorProfile'%}">
+                <a class="navbar-brand" href="{% url 'driverProfile'%}">
                     <img src="Defaultpfp.png" width="30" height="30">
                 </a>
             </ul>
@@ -59,28 +56,28 @@
 
         <div class="row text-center">
             <div class="col-md-12">
-                <h2 id="pagename" style="margin-bottom: 5%;"> Issues </h2>
+                <!-- Dropdown source: https://getbootstrap.com/docs/4.1/components/dropdowns/ -->
+                <div class="dropdown pull-right" style="margin-top: 1%;">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="organizstions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> My Organizations </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <!-- Example <a class="dropdown-item" href="#">Action</a> -->
+                    </div>
+                </div>
+
+                <h2 id="pagename"> Point History </h2>
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-3"></div>
-
-            <div class="col-md-6">
-                <!-- Templete for an open issue, if there is a better way then go for it
-                <div class = "issue">
-                    <h3> Issue Subject </h2>
-                    <h5> Issue Details </h4>
-                    <button class = "text-right" id = "closeissue"> Close Issue </button> 
-                </div> -->
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                {% for reason in reason_list %}
+                <p>{{ reason.date }} - {{ reason.points }} - {{ reason.desc }}</p>
+                {% endfor %}
+                <p>Total: {{ num_points }}</p>
             </div>
-
-
-            <div class="col-md-3"></div>
         </div>
 
     </div>
-
 
 </body>
 

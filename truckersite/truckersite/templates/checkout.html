@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
-<html lang = "en-US">
-<meta charset = "UTF-8">
+<html lang="en-US">
+<meta charset="UTF-8">
 
 <head>
 
@@ -27,55 +27,56 @@
 </head>
 
 <body>
-    
-    <div class = "container-fluid">
+
+    <div class="container-fluid">
 
         <!-- Credit for navbar: https://getbootstrap.com/docs/4.1/components/navbar/-->
-        <nav class = "navbar navbar-expand-md navbar-light fixed-top" id = "header">
-            <ul class = "navbar-nav w-100 justify-content-between">
-                <li class = "nav-item dropdown">
-                    <a class = "nav-link dropdown-toggle" id = "menubutton" role = "button" data-toggle = "dropdown" aria-haspopup = "true" aria-expanded = "false"> Menu </a>
+        <nav class="navbar navbar-expand-md navbar-light fixed-top" id="header">
+            <ul class="navbar-nav w-100 justify-content-between">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="menubutton" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Menu </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class = "dropdown-item" href = "{% url 'driverCatalog'%}"> Catalog </a>
-                        <a class = "dropdown-item" href = "{% url 'wishlist'%}"> Wishlist </a>
-                        <a class = "dropdown-item" href = "{% url 'driverOrderHistory'%}"> Order History </a>
+                        <a class="dropdown-item" href="{% url 'driverCatalog'%}"> Catalog </a>
+                        <a class="dropdown-item" href="{% url 'wishlist'%}"> Wishlist </a>
+                        <a class="dropdown-item" href="/driver_point_history"> Point History </a>
+                        <a class="dropdown-item" href="{% url 'driverOrderHistory'%}"> Order History </a>
                         <!-- <a class = "dropdown-item" href = "driver_notifications.html"> Notifications </a>
                         <a class = "dropdown-item" href = "driver_submit_issue.html"> Submit an Issue </a> -->
-                        <a class = "dropdown-item" href = "{% url 'logout' %}"> Logout </a>
+                        <a class="dropdown-item" href="{% url 'logout' %}"> Logout </a>
                     </div>
                 </li>
 
-                <li class = "nav-item active">
-                    <a class = "nav-link" href = "{% url 'driverDash' %}" id = "title"> Good Driver Incentive Program </a>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'driverDash' %}" id="title"> Good Driver Incentive Program </a>
                 </li>
 
-                <a class = "navbar-brand" href = "{% url 'driverProfile'%}">
-                    <img src = "Defaultpfp.png" width = "30" height = "30">
+                <a class="navbar-brand" href="{% url 'driverProfile'%}">
+                    <img src="Defaultpfp.png" width="30" height="30">
                 </a>
             </ul>
         </nav>
 
-        <div class = "row">
-            <div class = "col-md-3">
-                <div id = "sidebar">
-                    <a id = "back" href = "driver_catalog.html"> <i class = "fa fa-arrow-left"></i> Catalog </a>
-                    <p id = "pointstitle"> My Points: </p>
-                    <p id = "points"> {{points}} </p>
+        <div class="row">
+            <div class="col-md-3">
+                <div id="sidebar">
+                    <a id="back" href="driver_catalog.html"> <i class="fa fa-arrow-left"></i> Catalog </a>
+                    <p id="pointstitle"> My Points: </p>
+                    <p id="points"> {{points}} </p>
                 </div>
             </div>
 
-            <div class = "col-md-9 text-right">
-                <a id = "cart" href = "driver_cart.html"> <i class = "fa fa-shopping-cart"></i> </a>
+            <div class="col-md-9 text-right">
+                <a id="cart" href="driver_cart.html"> <i class="fa fa-shopping-cart"></i> </a>
                 <!-- Put Items Here -->
             </div>
         </div>
 
-        <div class = "row fixed-bottom">
-            <div class = "col-md-3"></div>
-            <div class = "col-md-9">
-                <h4> Shipping Address:  </h4>
+        <div class="row fixed-bottom">
+            <div class="col-md-3"></div>
+            <div class="col-md-9">
+                <h4> Shipping Address: </h4>
                 {% csrf_token %}
-                <select class = "form-control form-control-lg" id = "shipping" style = "margin-bottom: 10%;">
+                <select class="form-control form-control-lg" id="shipping" style="margin-bottom: 10%;">
                     <option value = "default">{{default}}</option>
 
                     {% for addr in addresses %}
@@ -85,15 +86,14 @@
             </div>
         </div>
 
-        <div class = "row fixed-bottom text-right">
-            <div class = "col-md-12">
+        <div class="row fixed-bottom text-right">
+            <div class="col-md-12">
                 {% if not isSponsor or not isAdmin %}
-                    <button id = "confirm"> Confirm </button>
-                {% endif %}
-                <button id = "cancel"> Cancel </button>
+                <button id="confirm"> Confirm </button> {% endif %}
+                <button id="cancel"> Cancel </button>
             </div>
         </div>
-        
+
     </div>
 
 </body>

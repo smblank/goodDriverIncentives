@@ -278,3 +278,37 @@ def sponsorChangePoints(request, driver_id):
         context = {'driver_name': driver_name,
                    'driver_id': driver_id, 'reason_list': reasons}
         return render(request, 'change_driver_points.html', context)
+
+def sponsorApplicationList(request):
+    if (request.session['isViewing']):
+        org_num = db.getOrgNo(request.session['tempEmail'])
+    else:
+        org_num = db.getOrgNo(request.session['email'])
+
+    class driver_applicant:
+        def __init__(self, name, applicant_id):
+            self.name = name
+            self.applicant_id = applicant_id
+
+    driver_application_list = []
+
+    # get list of applications to display
+    conn = db.getDB()
+    cursor = db.getCursor(conn)
+
+    query_applicants = "SELECT * FROM APPLICANT WHERE OrgID=%s AND IsAccepted=0"
+    cursor.execute(query_applicants, (org_num,))
+    result = cursor.fetchall()
+
+    for x in result:
+        temp_name = x[4]
+        temp_id = x[0]
+        temp_driver = driver_applicant(temp_name, temp_id)
+        driver_application_list.append(temp_driver)
+    
+    cursor.close()
+    conn.close()
+
+    context = {'driver_application_list': driver_application_list}
+
+    return render(request, 'sponsor_application_list.html', context)

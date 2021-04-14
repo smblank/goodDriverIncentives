@@ -58,6 +58,7 @@ urlpatterns = [
     path('getDriverDefaultAddr', profileOps.getDriverDefaultAddr, name = 'getDriverDefaultAddr'),
     path('getNewDriverProfilePic', profileOps.getDriverProfilePic, name = 'getNewDriverProfilePic'),
     path('driverProfile', profileViews.driverProfile, name = "driverProfile"),
+    path('driver_point_history', profileViews.driverPointHistory, name = "driverPointHistory"),
 
     #Sponsor profile forms
     path('getNewSponsorProfilePic', profileOps.getSponsorProfilePic, name = 'getNewSponsorProfilePic'),
@@ -128,6 +129,7 @@ urlpatterns = [
     path('reject_applicant/<int:applicant_id>', sponsorViews.sponsorRejectApplicant, name = 'sponsorRejectApplicant'),
     path('sponsor_view_drivers/', sponsorViews.sponsorViewDrivers, name = 'sponsorViewDrivers'),
     path('change_driver_points/<int:driver_id>', sponsorViews.sponsorChangePoints, name = 'sponsorChangePoints'),
+    path('sponsor_application_list/', sponsorViews.sponsorApplicationList, name = 'sponsorApplicationList'),
 
     #Dashboards
     path("driverDash/", dashViews.driverDash, name = 'driverDash'),

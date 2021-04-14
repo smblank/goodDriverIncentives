@@ -215,8 +215,10 @@ def addProducts(request):
 def product_list(request):
     if (request.session['isViewing']):
         org = db.getOrgNo(request.session['tempEmail'])
+        email = request.session['tempEmail']
     else:
         org = request.session['orgID']
+        email = request.session['email']
 
     result = db.getProductsInCatalog(org)
 
@@ -237,7 +239,10 @@ def product_list(request):
         tempProduct.pic = img
         products.append(tempProduct)
 
+    points = db.getDriverPoints(email, org)
+
     context = {
+        'points': points,
         'items': products
     }
     return render(request, "driver_catalog.html", context)

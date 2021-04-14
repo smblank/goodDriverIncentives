@@ -35,7 +35,8 @@
                     <a class="nav-link dropdown-toggle" id="menubutton" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Menu </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{% url 'orgPage' %}"> Organization Page </a>
-                       <a class="dropdown-item" href="/sponsor_view_drivers"> Driver List </a>
+                        <a class="dropdown-item" href="/sponsor_view_drivers"> Driver List </a>
+                        <a class="dropdown-item" href="/sponsor_application_list">Application List</a>
                         <a class="dropdown-item" href="{%url 'sponsorCatalog' %}"> Catalog </a>
                         <!-- <a class="dropdown-item" href="sponsor_notifications.html"> Notifications </a> -->
                         <a class="dropdown-item" href="{% url 'sponsorReportGeneration'%}"> Generate Report </a>
@@ -45,12 +46,12 @@
                     </div>
                 </li>
 
-                <li class = "nav-item active">
-                    <a class = "nav-link" href = "{% url 'sponsorDashDisplay' %}" id = "title"> Good Driver Incentive Program </a>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'sponsorDashDisplay' %}" id="title"> Good Driver Incentive Program </a>
                 </li>
 
-                <a class = "navbar-brand" href = "{% url 'sponsorProfile'%}">
-                    <img src = "Defaultpfp.png" width = "30" height = "30">
+                <a class="navbar-brand" href="{% url 'sponsorProfile'%}">
+                    <img src="Defaultpfp.png" width="30" height="30">
                 </a>
             </ul>
         </nav>
@@ -65,7 +66,7 @@
                     <!-- Source: https://stackoverflow.com/questions/50895806/bootstrap-4-multiselect-dropdown/50897096 -->
                     <form method="Post" action="{% url 'getSponsorReport'%}">
                         {% csrf_token %}
-                        <select id="drivers" name= "driver" class="selectpicker">
+                        <select id="drivers" name="driver" class="selectpicker">
                             <option value = "all"> All Drivers </option>
 
                             {% for driver in orgDrivers %}
@@ -74,12 +75,12 @@
                         </select>
 
                         <h4> Start Date </h4>
-                        <input type="text" id="start" name= "startDate" placeholder="mm/dd/yy" maxlength="8">
+                        <input type="text" id="start" name="startDate" placeholder="mm/dd/yy" maxlength="8">
                         <h4> End Date </h4>
-                        <input type="text" id="end" name= "endDate" placeholder="mm/dd/yy" maxlength="8">
+                        <input type="text" id="end" name="endDate" placeholder="mm/dd/yy" maxlength="8">
 
-                        <button id="generate" name = "generate"> Generate Report </button>
-                        <button id="download" name = "download" onclick = "window.open('{% url 'getSponsorReportPdf' %}')"> Download Report <i class = "fa fa-download"></i> </button>
+                        <button id="generate" name="generate"> Generate Report </button>
+                        <button id="download" name="download" onclick="window.open('{% url 'getSponsorReportPdf' %}')"> Download Report <i class = "fa fa-download"></i> </button>
                     </form>
                 </div>
             </div>
@@ -102,21 +103,20 @@
                     </tr>
                 </table>
                 {% for change in changes %}
-                    <table width="70%">
-                        <col style="width:20%">
-                        <col style="width:35%">
-                        <col style="width:30%">
-                        <col style="width:50%">
-                        <tr>
-                            <td>{{change.date}}</td>
-                            <td>{{change.pointChange}}</td>
-                            <td>{{change.sponsor}}</td>
-                            <td>{{change.reason}}</td>
-                        </tr>
-                    </table>
-                {% endfor %} 
-                <br>
-            {% endfor %}
+                <table width="70%">
+                    <col style="width:20%">
+                    <col style="width:35%">
+                    <col style="width:30%">
+                    <col style="width:50%">
+                    <tr>
+                        <td>{{change.date}}</td>
+                        <td>{{change.pointChange}}</td>
+                        <td>{{change.sponsor}}</td>
+                        <td>{{change.reason}}</td>
+                    </tr>
+                </table>
+                {% endfor %}
+                <br> {% endfor %}
 
             </div>
         </div>
