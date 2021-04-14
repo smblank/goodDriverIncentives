@@ -16,11 +16,11 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
 
-    <title> Edit User </title>
+    <title> Edit Point Reason </title>
 
     <!-- Links the .css file -->
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/edit_user.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/edit_reason.css'%}">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
 </head>
@@ -54,25 +54,18 @@
 
         <div class = "row text-center">
             <div class = "col-md-12">
-                <h2 id = "pagename" style = "margin-bottom: 3%;"> Edit User Information </h2>
+                <h2 id = "pagename" style = "margin-bottom: 3%;"> Edit Point Reason </h2>
             </div>
         </div>
 
         <div class = "row text-center">
             <div class = "col-md-12">
-                <h3 id = "user" style = "margin-bottom: 3%;"> User (sponsor, admin) - Name (Jane Doe) </h3>
-            </div>
-        </div>
-
-        <div class = "row text-center">
-            <div class = "col-md-12">
-                <h4 style = "margin-left: -16%;"> Email </h4>
-                <input class = "fields" type = "text" id = "email" maxlength = "100" placeholder = "User's Current Email"> <br>
+                <h4 style = "margin-left: -16%;"> Title </h4>
+                <input class = "fields" type = "text" id = "titlefield" maxlength = "100" placeholder = "Reason's Current Title"> <br>
                 <button class = "save" id = "saveemail"> <i class = "fa fa-save"></i> </button>
 
-                <h4 style = "margin-left: -13%;"> Password </h4>
-                <input class = "fields" type = "password" id = "password" maxlength = "100" placeholder = "Password"> <br>
-                <input class = "fields" type = "password" id = "confirmpassword" maxlength = "100" placeholder = "Confirm Password"> <br>
+                <h4 style = "margin-left: -13%;"> Description </h4>
+                <textarea id="description" name="description" placeholder="Reason's Current Description"></textarea> <br>
                 <button class = "save" id = "savepassword"> <i class = "fa fa-save"></i> </button>
             </div>
         </div>
