@@ -104,7 +104,7 @@
             </div>
             <div class = "col-md-3">
                 <p style = "font-size: 150%;">Admin Management: </p>
-                <form method = "Post" action = "{% url 'removeAdmin' %}">
+                <form method = "Post" action = "{% url 'editAdmin' %}">
                     {% csrf_token %}
                     <select class = "form-control form-control-lg" id = "admin" name = "admin" style = "margin-bottom: 1.5%;">
                         <option value = "none"> Select an Admin </option>
@@ -114,9 +114,9 @@
                         {% endfor %}
                     </select>
 
-                    <button id = "remove" onclick = "removeAdmin()"> Remove Admin </button>
+                    <button id = "remove" name = "remove"> Remove Admin </button>
+                    <button id = "edit" name = "edit"> Edit Admin Info </button>
                 </form>
-                <button id = "edit" onclick = "editAdmin()"> Edit Admin Info </button>
 
                 <p style = "font-size: 150%;">Add New Admin</p>
                 <form method = "Post" action = "{% url 'addAdmin' %}">

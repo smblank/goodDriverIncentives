@@ -2,6 +2,7 @@ from django.db import models
 import dbConnectionFunctions as db
 from dashboard import views
 from sponsor import views as spon
+from orgPage import views as org
 
 # Create your models here.
 
@@ -9,10 +10,15 @@ def setDriverOrg(request, orgID):
     request.session['orgID'] = orgID
     return views.driverDash(request)
 
-def removeAdmin(request):
+def editAdmin(request):
     admin = request.POST.get('admin')
 
-    db.removeAdmin(admin)
+    if admin != 'none':
+        if 'remove' in request.POST:
+            db.removeAdmin(admin)
+        
+        elif 'edit' in request.POST:
+            return org.adminEditUser(request, admin)
 
     return views.adminDash(request)
 

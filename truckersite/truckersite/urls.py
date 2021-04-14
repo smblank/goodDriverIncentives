@@ -137,7 +137,7 @@ urlpatterns = [
     #Dashboards
     path("driverDash/", dashViews.driverDash, name = 'driverDash'),
     path('adminDash/', dashViews.adminDash, name = 'adminDash'),
-    path("removeAdmin", dashOps.removeAdmin, name = 'removeAdmin'),
+    path("editAdmin", dashOps.editAdmin, name = 'editAdmin'),
     path('addAdmin', dashOps.addNewAdmin, name = 'addAdmin'),
     path('setDriverOrg/<int:orgID>', dashOps.setDriverOrg, name = 'setDriverOrg'),
     path('addOrg', dashOps.addOrg, name = 'addOrg'),
