@@ -74,25 +74,24 @@ def getNewDriverPassword(request):
     confirmPass = request.POST.get('password2')
 
     if newPass != confirmPass:
-        response = "The passwords do not match."
+        messages.success(request, "The passwords do not match.")
         return render(request, 'driver_profile.html')
-    
     if not newPass.isupper() :
-        response = "You need a capital letter."
+        messages.success(request, "You need a capital letter.")
         return render(request, 'driver_profile.html')
     
     if any(char.isdigit() for char in newPass) >=1 :
-        response = "You need a number."
+        messages.success(request, "You need a number.")
         return render(request, 'driver_profile.html')
 
     regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
     if (regex.search(newPass) != None):
-        response = "You need a special character."
+        messages.success(request, "You need a special character.")
         return render(request, 'driver_profile.html')
 
     if(len(newPass) >= 8):
-        response = "Password needs 8 chars long."
-        return render(request, 'driver_profile.html')       
+        messages.success(request, "Password needs 8 chars long.")
+        return render(request, 'driver_profile.html')
 
     if (request.session['isViewing']):
         response = db.changePassword(request.session['tempEmail'], newPass)
@@ -187,24 +186,23 @@ def getNewSponsorPassword(request):
     confirmPass = request.POST.get('password2')
 
     if newPass != confirmPass:
-        response = "The passwords do not match."
+        messages.success(request,"The passwords do not match.")
         return render(request, 'sponsor_profile.html')
     
     if not newPass.isupper() :
-        response = "You need a capital letter."
+        messages.success(request, "You need a capital letter.")
         return render(request, 'sponsor_profile.html')
-    
     if any(char.isdigit() for char in newPass) >=1 :
-        response = "You need a number."
+        messages.success(request, "You need a number.")
         return render(request, 'sponsor_profile.html')
 
     regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
     if (regex.search(newPass) != None):
-        response = "You need a special character."
+        messages.success(request, "You need a special character.")
         return render(request, 'sponsor_profile.html')
 
     if(len(newPass) >= 8):
-        response = "Password needs 8 chars long."
+        messages.success(request, "Password needs 8 chars long.")
         return render(request, 'sponsor_profile.html') 
 
     if (request.session['isViewing']):
@@ -247,24 +245,24 @@ def getNewAdminPassword(request):
     confirmPass = request.POST.get('password2')
 
     if newPass != confirmPass:
-        response = "The passwords do not match."
+        messages.success(request,"The passwords do not match.")
         return render(request, 'admin_profile.html')
     
     if not newPass.isupper() :
-        response = "You need a capital letter."
+        messages.success(request,"You need a capital letter.")
         return render(request, 'admin_profile.html')
     
     if any(char.isdigit() for char in newPass) >=1 :
-        response = "You need a number."
+        messages.success(request,"You need a number.")
         return render(request, 'admin_profile.html')
 
     regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
     if (regex.search(newPass) != None):
-        response = "You need a special character."
+        messages.success(request,"You need a special character.")
         return render(request, 'admin_profile.html')
     
     if(len(newPass) >= 8):
-        response = "Password needs 8 chars long."
+        messages.success(request,"Password needs 8 chars long.")
         return render(request, 'admin_profile.html') 
     
     response = db.changePassword(request.session['email'], newPass)
