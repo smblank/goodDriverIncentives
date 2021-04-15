@@ -59,12 +59,16 @@
                     <a id = "back" href = "{% url 'adminReportGeneration'%}"> <i class = "fa fa-arrow-left"></i> Generate Report </a>
                     <h3 class = "text-center" style = "margin-bottom: 5%; margin-top: 2%;"> Sales By Driver Report </h3>
 
-                    <h4> Select Organization </h4>
+                    <h4> Select Driver </h4>
                     <!-- Source: https://stackoverflow.com/questions/50895806/bootstrap-4-multiselect-dropdown/50897096 -->
                     <form method = "Post" action = "{% url 'getDriverSales'%}">
                         {% csrf_token %}
                         <select id = "orgs" name = "org" class = "selectpicker">
-                            <option value = "all"> All Organizations </option>
+                            <option value = "all"> All Drivers </option>
+
+                            {% for driver in drivers %}
+                                <option value = {{driver.id}}>{{driver.name}}</option>
+                            {% endfor %}
                         </select>
 
                         <label class="container">Detailed Report

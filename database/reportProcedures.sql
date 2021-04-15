@@ -33,7 +33,7 @@ CREATE PROCEDURE indvSponsorSaleRep(startDate DATE, endDate DATE, detailed BOOLE
     BEGIN
         IF detailed = TRUE THEN
             IF driver = -1 THEN
-                SELECT ORGANIZATION.Name, OrderID, OrderDate, USER.Name, ProductName, Quantity, Price
+                SELECT ORGANIZATION.Name, OrderID, OrderDate, USER.UserID, USER.Name, ProductName, Quantity, Price
                 FROM ORGANIZATION, PRODUCT, USER, DRIVER, DRIVER_ORDER, IS_IN_ORDER, BELONGS_TO
                 WHERE OrderDate >= startDate AND OrderDate <= endDate AND 
                     orgID = org AND
@@ -42,7 +42,7 @@ CREATE PROCEDURE indvSponsorSaleRep(startDate DATE, endDate DATE, detailed BOOLE
                     BELONGS_TO.OrderID = IS_IN_ORDER.OrderID AND BELONGS_TO.OrderID = DRIVER_ORDER.OrderID AND
                     IS_IN_ORDER.ProductID = PRODUCT.ProductID;
             ELSE
-                SELECT ORGANIZATION.Name, OrderID, OrderDate, USER.Name, ProductName, Quantity, Price
+                SELECT ORGANIZATION.Name, OrderID, OrderDate, USER.UserID, USER.Name, ProductName, Quantity, Price
                 FROM ORGANIZATION, PRODUCT, USER, DRIVER, DRIVER_ORDER, IS_IN_ORDER, BELONGS_TO
                 WHERE OrderDate >= startDate AND OrderDate <= endDate AND 
                     orgID = org AND DRIVER.UserID = driver AND
@@ -79,7 +79,7 @@ DROP PROCEDURE IF EXISTS allSponsorSaleRep;
 CREATE PROCEDURE allSponsorSaleRep(startDate DATE, endDate DATE, detailed BOOLEAN)
     BEGIN
         IF detailed = TRUE THEN
-            SELECT ORGANIZATION.Name, OrderID, OrderDate, USER.Name, ProductName, Quantity, Price
+            SELECT ORGANIZATION.Name, OrderID, OrderDate, USER.UserID, USER.Name, ProductName, Quantity, Price
             FROM ORGANIZATION, PRODUCT, USER, DRIVER, DRIVER_ORDER, IS_IN_ORDER
             WHERE OrderDate >= startDate AND OrderDate <= endDate AND
                     USER.UserID = DRIVER.UserID AND
@@ -87,7 +87,7 @@ CREATE PROCEDURE allSponsorSaleRep(startDate DATE, endDate DATE, detailed BOOLEA
                     BELONGS_TO.OrderID = IS_IN_ORDER.OrderID AND BELONGS_TO.OrderID = DRIVER_ORDER.OrderID AND
                     IS_IN_ORDER.ProductID = PRODUCT.ProductID;
         ELSE
-            SELECT ORGANIZATION.Name, OrderID, OrderDate, USER.Name, Quantity, Price
+            SELECT ORGANIZATION.Name, OrderID, OrderDate, USER.UserID, USER.Name, Quantity, Price
             FROM ORGANIZATION, PRODUCT, USER, DRIVER, DRIVER_ORDER, IS_IN_ORDER
             WHERE OrderDate >= startDate AND OrderDate <= endDate  AND
                     USER.UserID = DRIVER.UserID AND
@@ -104,36 +104,35 @@ CREATE PROCEDURE driverSaleRep(startDate DATE, endDate DATE, detailed BOOLEAN, o
         IF detailed = TRUE THEN
             IF org = -1 THEN
                 SELECT USER.Name, ORGANIZATION.Name, DRIVER_ORDER.OrderID, OrderDate, ProductName, Quantity, Price
-                FROM ORGANIZATION, USER, DRIVER, DRIVER_ORDER, PRODUCT, IS_IN_ORDER, BELONGS_TO
+                FROM ORGANIZATION, USER, DRIVER, DRIVER_ORGS, DRIVER_ORDER, PRODUCT, IS_IN_ORDER, BELONGS_TO
                 WHERE OrderDate >= startDate AND OrderDate <= endDate AND
                     DRIVER.UserID = driver AND 
-                    USER.UserID = DRIVER.UserID AND DRIVER.OrgID = org AND 
-                    BELONGS_TO.DriverID = DRIVER.userID AND IS_IN_ORDER.OrderID = BELONGS_TO.OrderID AND DRIVER_ORDER.OrderID = IS_IN_ORDER.OrderID AND
+                    USER.UserID = DRIVER.UserID AND DRIVER_ORGS.OrgID = org AND DRIVER_ORGS.UserID = DRIVER.UserID AND BELONGS_TO.DriverID = DRIVER.userID AND IS_IN_ORDER.OrderID = BELONGS_TO.OrderID AND DRIVER_ORDER.OrderID = IS_IN_ORDER.OrderID AND
                     PRODUCT.ProductID = IS_IN_ORDER.ProductID;
             ELSE
                 SELECT USER.Name, ORGANIZATION.Name, DRIVER_ORDER.OrderID, OrderDate, ProductName, Quantity, Price
-                FROM ORGANIZATION, USER, DRIVER, DRIVER_ORDER, PRODUCT, IS_IN_ORDER, BELONGS_TO
+                FROM ORGANIZATION, USER, DRIVER, DRIVER_ORGS, DRIVER_ORDER, PRODUCT, IS_IN_ORDER, BELONGS_TO
                 WHERE OrderDate >= startDate AND OrderDate <= endDate AND
                     DRIVER.UserID = driver AND 
-                    ORGANIZATION.OrgID = org AND USER.UserID = DRIVER.UserID AND DRIVER.OrgID = org AND 
+                    ORGANIZATION.OrgID = org AND USER.UserID = DRIVER.UserID AND DRIVER_ORGS.OrgID = org AND DRIVER_ORGS.UserID = DRIVER.UserID AND  
                     BELONGS_TO.DriverID = DRIVER.userID AND IS_IN_ORDER.OrderID = BELONGS_TO.OrderID AND DRIVER_ORDER.OrderID = IS_IN_ORDER.OrderID AND
                     PRODUCT.ProductID = IS_IN_ORDER.ProductID;
             END IF;
         ELSE
             IF org = -1 THEN
                 SELECT USER.Name, ORGANIZATION.Name, DRIVER_ORDER.OrderID, OrderDate, Quantity, Price
-                FROM ORGANIZATION, USER, DRIVER, DRIVER_ORDER, PRODUCT, IS_IN_ORDER, BELONGS_TO
+                FROM ORGANIZATION, USER, DRIVER, DRIVER_ORGS, DRIVER_ORDER, PRODUCT, IS_IN_ORDER, BELONGS_TO
                 WHERE OrderDate >= startDate AND OrderDate <= endDate AND 
                     DRIVER.UserID = driver AND 
-                    USER.UserID = DRIVER.UserID AND DRIVER.OrgID = org AND 
+                    USER.UserID = DRIVER.UserID AND DRIVER_ORGS.OrgID = org AND DRIVER_ORGS.UserID = DRIVER.UserID AND  
                     BELONGS_TO.DriverID = DRIVER.userID AND IS_IN_ORDER.OrderID = BELONGS_TO.OrderID AND DRIVER_ORDER.OrderID = IS_IN_ORDER.OrderID AND
                     PRODUCT.ProductID = IS_IN_ORDER.ProductID;
             ELSE
                 SELECT USER.Name, ORGANIZATION.Name, DRIVER_ORDER.OrderID, OrderDate, Quantity, Price
-                FROM ORGANIZATION, USER, DRIVER, DRIVER_ORDER, PRODUCT, IS_IN_ORDER, BELONGS_TO
+                FROM ORGANIZATION, USER, DRIVER, DRIVER_ORGS, DRIVER_ORDER, PRODUCT, IS_IN_ORDER, BELONGS_TO
                 WHERE OrderDate >= startDate AND OrderDate <= endDate AND
                     DRIVER.UserID = driver AND 
-                    ORGANIZATION.OrgID = org AND USER.UserID = DRIVER.UserID AND DRIVER.OrgID = org AND 
+                    ORGANIZATION.OrgID = org AND USER.UserID = DRIVER.UserID AND DRIVER_ORGS.OrgID = org AND DRIVER_ORGS.UserID = DRIVER.UserID AND  
                     BELONGS_TO.DriverID = DRIVER.userID AND IS_IN_ORDER.OrderID = BELONGS_TO.OrderID AND DRIVER_ORDER.OrderID = IS_IN_ORDER.OrderID AND
                     PRODUCT.ProductID = IS_IN_ORDER.ProductID;
             END IF;

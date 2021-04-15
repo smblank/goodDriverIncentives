@@ -188,8 +188,6 @@ def getAuditLog(request):
     startDate = request.POST.get('startDate')
     endDate = request.POST.get('endDate')
 
-    print(reportType)
-
     if (reportType == 'applications'):
         result = db.driverApplicationsReport(startDate, endDate)
 
@@ -496,30 +494,58 @@ def getInvoice(request):
     class InvoiceItem:
         def __init__(self):
             date = '00/00/00'
-            driver = 'none'
             cost = 0
 
+    class Driver:
+        def __init__(self):
+            id = -1
+            name = ''
+            orders = []
+            totalCost = 0
+            driverFee = 0
+
+    class Org:
+        def __init__(self):
+            name = ''
+            drivers = []
+            totalSales = 0
+            totalFee = 0
+
+    driverIDs = []
     orgNames = []
-    invoices = []
-    costs = []
 
     orgs = []
 
-    for (orgName, orderDate, driverName, price, qty) in result:
+    for (orgName, orderDate, driverID, driverName, price, qty) in result:
         if (not exists(orgNames, orgName)):
             orgNames.append(orgName)
-            invoices.append([])
-            costs.append(0)
 
-        i = find(orgNames, orgName)
+            tempOrg = Org()
+            tempOrg.name = orgName
+            orgs.append(tempOrg)
+        
+        if (not exists(driverIDs, driverID)):
+            i = find(orgNames, orgName)
+            driverIDs.append(driverID)
+
+            tempDriver = Driver()
+            tempDriver.id = driverID
+            tempDriver.name = driverName
+            orgs[i].drivers.append(tempDriver)
+
+        i = find(driverIDs, driverID)
+        j = find(orgNames, orgName)
         tempItem = InvoiceItem()
         tempItem.date = orderDate
         tempItem.driver = driverName
-        tempItem.cost = price
-        invoices[i].append(tempItem)
-        costs[i] += price * qty
+        tempItem.cost = price * qty
+        orgs[j].drivers[i].orders.append(tempItem)
 
-    orgs = zip (orgNames, invoices, costs)
+        orgs[j].drivers[i].totalCost += price * qty
+        orgs[j].drivers[i].driverFee = orgs[j].drivers[i].totalCost * 0.01
+
+        orgs[j].totalSales += price * qty
+        orgs[j].totalFee = orgs[j].totalSales * 0.01
 
     webContext = views.getInvoiceContext(request)
 
@@ -534,7 +560,7 @@ def getInvoice(request):
         #Print data range
         canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
 
-        for (org, invoices, totalCost) in zip(orgNames, invoices, costs):
+        for org in orgs:
             if (rowNum <= 80):
                     canvas.showPage()
                     rowNum = 800
@@ -542,35 +568,52 @@ def getInvoice(request):
             rowNum -= 35
             canvas.drawString(70, rowNum, "Sponsor: " + org)
 
-            if (rowNum <= 80):
-                    canvas.showPage()
-                    rowNum = 800
-            rowNum -= 20
-            canvas.drawString(70, rowNum, "Sales")
-
-            if (rowNum <= 80):
-                    canvas.showPage()
-                    rowNum = 800
-            rowNum -= 30
-            canvas.drawString(70, rowNum, "Date")
-            canvas.drawString(150, rowNum, "Driver")
-            canvas.drawString(250, rowNum, "Cost")
-
-            if (rowNum <= 80):
-                    canvas.showPage()
-                    rowNum = 800
-
-            for invoice in invoices:
+            for driver in org.drivers:
+                if (rowNum <= 80):
+                        canvas.showPage()
+                        rowNum = 800
                 rowNum -= 20
-                canvas.drawString(70, rowNum, str(invoice.date))
-                canvas.drawString(150, rowNum, invoice.driver)
-                canvas.drawString(250, rowNum, str(invoice.cost))
-            
+                canvas.drawString(70, rowNum, "Sales by " + driver.name)
+
+                if (rowNum <= 80):
+                        canvas.showPage()
+                        rowNum = 800
+                rowNum -= 30
+                canvas.drawString(70, rowNum, "Date")
+                canvas.drawString(150, rowNum, "Cost")
+
+                if (rowNum <= 80):
+                        canvas.showPage()
+                        rowNum = 800
+
+                for order in driver.orders:
+                    rowNum -= 20
+                    canvas.drawString(70, rowNum, str(order.date))
+                    canvas.drawString(150, rowNum, str(order.cost))
+                
             if (rowNum <= 80):
                     canvas.showPage()
                     rowNum = 800
             rowNum -= 20
-            canvas.drawString(300, rowNum, "Total Cost: " + str(totalCost))
+            canvas.drawString(300, rowNum, "Total Cost: " + str(driver.totalCost))
+
+            if (rowNum <= 80):
+                    canvas.showPage()
+                    rowNum = 800
+            rowNum -= 20
+            casvas.drawString(500, rowNum, "Total Fee for Driver: " + str(driver.driverFee))
+
+        if (rowNum <= 80):
+            canvas.showPage()
+            rowNum = 800
+        rowNum -= 35
+        canvas.drawString(300, rowNum, "Total Sales: " + str(org.totalSales))
+
+        if (rowNum <= 80):
+            canvas.showPage()
+            rowNum = 800
+        rowNum -= 20
+        canvas.drawString(300, rowNum, "Total Amount Owed: " + str(org.totalFee))
 
         canvas.save()
 
@@ -579,7 +622,8 @@ def getInvoice(request):
         'endDate': endDate,
         'orgs': orgs,
         'profilePic': webContext['profilePic'],
-        'listOrgs': webContext['listOrgs']
+        'listOrgs': webContext['listOrgs'],
+        'totalFee': totalFee
     }
 
 

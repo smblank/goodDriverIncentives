@@ -85,32 +85,35 @@
             <div class = "col-md-9" id = "preview">
                 <p>Date Range: {{startDate}} - {{endDate}}</p>
 
-                {% for org, invoices, totalCost in orgs %}
+                {% for org in orgs %}
                     <p>Sponsor: {{org}}</p>
-                    <p>Sales</p>
 
-                    <table width = "40%">
-                        <col style = "width:20%">
-                        <col style = "width:25%">
-                        <col style = "width:15%">
-                        <tr>
-                            <td>Date</td>
-                            <td>Driver</td>
-                            <td>Cost</td>
-                        </tr>
+                    {% for driver in org.drivers %}
+                        <p>Sales from {{driver.name}}</p>
 
-                        {% for invoice in invoices %}
+
+                        <table width = "40%">
+                            <col style = "width:20%">
+                            <col style = "width:15%">
                             <tr>
-                                <td>{{invoice.date}}</td>
-                                <td>{{invoice.driver}}</td>
-                                <td>{{invoice.cost}}</td>
+                                <td>Date</td>
+                                <td>Cost</td>
                             </tr>
-                        {% endfor %}
 
-                        <tr>
-                            <td colspan = "4" align = "right">Total Cost: {{totalCost}}</td>
-                        </tr>
-                    </table>
+                            {% for order in driver.orders %}
+                                <tr>
+                                    <td>{{order.date}}</td>
+                                    <td>{{order.cost}}</td>
+                                </tr>
+                            {% endfor %}
+
+                            <td colspan = "3" align = "right">Total Cost: {{driver.totalCost}}</td>
+                            <td colspan = "3" align = "right">Total Fee for Driver: {{driver.driverFee}}</td>
+                        </table>
+                    {% endfor %}
+
+                    <p>Total Sales: {{org.totalSales}}</p>
+                    <p>Total Amount Owed: {{org.totalFee}}</p>
                 {% endfor %}
             </div>
         </div>

@@ -270,6 +270,15 @@ CREATE PROCEDURE getDrivers (organization INT)
             DRIVER_ORGS.OrgID = organization;
     END;;
 
+DROP PROCEDURE IF EXISTS getAllDrivers;
+
+CREATE PROCEDURE getAllDrivers ()
+    BEGIN
+        SELECT DRIVER.UserID, Name
+        FROM USER, DRIVER
+        WHERE USER.UserID = DRIVER.UserID;
+    END;;
+
 DROP PROCEDURE IF EXISTS getDriverOrgs;
 
 CREATE PROCEDURE getDriverOrgs (driver INT)

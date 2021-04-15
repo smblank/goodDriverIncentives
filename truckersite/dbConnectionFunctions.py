@@ -974,6 +974,22 @@ def getDrivers(org):
     except Error as err:
         print(err)
 
+def getAllDrivers():
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL getAllDrivers()"
+        cursor.execute(query, ())
+        result = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+        return result
+    
+    except Error as err:
+        print(err)
+
 def getDriverOrgs (driverID):
     try:
         conn = getDB()

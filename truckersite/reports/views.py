@@ -92,8 +92,25 @@ def invoice(request):
 def driverSales(request):
     imgPath = db.getProfilePic(request.session['email'])
     profilePic = 'http://127.0.0.1:8000/static/img/' + imgPath
+
+    result = db.getAllDrivers()
+
+    class Driver():
+        def __init__(self):
+            id = -1
+            name = ''
+    
+    drivers = []
+
+    for (id, name) in result:
+        tempDriver = Driver()
+        tempDriver.id = id
+        tempDriver.name = name
+        drivers.append(tempDriver)
+    
     context = {
-        'profilePic': profilePic
+        'profilePic': profilePic,
+        'drivers': drivers
     }
     return render(request, 'sales_by_driver.html', context)
 
