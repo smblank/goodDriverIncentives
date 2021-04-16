@@ -71,7 +71,13 @@
                 <a class = "settingname" href = "#nightmode"> Night Mode </a> <br>
             
             </div>
-
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
             <div class = "col-md-9 h-100">
 
                 <p class = "setting" style = "top: 3%;"> Change Profile Picture </p>
