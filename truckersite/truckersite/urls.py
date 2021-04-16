@@ -113,6 +113,7 @@ urlpatterns = [
     path('getInvoice', reportOps.getInvoice, name = 'getInvoice'),
     path('getDriverSales', reportOps.getDriverSales, name = 'getDriverSales'),
     path('getSponsorSales', reportOps.getSponsorSales, name = 'getSponsorSales'),
+    path('updateDriverList', reportOps.updateDriverList, name = 'updateDriverList'),
 
     #Catalog
     path('driverCatalog/', catalogViews.product_list, name = 'driverCatalog'),

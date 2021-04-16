@@ -90,6 +90,32 @@ def getDriverSalesContext(request):
 
     return context
 
+def getSponsorSalesContext(request):
+    imgPath = db.getProfilePic(request.session['email'])
+    profilePic = 'img/' + imgPath
+
+    result = db.getOrgs()
+
+    class Org:
+        def __init__(self):
+            id = -1
+            name = ''
+    
+    orgs = []
+
+    for (id, name) in result:
+        tempOrg = Org()
+        tempOrg.id = id
+        tempOrg.name = name
+        orgs.append(tempOrg)
+
+    context = {
+        'pic': profilePic,
+        'orgs': orgs
+    }
+
+    return context
+
 # Create your views here.
 def sponsorGenerateReport(request):
     context = getSponsorContext(request)
@@ -120,26 +146,5 @@ def driverSales(request):
     return render(request, 'sales_by_driver.html', context)
 
 def sponsorSales(request):
-    imgPath = db.getProfilePic(request.session['email'])
-    profilePic = 'img/' + imgPath
-
-    result = db.getOrgs()
-
-    class Org:
-        def __init__(self):
-            id = -1
-            name = ''
-    
-    orgs = []
-
-    for (id, name) in result:
-        tempOrg = Org()
-        tempOrg.id = id
-        tempOrg.name = name
-        orgs.append(tempOrg)
-
-    context = {
-        'pic': profilePic,
-        'orgs': orgs
-    }
+    context = getSponsorSalesContext(request)
     return render(request, 'sales_by_sponsor.html', context)

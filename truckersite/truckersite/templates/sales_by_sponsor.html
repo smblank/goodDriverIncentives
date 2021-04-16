@@ -63,16 +63,28 @@
                     <!-- Source: https://stackoverflow.com/questions/50895806/bootstrap-4-multiselect-dropdown/50897096 -->
                     <form method = "Post" action = "{% url 'getSponsorSales' %}">
                         {% csrf_token %}
-                        <select id = "drivers" name = "sponsor" class = "selectpicker">
-                            <option value = "all"> All Sponsors </option>
+                            <select id = "drivers" name = "sponsor" class = "selectpicker">
+                                {% if not choice %}
+                                    <option value = "all"> All Sponsors </option>
 
-                            {% for org in orgs %}
-                                <option value = "{{org.id}}">{{org.name}}</option>
-                            {% endfor %}
-                        </select>
+                                    {% for org in orgs %}
+                                        <option value = "{{org.id}}">{{org.name}}</option>
+                                    {% endfor %}
+                                
+                                {% else %}
+                                    <option value = {{chosenOrg}}>{{orgName}}</option>
+                                {% endif %}
+                            </select>
+                            {% if not choice %}
+                                <button id = "generate" name = "choseOrg"> Choose Sponsor </button>
+                            {% endif %}
 
                         <select id = "drivers" name = "driver" class = "selectpicker">
                             <option value = "all"> All Drivers </option>
+
+                            {% for driver in drivers %}
+                                <option value = {{driver.id}}>{{driver.name}}</option>
+                            {% endfor %}
                         </select>
 
                         <label class="container">Detailed Report
@@ -85,61 +97,69 @@
                         <h4> End Date </h4>
                         <input type = "text" id = "end" name = "endDate" placeholder = "mm/dd/yy" maxlength = "8">
                         
-                        <button id = "generate"> Generate Report </button>
+                        <button id = "generate" name = "generate"> Generate Report </button>
+                        <button id = "download" name = "download"> Download Report <i class = "fa fa-download"></i> </button>
                     </form>
-                    <button id = "download"> Download Report <i class = "fa fa-download"></i> </button>
                 </div>
             </div>
 
             <div class = "col-md-9" id = "preview">
                 <p>Date Range: {{startDate}} - {{endDate}}</p>
-                <p>Sponsor: {{orgName}}</p>
+                {% for org in orgSales %}
+                    <p>Sponsor: {{org.name}}</p>
 
-                {% for orders in drivers %}
-
-                        {% if detailed %}
-                            <table>
-                                <tr>
-                                    <td>Date</td>
-                                    <td>Driver</td>
-                                    <td>Product</td>
-                                    <td>Quantity</td>
-                                    <td>Cost</td>
-                                </tr>
-                            {% for order in orders %}
-                                <tr>
-                                    <td>{{order.date}}</td>
-                                    <td>{{order.driver}}</td>
-                                </tr>
-
-                                {% for product in order.products %}
+                    {% for driver in org.drivers %}
+                        <p>Sales by: {{driver.name}}</p>
+                            {% if detailed %}
+                                <table width = "40%">
+                                    <col style = "width:20%">
+                                    <col style = "width:15%">
+                                    <col style = "width:10%">
+                                    <col style = "width:20%">
                                     <tr>
-                                        <td></td>
-                                        <td>{{product.name}}</td>
-                                        <td>{{product.qty}}</td>
-                                        <td>{{product.price}}</td>
+                                        <td>Date</td>
+                                        <td>Product</td>
+                                        <td>Quantity</td>
+                                        <td>Cost</td>
+                                    </tr>
+                                {% for order in driver.orders %}
+                                    <tr>
+                                        <td>{{order.date}}</td>
+                                    </tr>
+
+                                    {% for product in order.products %}
+                                        <tr>
+                                            <td></td>
+                                            <td>{{product.name}}</td>
+                                            <td>{{product.qty}}</td>
+                                            <td>{{product.price}}</td>
+                                        </tr>
+                                    {% endfor %}
+
+                                    <tr>
+                                        <td colspan = "4" align = "right">Total Cost: {{order.totalCost}}</td>
                                     </tr>
                                 {% endfor %}
-
-                                <tr>
-                                    <td colspan = "4" align = "right">Total Cost: {{order.totalCost}}</td>
-                                </tr>
-                            {% endfor %}
-                        
-                        {% else %}
-                            <table>
-                                <tr>
-                                    <td>Date</td>
-                                    <td>Total Cost</td>
-                                </tr>
-                                {% for order in orders %}
-                                <tr>
-                                    <td>{{order.date}}</td>
-                                    <td>{{order.totalCost}}</td>
-                                </tr>
-                            {% endfor %}
-                        {% endif %}
-                    </table>
+                            
+                            {% else %}
+                                <table width = "20%">
+                                    <col style = "width:10%">
+                                    <col style = "width:15%">
+                                    <tr>
+                                        <td>Date</td>
+                                        <td>Total Cost</td>
+                                    </tr>
+                                    {% for order in driver.orders %}
+                                    <tr>
+                                        <td>{{order.date}}</td>
+                                        <td>{{order.totalCost}}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </table>
+                        <p>Total Sales by Driver: {{driver.totalCost}}</p>
+                    {% endfor %}
+                    <p>Total Sales for Organization: {{org.totalCost}}</p>
                 {% endfor %}
             </div>
         </div>

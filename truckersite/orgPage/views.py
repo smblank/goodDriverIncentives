@@ -4,8 +4,10 @@ import dbConnectionFunctions as db
 # Create your views here.
 def organizationPage(request):
     if (request.session['isViewing']):
+        email = request.session['tempEmail']
         orgNo = db.getOrgNo(request.session['tempEmail'])
     else:
+        email = request.session['email']
         orgNo = db.getOrgNo(request.session['email'])
         
     result = db.getPointChangeReasons(orgNo)
@@ -61,7 +63,10 @@ def organizationPage(request):
             drivers.append(tempDriver)
 
     imgPath = db.getOrgLogo(orgNo)
-    logo = 'http://127.0.0.1:8000/static/img/' + imgPath
+    logo = 'img/' + imgPath
+
+    imgPath = db.getProfilePic(email)
+    pic = 'img/' + imgPath
 
     result = db.getKeywords(orgNo)
 
@@ -83,7 +88,8 @@ def organizationPage(request):
         'sponsors': sponsors,
         'drivers': drivers,
         'logo': logo,
-        'keywords': keywords
+        'keywords': keywords,
+        'pic': pic
     }
 
     return render(request, 'sponsor_organization.html', context)
@@ -157,8 +163,7 @@ def adminOrgs(request):
             drivers.append(tempDriver)
 
         imgPath = db.getOrgLogo(orgNo)
-        logo = 'http://127.0.0.1:8000/static/img/' + imgPath
-
+        logo = 'img/' + imgPath
 
         result = db.getProductsInCatalog(orgNo)
 
@@ -179,18 +184,27 @@ def adminOrgs(request):
             tempProduct.pic = img
             products.append(tempProduct)
 
+
+        imgPath = db.getProfilePic(request.session['email'])
+        pic = 'img/' + imgPath
+
         context = {
             'reasons': reasons,
             'sponsors': sponsors,
             'drivers': drivers,
             'orgs': orgs,
             'logo': logo,
-            'items': products
+            'items': products,
+            'pic': pic
         }
     
     else:
+        imgPath = db.getProfilePic(request.session['email'])
+        pic = 'img/' + imgPath
+
         context = {
-            'orgs': orgs
+            'orgs': orgs,
+            'pic': pic
         }
 
     return render(request, 'admin_organization.html', context)
@@ -219,13 +233,17 @@ def adminEditUser(request, userID):
             tempOrg.id = id
             tempOrg.name = name
             orgs.append(tempOrg)
+
+    imgPath = db.getProfilePic(request.session['email'])
+    pic = 'img/' + imgPath
     
     context = {
         'userType': userType,
         'isDriver': isDriver,
         'userName': db.getUserName(email),
         'orgs': orgs,
-        'userID': userID
+        'userID': userID,
+        'pic': pic
     }
         
     return render(request, 'admin_edit_user.html', context)
@@ -238,17 +256,30 @@ def sponsorEditUser(request, userID):
         isDriver = True
     else:
         isDriver = False
+
+    if request.session['isViewing']:
+        imgPath = db.getProfilePic(request.session['tempEmail'])
+    else:
+        imgPath = db.getProfilePic(request.session['email'])
+    pic = 'img/' + imgPath
     
     context = {
         'userType': userType,
         'isDriver': isDriver,
         'userName': db.getUserName(email),
-        'userID': userID
+        'userID': userID,
+        'pic': pic
     }
 
     return render(request, 'sponsor_edit_user.html', context)
 
 def sponsorEditReason(request, reasonID):
+    if request.session['isViewing']:
+        imgPath = db.getProfilePic(request.session['tempEmail'])
+    else:
+        imgPath = db.getProfilePic(request.session['email'])
+    pic = 'img/' + imgPath
+
     context = {
         'reasonID': reasonID
     }
@@ -256,6 +287,9 @@ def sponsorEditReason(request, reasonID):
     return render(request, 'sponsor_edit_reason.html', context)
 
 def adminEditReason(request, reasonID):
+    imgPath = db.getProfilePic(request.session['email'])
+    pic = 'img/' + imgPath
+
     context = {
         'reasonID': reasonID
     }

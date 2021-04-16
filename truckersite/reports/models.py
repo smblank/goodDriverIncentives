@@ -19,6 +19,43 @@ def find(list, element):
 
     return -1
 
+def updateDriverList(request):
+    chosenOrg = request.POST.get('sponsor')
+
+    if chosenOrg != 'all':
+        choice = True
+        result = db.getDrivers(chosenOrg)
+
+        class Driver:
+            def __init__(self):
+                id = -1
+                name = ''
+
+        drivers = []
+
+        for (id, name, email) in result:
+            tempDriver = Driver()
+            tempDriver.id = id
+            tempDriver.name = name
+            drivers.append(tempDriver)
+
+        pic = db.getProfilePic(request.session['email'])
+        imgPath = 'img/' + pic
+    
+        context = {
+            'pic': imgPath,
+            'chosenOrg': chosenOrg,
+            'orgName': db.getOrgName(chosenOrg),
+            'drivers': drivers,
+            'choice': choice
+        }
+
+        return render(request, 'sales_by_sponsor.html', context)
+
+    else:
+        return views.sponsorSales(request)
+
+
 # Create your models here.
 def getSponsorReport(request):
     driver = request.POST.get('driver')
@@ -712,6 +749,10 @@ def getDriverSales(request):
             drivers[i].orgs[j].orders[k].products.append(tempProduct)
             drivers[i].orgs[j].orders[k].totalCost += price * qty
 
+            orgs[i].drivers[j].totalCost += price * qty
+
+            orgs[i].totalCost += price * qty
+
         rowNum = 800
         if 'download' in request.POST:
             if driverID == "all":
@@ -837,6 +878,10 @@ def getDriverSales(request):
             k = find(orderIDs, orderID)
             drivers[i].orgs[j].orders[k].totalCost += price * qty
 
+            orgs[i].drivers[j].totalCost += price * qty
+
+            orgs[i].totalCost += price * qty
+
         rowNum = 800
         if 'download' in request.POST:
             if driverID == "all":
@@ -897,6 +942,9 @@ def getDriverSales(request):
     return render(request, 'sales_by_driver.html', context)
 
 def getSponsorSales(request):
+    if 'choseOrg' in request.POST:
+        return updateDriverList(request)
+    
     orgID = request.POST.get('sponsor')
     startDate = request.POST.get('startDate')
     endDate = request.POST.get('endDate')
@@ -921,6 +969,8 @@ def getSponsorSales(request):
                 price = 0
 
         class DriverOrder:
+            products = []
+            totalCost = 0
             def __init__(self):
                 id = -1
                 date = '00/00/00'
@@ -928,34 +978,139 @@ def getSponsorSales(request):
                 products = []
                 totalCost = 0
 
-        orgNames = []
-        orders = []
+        class Driver:
+            orders = []
+            totalCost = 0
+            def __init__(self):
+                id = -1
+                name = ''
+                orders = []
+                totalCost = 0
+
+        class Org:
+            drivers = []
+            totalCost = 0
+            def __init__(self):
+                id = -1
+                name = ''
+                drivers = []
+                totalCost = 0
+
+        orgIDs = []
         orderIDs = []
+        driverIDs = []
 
         orgs = []
 
-        for (orgName, orderID, orderDate, driverID, driverName, productName, qty, price) in result:
-            if (not exists(orgNames, orgName)):
-                orgNames.append(orgName)
-                orders.append([])
+        for (orgID, orgName, orderID, orderDate, driverID, driverName, productName, qty, price) in result:
+            if (not exists(orgIDs, orgID)):
+                orgIDs.append(orgID)
 
-            i = find(orgNames, orgName)
+                tempOrg = Org()
+                tempOrg.id = orgID
+                tempOrg.name = orgName
+                orgs.append(tempOrg)
+
+            i = find(orgIDs, orgID)
+            if (not exists(driverIDs, driverID)):
+                driverIDs.append(driverID)
+
+                tempDriver = Driver()
+                tempDriver.id = driverID
+                tempDriver.name = driverName
+                orgs[i].drivers.append(tempDriver)
+
+            j = find(driverIDs, driverID)
             if (not exists(orderIDs, orderID)):
                 orderIDs.append(orderID)
+
                 tempOrder = DriverOrder()
                 tempOrder.id = orderID
                 tempOrder.driver = driverName
                 tempOrder.date = orderDate
-                orders[i].append(tempOrder)
+                orgs[i].drivers[j].orders.append(tempOrder)
 
+            k = find(orderIDs, orderID)
             tempProduct = Product()
             tempProduct.name = productName
             tempProduct.qty = qty
             tempProduct.price = price
-            orders[i].products.append(tempProduct)
-            orders[i].totalCost += price * qty
+            orgs[i].drivers[j].orders[k].products.append(tempProduct)
+            orgs[i].drivers[j].orders[k].totalCost += price * qty
 
-        orgs = zip (orgNames, orders)
+            orgs[i].drivers[j].totalCost += price * qty
+
+            orgs[i].totalCost += price * qty
+
+        rowNum = 800
+        if 'download' in request.POST:
+            if driverID == "all":
+                canvas = Canvas("allSponsorSales.pdf")
+            else:
+                name = db.getOrgName(orgID)
+                canvas = Canvas(name + "Sales.pdf")
+
+            #Print data range
+            canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
+
+            for org in orgs:
+                if (rowNum <= 80):
+                    canvas.showPage()
+                    rowNum = 800
+
+                rowNum -= 35
+                canvas.drawString(70, rowNum, "Sponsor: " + sponsor.name)
+
+                for driver in org.drivers:
+                    if (rowNum <= 80):
+                        canvas.showPage()
+                        rowNum = 800
+                    rowNum -= 20
+                    canvas.drawString(70, rowNum, "Sales by: " + driver.name)
+
+                    if (rowNum <= 80):
+                        canvas.showPage()
+                        rowNum = 800
+                    rowNum -= 30
+                    canvas.drawString(70, rowNum, "Date")
+                    canvas.drawString(150, rowNum, "Product")
+                    canvas.drawString(250, rowNum, "Quantity")
+                    canvas.drawString(300, rowNum, "Cost")
+
+                    if (rowNum <= 80):
+                        canvas.showPage()
+                        rowNum = 800
+
+                    for order in driver.orders:
+                        rowNum -= 20
+                        canvas.drawString(70, rowNum, str(order.date))
+
+                        if (rowNum <= 80):
+                            canvas.showPage()
+                            rowNum = 800
+                        for product in order.products:
+                            rowNum -= 20
+                            canvas.drawString(150, rowNum, product.name)
+                            canvas.drawString(250, rowNum, str(product.qty))
+                            canvas.drawString(300, rowNum, str(product.price))
+                    
+                        if (rowNum <= 80):
+                                canvas.showPage()
+                                rowNum = 800
+                        rowNum -= 20
+                        canvas.drawString(300, rowNum, "Total Cost: " + str(order.totalCost))
+
+                    if (rowNum <= 80):
+                            canvas.showPage()
+                            rowNum = 800
+                    rowNum -= 30
+                    canvas.drawString(70, rowNum, "Total Sales by Driver: " + driver.totalCost)
+            if (rowNum <= 80):
+                    canvas.showPage()
+                    rowNum = 800
+            rowNum -= 30
+            canvas.drawString(70, rowNum, "Total Sales from Sponsor: " + org.totalCost)
+            canvas.save()
 
     else:
         details = False
@@ -969,42 +1124,138 @@ def getSponsorSales(request):
                 result = db.indvSponsorSaleReport(startDate, endDate, details, db.getUserID(driver), orgID)
 
         class DriverOrder:
+            totalCost = 0
+            totalCost = 0
             def __init__(self):
                 id = -1
                 date = '00/00/00'
                 driver = ""
                 totalCost = 0
 
-        orgNames = []
-        orders = []
+        class Driver:
+            orders = []
+            totalCost = 0
+            def __init__(self):
+                id = -1
+                name = ''
+                orders = []
+                totalCost = 0
+
+        class Org:
+            drivers = []
+            totalCost = 0
+            def __init__(self):
+                id = -1
+                name = ''
+                drivers = []
+                totalCost = 0
+
+        orgIDs = []
         orderIDs = []
+        driverIDs = []
 
         orgs = []
 
-        for (orgName, orderID, orderDate, drjiverID, driverName, qty, price) in result:
-            driver = driverName
-            if (not exists(orgNames, orgName)):
-                orgNames.append(orgName)
-                orders.append([])
+        for (orgID, orgName, orderID, orderDate, driverID, driverName, qty, price) in result:
+            if (not exists(orgIDs, orgID)):
+                orgIDs.append(orgID)
 
-            i = find(orgNames, orgName)
+                tempOrg = Org()
+                tempOrg.id = orgID
+                tempOrg.name = orgName
+                orgs.append(tempOrg)
+
+            i = find(orgIDs, orgID)
+            if (not exists(driverIDs, driverID)):
+                driverIDs.append(driverID)
+
+                tempDriver = Driver()
+                tempDriver.id = driverID
+                tempDriver.name = driverName
+                orgs[i].drivers.append(tempDriver)
+
+            j = find(driverIDs, driverID)
             if (not exists(orderIDs, orderID)):
                 orderIDs.append(orderID)
+
                 tempOrder = DriverOrder()
                 tempOrder.id = orderID
                 tempOrder.driver = driverName
                 tempOrder.date = orderDate
-                orders[i].append(tempOrder)
+                orgs[i].drivers[j].orders.append(tempOrder)
 
-            orders[i].totalCost += price * qty
+            k = find(orderIDs, orderID)
+            orgs[i].drivers[j].orders[k].totalCost += price * qty
 
-        orgs = zip (orgNames, orders)
+            orgs[i].drivers[j].totalCost += price * qty
+
+            orgs[i].totalCost += price * qty
+
+        rowNum = 800
+        if 'download' in request.POST:
+            if driverID == "all":
+                canvas = Canvas("allSponsorSales.pdf")
+            else:
+                name = db.getOrgName(orgID)
+                canvas = Canvas(name + "Sales.pdf")
+
+            #Print data range
+            canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
+
+            for org in orgs:
+                if (rowNum <= 80):
+                    canvas.showPage()
+                    rowNum = 800
+
+                rowNum -= 35
+                canvas.drawString(70, rowNum, "Sponsor: " + sponsor.name)
+
+                for driver in org.drivers:
+                    if (rowNum <= 80):
+                        canvas.showPage()
+                        rowNum = 800
+                    rowNum -= 20
+                    canvas.drawString(70, rowNum, "Sales by: " + driver.name)
+
+                    if (rowNum <= 80):
+                        canvas.showPage()
+                        rowNum = 800
+                    rowNum -= 30
+                    canvas.drawString(70, rowNum, "Date")
+                    canvas.drawString(150, rowNum, "Product")
+                    canvas.drawString(250, rowNum, "Quantity")
+                    canvas.drawString(300, rowNum, "Cost")
+
+                    if (rowNum <= 80):
+                        canvas.showPage()
+                        rowNum = 800
+
+                    for order in driver.orders:
+                        rowNum -= 20
+                        canvas.drawString(70, rowNum, str(order.date))
+                        canvas.drawString(150, rowNum, str(order.totalCost))
+
+                    if (rowNum <= 80):
+                            canvas.showPage()
+                            rowNum = 800
+                    rowNum -= 30
+                    canvas.drawString(70, rowNum, "Total Sales by Driver: " + driver.totalCost)
+            if (rowNum <= 80):
+                    canvas.showPage()
+                    rowNum = 800
+            rowNum -= 30
+            canvas.drawString(70, rowNum, "Total Sales from Sponsor: " + org.totalCost)
+            canvas.save()
+
+    webContext = views.getSponsorSalesContext(request)
 
     context = {
         'startDate': startDate,
         'endDate': endDate,
-        'orgs': orgs,
-        'detailed': details
+        'orgSales': orgs,
+        'detailed': details,
+        'pic': webContext['pic'],
+        'orgs': webContext['orgs'],
     }
 
     return render(request, 'sales_by_sponsor.html', context)
