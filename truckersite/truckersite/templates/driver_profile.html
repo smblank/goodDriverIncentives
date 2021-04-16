@@ -115,7 +115,8 @@
 
                 <form method="Post" action="{% url 'getNewDriverPass'%}">
                     {% csrf_token %}
-                    <p class="setting" id="changepassword" style="margin-top: 1.5%;"> Change Password </p>
+                    <p class="setting" id="changepassword" style="margin-top: 1.5%; margin-bottom: 0%;"> Change Password </p>
+                    <h6>* Passwords should be at least 8 characters long and contain an uppercase letter, lowercase letter, special character, and a digit</h6>
                     <input class="settingtext" type="password" id="changepassword1" style="margin-right: 100%;" maxlength="100" placeholder="Password" name="password1">
                     <input class="settingtext" type="password" id="changepassword2" style="margin-top: 1%;" maxlength="100" placeholder="Confirm Password" name="password2">
                     <button class="save" id="savepassword"> <i class = "fa fa-save"></i> </button>
