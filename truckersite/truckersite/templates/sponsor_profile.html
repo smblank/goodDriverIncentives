@@ -53,7 +53,7 @@
                 </li>
 
                 <a class="navbar-brand" href="{% url 'sponsorProfile'%}">
-                    <img src="{{profilePic}}" width="30" height="30">
+                    <img src="{% static pic %}" width="30" height="30">
                 </a>
             </ul>
         </nav>
@@ -83,7 +83,7 @@
             <div class="col-md-9 h-100">
 
                 <p class="setting" style="top: 3%;"> Change Profile Picture </p>
-                <img id="pfpsetting" src="{{profilePic}}"> <br>
+                <img id="pfpsetting" src="{% static pic %}"> <br>
 
                 <form method="POST" enctype="multipart/form-data" action="{% url 'getNewSponsorProfilePic'%}">
                     {% csrf_token %}
