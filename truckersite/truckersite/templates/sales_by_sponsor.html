@@ -19,6 +19,7 @@
     <!-- Links the .css file -->
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/sales_by_sponsor.css' %}">
+    <link rel="stylesheet" type="text/css" href="sales_by_sponsor.css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
 
@@ -76,7 +77,7 @@
                                 {% endif %}
                             </select>
                             {% if not choice %}
-                                <button id = "generate" name = "choseOrg"> Choose Sponsor </button>
+                                <button id = "choseorg" name = "choseOrg"> Choose Sponsor </button>
                             {% endif %}
 
                         <select id = "drivers" name = "driver" class = "selectpicker">
