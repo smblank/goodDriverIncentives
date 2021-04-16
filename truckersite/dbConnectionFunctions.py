@@ -1305,7 +1305,7 @@ def allSponsorSaleReport(startDate, endDate, detailed):
     except Error as err:
         print(err)
 
-def driverSaleReport(startDate, endDate, detailed, orgID, driverID):
+def driverSaleReport(startDate, endDate, detailed, driverID):
     try:
         conn = getDB()
         cursor = getCursor(conn)
@@ -1313,8 +1313,8 @@ def driverSaleReport(startDate, endDate, detailed, orgID, driverID):
         start = datetime.strptime(startDate, '%m/%d/%y').date()
         end = datetime.strptime(endDate, '%m/%d/%y').date()
 
-        query = "CALL driverSaleRep(%s, %s, %s, %s, %s)"
-        cursor.execute(query, (start, end, detailed, orgID, driverID))
+        query = "CALL driverSaleRep(%s, %s, %s, %s)"
+        cursor.execute(query, (start, end, detailed, driverID))
         result = cursor.fetchall()
 
         cursor.close()
@@ -1474,7 +1474,22 @@ def updateOrgPayment (ccNum, ccSec, ccDate, billAddr, org, payID):
 
 def emailNewDriver(driverEmail, password):
     driverName = getUserName(driverEmail)
+
+    result.getDriverOrgs(driverEmail)
+    count = 0
+
+    for _ in result:
+        count += 1
     
+    if count > 1:
+        subject = "Acceptance into New Sponsor"
+
+        message = """\
+        Congratualations %s!
+        
+        You're applicantion to another sponsor organization has been accepted. You can login as normal, and change to the new organization on your dashboard.
+        
+        Login Link: http://ec2-23-23-99-117.compute-1.amazonaws.com/""" % (driverName)
     subject = "Acceptance to the Good Driver Incentive Program"
 
     message = """\

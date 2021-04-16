@@ -39,16 +39,22 @@ def wishlist(request):
     
     points = db.getDriverPoints(email, org)
 
+    pic = db.getProfilePic(email)
+    imgPath = 'img/' + pic
+
     context = {
-        'points': points
+        'points': points,
+        'pic': imgPath
     }
     return render(request, 'wishlist.html', context)
 
 def driverOrderHistory(request):
     if (request.session['isViewing']):
+        email = request.session['tempEmail']
         driverID = db.getUserID(request.session['tempEmail'])
         org = db.getOrgNo(request.session['tempEmail'])
     else:
+        email = request.session['email']
         driverID = db.getUserID(request.session['email'])
         org = request.session['orgID']
     
@@ -89,8 +95,12 @@ def driverOrderHistory(request):
         orders[i].products.append(tempProduct)
         orders[i].totalCost += price * qty
 
+    pic = db.getProfilePic(email)
+    imgPath = 'img/' + pic
+
     context = {
-        'orders': orders
+        'orders': orders,
+        'pic': imgPath
     }        
 
     return render(request, 'driver_order_history.html', context)
@@ -105,8 +115,12 @@ def driverCart(request):
     
     points = db.getDriverPoints(email, org)
 
+    pic = db.getProfilePic(email)
+    imgPath = 'img/' + pic
+
     context = {
-        'points': points
+        'points': points,
+        'pic': imgPath
     }
     return render(request, 'driver_cart.html', context)
 
@@ -138,10 +152,14 @@ def checkout(request):
             tempAddr.addr = address
             addresses.append(tempAddr)
 
+    pic = db.getProfilePic(email)
+    imgPath = 'img/' + pic
+
     context = {
         'points': points,
         'default': defaultAddr,
-        'addresses': addresses
+        'addresses': addresses,
+        'pic': imgPath
     }
     return render(request, 'checkout.html', context)
 
@@ -170,11 +188,15 @@ def productPage(request, id):
     product.price = result[1]
     product.pic = result[2]
 
+    pic = db.getProfilePic(email)
+    imgPath = 'img/' + pic
+
     context = {
         'points': points,
         'product': product,
         'isSponsor': request.session['isSponsor'],
-        'isAdmin': request.session['isAdmin']
+        'isAdmin': request.session['isAdmin'],
+        'pic': imgPath
     }
 
     return render(request, 'product.html', context)
@@ -241,16 +263,22 @@ def product_list(request):
 
     points = db.getDriverPoints(email, org)
 
+    pic = db.getProfilePic(email)
+    imgPath = 'img/' + pic
+
     context = {
         'points': points,
-        'items': products
+        'items': products,
+        'pic': imgPath
     }
     return render(request, "driver_catalog.html", context)
 
 def sponsor_catalog(request):
     if (request.session['isViewing']):
+        email = request.session['tempEmail']
         org = db.getOrgNo(request.session['tempEmail'])
     else:
+        email = request.session['email']
         org = db.getOrgNo(request.session['email'])
 
     result = db.getProductsInCatalog(org)
@@ -272,8 +300,12 @@ def sponsor_catalog(request):
         tempProduct.pic = img
         products.append(tempProduct)
 
+    pic = db.getProfilePic(email)
+    imgPath = 'img/' + pic
+
     context = {
-        'items': products
+        'items': products,
+        'pic': imgPath
     }
     return render(request, "sponsor_catalog.html", context)
 

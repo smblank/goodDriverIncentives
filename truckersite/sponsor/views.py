@@ -12,8 +12,10 @@ def sponsorDashDisplay(request):
     driver_application_list = []
 
     if (request.session['isViewing']):
+        email = request.session['tempEmail']
         org_num = db.getOrgNo(request.session['tempEmail'])
     else:
+        email = request.session['email']
         org_num = db.getOrgNo(request.session['email'])
 
     conn = db.getDB()
@@ -34,12 +36,20 @@ def sponsorDashDisplay(request):
     cursor.close()
     conn.close()
 
+    profilePic = db.getProfilePic(email)
+    imgPath = 'img/' + profilePic
+
     context = {'driver_application_list': driver_application_list,
-               'isSponsor': request.session['isSponsor'], 'isAdmin': request.session['isAdmin']}
+               'isSponsor': request.session['isSponsor'], 'isAdmin': request.session['isAdmin'], 'pic': imgPath}
     return render(request, 'sponsor_dash.html', context)
 
 
 def sponsorViewApplicant(request, applicant_id):
+    if request.session['isViewing']:
+        email = request.session['tempEmail']
+    else:
+        email = request.session['email']
+    
     conn = db.getDB()
     cursor = db.getCursor(conn)
 
@@ -56,8 +66,11 @@ def sponsorViewApplicant(request, applicant_id):
     cursor.close()
     conn.close()
 
+    profilePic = db.getProfilePic(email)
+    imgPath = 'img/' + profilePic
+
     context = {'applicant_id': applicant_id, 'applicant_name': applicant_name, 'applicant_date': applicant_date, 'applicant_email': applicant_email,
-               'applicant_phone': applicant_phone, 'applicant_address': applicant_address}
+               'applicant_phone': applicant_phone, 'applicant_address': applicant_address, 'pic': imgPath}
     return render(request, 'view_application.html', context)
 
 
@@ -83,8 +96,10 @@ def sponsorAcceptApplicant(request, applicant_id):
     applicant_password = db.getRandomPassword()
 
     if (request.session['isViewing']):
+        email = request.session['tempEmail']
         orgNo = db.getOrgNo(request.session['tempEmail'])
     else:
+        email = request.session['email']
         orgNo = db.getOrgNo(request.session['email'])
 
     # name, email, password, address, phone, organization
@@ -97,7 +112,10 @@ def sponsorAcceptApplicant(request, applicant_id):
 
     db.emailNewDriver(applicant_email, applicant_password)
 
-    context = {'applicant_name': applicant_name, 'applicant_email': applicant_email, 'applicant_password': applicant_password}
+    profilePic = db.getProfilePic(email)
+    imgPath = 'img/' + profilePic
+
+    context = {'applicant_name': applicant_name, 'applicant_email': applicant_email, 'applicant_password': applicant_password, 'pic': imgPath}
     return render(request, 'accept_applicant_confirmation.html', context)
 
 
@@ -134,7 +152,12 @@ def sponsorViewDrivers(request):
 
     driver_list = []
 
-    org_num = db.getOrgNo(request.session['email'])
+    if request.session['isViewing']:
+        email = request.session['tempEmail']
+    else:
+        email = request.session['email']
+
+    org_num = db.getOrgNo(email)
 
     conn = db.getDB()
     cursor = db.getCursor(conn)
@@ -154,7 +177,10 @@ def sponsorViewDrivers(request):
     cursor.close()
     conn.close()
 
-    context = {'driver_list': driver_list}
+    profilePic = db.getProfilePic(email)
+    imgPath = 'img/' + profilePic
+
+    context = {'driver_list': driver_list, 'pic': imgPath}
     return render(request, 'sponsor_view_drivers.html', context)
 
 
@@ -168,8 +194,10 @@ def sponsorChangePoints(request, driver_id):
 
         # get organization number
         if (request.session['isViewing']):
+            email = request.session['tempEmail']
             orgNo = db.getOrgNo(request.session['tempEmail'])
         else:
+            email = request.session['email']
             orgNo = db.getOrgNo(request.session['email'])
 
         # get driver information
@@ -275,14 +303,19 @@ def sponsorChangePoints(request, driver_id):
         cursor.close()
         conn.close()
 
+        profilePic = db.getProfilePic(email)
+        imgPath = 'img/' + profilePic
+
         context = {'driver_name': driver_name,
-                   'driver_id': driver_id, 'reason_list': reasons}
+                   'driver_id': driver_id, 'reason_list': reasons, 'pic': imgPath}
         return render(request, 'change_driver_points.html', context)
 
 def sponsorApplicationList(request):
     if (request.session['isViewing']):
+        email = request.session['tempEmail']
         org_num = db.getOrgNo(request.session['tempEmail'])
     else:
+        email = request.session['email']
         org_num = db.getOrgNo(request.session['email'])
 
     class driver_applicant:
@@ -309,6 +342,9 @@ def sponsorApplicationList(request):
     cursor.close()
     conn.close()
 
-    context = {'driver_application_list': driver_application_list}
+    profilePic = db.getProfilePic(email)
+    imgPath = 'img/' + profilePic
+
+    context = {'driver_application_list': driver_application_list, 'pic': imgPath}
 
     return render(request, 'sponsor_application_list.html', context)

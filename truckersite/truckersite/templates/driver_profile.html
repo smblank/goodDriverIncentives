@@ -98,7 +98,7 @@
             <div class="col-md-9 h-100">
 
                 <p class="setting" style="top: 3%;"> Change Profile Picture </p>
-                <img id="pfpsetting" src="{% static profilePic %}"> <br>
+                <img id="pfpsetting" src="{% static pic %}"> <br>
 
                 <form method="POST" enctype="multipart/form-data" action="{% url 'getNewDriverProfilePic'%}">
                     {% csrf_token %}

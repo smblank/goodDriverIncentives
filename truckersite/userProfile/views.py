@@ -9,7 +9,7 @@ def driverProfile(request):
     else:
         imgPath = db.getProfilePic(request.session['email'])
 
-    profilePic = 'http://127.0.0.1:8000/static/img/' + imgPath
+    profilePic = 'img/' + imgPath
 
     class Address:
         def __init__(self):
@@ -30,7 +30,7 @@ def driverProfile(request):
         addresses.append(newAddr)
     
     context = {
-        'profilePic': profilePic,
+        'pic': profilePic,
         'addresses': addresses
     }
     return render(request, 'driver_profile.html', context)
@@ -41,17 +41,17 @@ def sponsorProfile(request):
     else:
         imgPath = db.getProfilePic(request.session['email'])
 
-    profilePic = 'http://127.0.0.1:8000/static/img/' + imgPath
+    profilePic = 'img/' + imgPath
     context = {
-        'profilePic': profilePic
+        'pic': profilePic
     }
     return render(request, 'sponsor_profile.html', context)
 
 def adminProfile(request):
     imgPath = db.getProfilePic(request.session['email'])
-    profilePic = 'http://127.0.0.1:8000/static/img/' + imgPath
+    profilePic = 'img/' + imgPath
     context = {
-        'profilePic': profilePic
+        'pic': profilePic
     }
     return render(request, 'admin_profile.html', context)
 
@@ -104,5 +104,8 @@ def driverPointHistory(request):
 
     num_points = db.getDriverPoints(email, org)
 
-    context = {'reason_list': point_list, 'num_points': num_points}
+    pic = db.getProfilePic(email)
+    imgPath = 'img/' + pic
+
+    context = {'reason_list': point_list, 'num_points': num_points, 'pic': imgPath}
     return render(request, 'driver_point_history.html', context)

@@ -7,7 +7,7 @@ def getSponsorContext(request):
     else: 
         imgPath = db.getProfilePic(request.session['email'])
         
-    profilePic = 'http://127.0.0.1:8000/static/img/' + imgPath
+    profilePic = 'img/' + imgPath
 
     if (request.session['isViewing']):
         orgNo = db.getOrgNo(request.session['tempEmail'])
@@ -32,7 +32,7 @@ def getSponsorContext(request):
         drivers.append(tempDriver)
 
     context = {
-        'profilePic': profilePic,
+        'pic': profilePic,
         'orgDrivers': drivers
     }
     
@@ -40,7 +40,7 @@ def getSponsorContext(request):
 
 def getInvoiceContext(request):
     imgPath = db.getProfilePic(request.session['email'])
-    profilePic = 'http://127.0.0.1:8000/static/img/' + imgPath
+    profilePic = 'img/' + imgPath
 
     result = db.getOrgs()
 
@@ -58,40 +58,15 @@ def getInvoiceContext(request):
         orgs.append(tempOrg)
 
     context = {
-        'profilePic': profilePic,
+        'pic': profilePic,
         'listOrgs': orgs
     }
 
     return context
 
-# Create your views here.
-def sponsorGenerateReport(request):
-    context = getSponsorContext(request)
-    return render(request, 'sponsor_generate_report.html', context)
-
-def adminGenerateReport(request):
+def getDriverSalesContext(request):
     imgPath = db.getProfilePic(request.session['email'])
-    profilePic = 'http://127.0.0.1:8000/static/img/' + imgPath
-    context = {
-        'profilePic': profilePic
-    }
-    return render(request, 'admin_generate_report.html', context)
-
-def auditLog(request):
-    imgPath = db.getProfilePic(request.session['email'])
-    profilePic = 'http://127.0.0.1:8000/static/img/' + imgPath
-    context = {
-        'profilePic': profilePic
-    }
-    return render(request, 'audit_log.html', context)
-
-def invoice(request):
-    context = getInvoiceContext(request)
-    return render(request, 'invoice.html', context)
-
-def driverSales(request):
-    imgPath = db.getProfilePic(request.session['email'])
-    profilePic = 'http://127.0.0.1:8000/static/img/' + imgPath
+    profilePic = 'img/' + imgPath
 
     result = db.getAllDrivers()
 
@@ -109,14 +84,44 @@ def driverSales(request):
         drivers.append(tempDriver)
     
     context = {
-        'profilePic': profilePic,
+        'pic': profilePic,
         'drivers': drivers
     }
+
+    return context
+
+# Create your views here.
+def sponsorGenerateReport(request):
+    context = getSponsorContext(request)
+    return render(request, 'sponsor_generate_report.html', context)
+
+def adminGenerateReport(request):
+    imgPath = db.getProfilePic(request.session['email'])
+    profilePic = 'img/' + imgPath
+    context = {
+        'pic': profilePic
+    }
+    return render(request, 'admin_generate_report.html', context)
+
+def auditLog(request):
+    imgPath = db.getProfilePic(request.session['email'])
+    profilePic = 'img/' + imgPath
+    context = {
+        'pic': profilePic
+    }
+    return render(request, 'audit_log.html', context)
+
+def invoice(request):
+    context = getInvoiceContext(request)
+    return render(request, 'invoice.html', context)
+
+def driverSales(request):
+    context = getDriverSalesContext(request)
     return render(request, 'sales_by_driver.html', context)
 
 def sponsorSales(request):
     imgPath = db.getProfilePic(request.session['email'])
-    profilePic = 'http://127.0.0.1:8000/static/img/' + imgPath
+    profilePic = 'img/' + imgPath
 
     result = db.getOrgs()
 
@@ -134,7 +139,7 @@ def sponsorSales(request):
         orgs.append(tempOrg)
 
     context = {
-        'profilePic': profilePic,
+        'pic': profilePic,
         'orgs': orgs
     }
     return render(request, 'sales_by_sponsor.html', context)

@@ -326,6 +326,7 @@ MODIFIES SQL DATA
         DECLARE address VARCHAR(100);
         DECLARE org INT;
         DECLARE newDriver INT;
+        DECLARE driverExists BOOLEAN;
 
         UPDATE APPLICANT
             SET
@@ -339,7 +340,15 @@ MODIFIES SQL DATA
         FROM APPLICANT
         WHERE Email = userEmail;
 
-        SELECT CreateDriver(driverName, userEmail, randomPassword, address, phone, org) INTO newDriver;
+        SELECT emailExists(userEmail) INTO driverExists;
+
+        IF (!driverExists) THEN
+            SELECT CreateDriver(driverName, userEmail, randomPassword, address, phone, org) INTO newDriver;
+        ELSE
+            SELECT getUserID(userEmail) INTO newDriver;
+            INSERT INTO DRIVER_ORGS (UserID, OrgID, Points)
+                VALUES (newDriver, org, 0);
+        END IF;
 
         RETURN newDriver;
     END;;
