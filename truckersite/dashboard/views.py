@@ -32,11 +32,16 @@ def driverDash(request):
     
     points = db.getDriverPoints(email, org)
 
+    pic = db.getProfilePic(email)
+
+    imgPath = 'img/' + pic
+
     context = {
         'isSponsor': request.session['isSponsor'],
         'isAdmin': request.session['isAdmin'],
         'driverOrgs': orgs,
-        'points': points
+        'points': points,
+        'pic': imgPath
     }
     return render(request, "driver_dash.html", context)
 
@@ -78,9 +83,14 @@ def adminDash(request):
         tempOrg.name = name
         orgs.append(tempOrg)
 
+    pic = db.getProfilePic(request.session['email'])
+
+    imgPath = 'img/' + pic
+
     context = {
         'admins': admins,
-        'orgs': orgs
+        'orgs': orgs,
+        'pic': imgPath
     }
 
     return render(request, "admin_dash.html", context)
