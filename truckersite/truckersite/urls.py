@@ -41,6 +41,11 @@ from Catalog import models as catalogOps
 from django.conf.urls.static import static
 from django.conf import settings
 
+handler404 = 'truckersite.views.page_not_found_view'
+handler500 = 'truckersite.views.error_view'
+handler403 = 'truckersite.views.permission_denied_view'
+handler400 = 'truckersite.views.bad_request_view'
+
 urlpatterns = [
     path('',forms.login), 
     path('loginScreen/', forms.login, name = 'loginScreen'),

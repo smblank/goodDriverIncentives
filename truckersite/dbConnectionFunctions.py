@@ -1240,13 +1240,13 @@ def getAllAdmins():
     except Error as err:
         print(err)
 
-def createApplicant(date, name, email, phone, orgID):
+def createApplicant(date, name, email, phone, address, orgID):
     try:
         conn = getDB()
         cursor = getCursor(conn)
 
-        query = "SELECT createApplicant(%s, %s, %s, %s, %s)"
-        cursor.execute(query, (date, name, email, phone, orgID))
+        query = "SELECT createApplicant(%s, %s, %s, %s, %s, %s)"
+        cursor.execute(query, (date, name, email, phone, address, orgID))
         result = cursor.fetchone()
 
         for applicantID in result:

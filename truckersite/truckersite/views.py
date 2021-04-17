@@ -2,17 +2,33 @@ from django.shortcuts import render
 from truckersite.models import Uregister
 from django.contrib import messages
 import dbConnectionFunctions as db
+import datetime
 
 #add reguser to settings
 def application(request):
+    result = db.getOrgs()
+
+    class Org:
+        def __init__(self):
+            id = -1
+            name = ''
+
+    orgs = []
+
+    for (orgId, name) in result:
+        tempOrg = Org()
+        tempOrg.id = orgId
+        tempOrg.name = name
+        orgs.append(tempOrg)
+    
     if 'loggedIn' in request.session:
         context = {
             'loggedIn': request.session['loggedin']
         }
-    
     else:
         context = {
-            'loggedIn': False
+            'loggedIn': False,
+            'orgs': orgs
         }
     
     return render(request, 'apply.html', context)
@@ -20,22 +36,24 @@ def application(request):
 
 def userreggin(request):
     if request.method=='POST':
-        if request.get('Name') and request.get('lname') and request.get('PhoneNo') and request.get('Email') and request.get('Address') and request.get('address2') and request.get('city') and request.get('state') and request.get('zipcode') and request.get('org') and request.get('sponsor'):
-            saverecord= Uregister()
-            saverecord.Name = request.get('Name')
-            saverecord.lname = request.get('lname')
-            saverecord.PhoneNo = request.get('PhoneNo')
-            saverecord.Email = request.get('Email')
-            saverecord.Address = request.get('Address')
-            saverecord.address2 = request.get('address2')
-            saverecord.city = request.get('city')
-            saverecord.state = request.get('state')
-            saverecord.zipcode = request.get('zipcode')
-            saverecord.org = request.get('org')
-            saverecord.sponsor = request.get('sponsor')
-            saverecord.save()
-            messages.success(request,"Registration completed")
+        if request.POST.get('Name') and request.POST.get('lname') and request.POST.get('PhoneNo') and request.POST.get('Email') and request.POST.get('Address') and request.POST.get('city') and request.POST.get('state') and request.POST.get('zipcode') and request.POST.get('sponsor'):
+            now = datetime.datetime.now()
+            today = now.strftime('%Y-%m-%d')
+            
+            applicant_name = request.POST.get('Name') + ' ' + request.POST.get('lname')
+            applicant_phone = request.POST.get('PhoneNo')
+            applicant_email = request.POST.get('Email')
+            if request.POST.get('address2'):
+                applicant_address = request.POST.get('Address') + ' ' + request.POST.get('address2') + ', ' + request.POST.get('city') + ', ' + request.POST.get('state') + ' ' + request.POST.get('zipcode')
+            else:
+                applicant_address = request.POST.get('Address') + ', ' + request.POST.get('city') + ', ' + request.POST.get('state') + ' ' + request.POST.get('zipcode')
+            applicant_org = request.POST.get('sponsor')
+
+            db.createApplicant(today, applicant_name, applicant_email, applicant_phone, applicant_address, applicant_org)
+
             return render(request,'index.html')
+        else:
+            return render(request,'apply.html')
     else:
         return render(request,'apply.html')
 
@@ -60,3 +78,15 @@ def getorgs(request):
         'orgs': orgs
     }
     return render(request, 'apply.html', context)
+
+def page_not_found_view(request, exception=None):
+    return render(request, '404.html')
+
+def error_view(request):
+    return render(request, '500.html')
+
+def permission_denied_view(request, exception=None):
+    return render(request, '403.html')
+
+def bad_request_view(request, exception=None):
+    return render(request, '400.html')
