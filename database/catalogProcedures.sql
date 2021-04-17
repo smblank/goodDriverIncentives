@@ -132,13 +132,13 @@ MODIFIES SQL DATA
 
 DROP FUNCTION IF EXISTS createOrder;
 
-CREATE FUNCTION createOrder (driver INT, dateCreated DATE)
+CREATE FUNCTION createOrder (driver INT, dateCreated DATE, org INT)
 RETURNS INT
 MODIFIES SQL DATA
     BEGIN
         DECLARE newID INT;
 
-        INSERT INTO DRIVER_ORDER (OrderDate, Status) VALUES (dateCreated, 'In-Progress');
+        INSERT INTO DRIVER_ORDER (OrderDate, Status, OrgID) VALUES (dateCreated, 'In-Progress', org);
 
         SELECT OrderID INTO newID
         FROM DRIVER_ORDER
@@ -176,44 +176,55 @@ MODIFIES SQL DATA
             RETURN 0;
     END;;
 
-DROP FUNCTION IF EXISTS addToOrder;
+DROP FUNCTION IF EXISTS addToCart;
 
-CREATE FUNCTION addToOrder (orderID INT, product INT, qty INT)
+CREATE FUNCTION addToCart (driver INT, org INT, product CHAR(12), qty INT)
 RETURNS BOOLEAN
 MODIFIES SQL DATA
     BEGIN
-        DECLARE productExists BOOLEAN;
+        DECLARE orderID BOOLEAN;
 
-        SELECT EXISTS (
-            SELECT ProductID
-            FROM Product
-            WHERE ProductID = product
-        ) INTO productExists;
+        SET orderID = -1;
 
-        IF productExists = TRUE THEN
-            INSERT INTO IS_IN_ORDER (OrderID, ProductID, Quantity) VALUES (orderID, product, qty);
+        SELECT DRIVER_ORDER.OrderID INTO orderID
+        FROM DRIVER_ORDER, IS_IN_ORDER, BELONGS_TO
+        WHERE DRIVER_ORDER.OrderID = IS_IN_ORDER.OrderID AND DRIVER_ORDER.     OrderID = BELONGS_TO.OrderID AND DRIVER_ORDER.OrgID = org AND BELONGS_TO.DriverID = driver AND DRIVER_ORDER.Status = "In-Progress";
+
+        IF (orderID = -1) THEN
+            SELECT createOrder (driver, CURDATE(), org) INTO orderID;
         END IF;
 
-        RETURN productExists;
+        INSERT INTO IS_IN_ORDER (OrderID, ProductID, Quantity) VALUES (orderID, product, qty);
+
+        RETURN TRUE;
     END;;
 
-DROP FUNCTION IF EXISTS removeFromOrder;
+DROP FUNCTION IF EXISTS removeFromCart;
 
-CREATE FUNCTION removeFromOrder (orderID INT, product INT)
+CREATE FUNCTION removeFromCart (driver INT, org INT, product CHAR(12))
 RETURNS BOOLEAN
 MODIFIES SQL DATA
     BEGIN
-        DECLARE orderExists BOOLEAN;
+        DECLARE orderID BOOLEAN;
 
-        SELECT EXISTS (
-            SELECT OrderID
-            FROM IS_IN_ORDER
-            WHERE OrderID = orderID AND ProductID = product
-        ) INTO orderExists;
+        SELECT DRIVER_ORDER.OrderID INTO orderID
+        FROM DRIVER_ORDER, IS_IN_ORDER, BELONGS_TO
+        WHERE DRIVER_ORDER.OrderID = IS_IN_ORDER.OrderID AND DRIVER_ORDER.     OrderID = BELONGS_TO.OrderID AND DRIVER_ORDER.OrgID = org AND BELONGS_TO.DriverID = driver AND DRIVER_ORDER.Status = "In-Progress";
 
-        DELETE FROM IS_IN_ORDER WHERE OrderID = orderID AND ProductID = product;
+        DELETE FROM IS_IN_ORDER 
+            WHERE OrderID = orderID AND ProductID = product;
 
         RETURN orderExists;
+    END;;
+
+DROP PROCEDURE IF EXISTS getProductsInCart;
+
+CREATE PROCEDURE getProductsInCart (driver INT, org INT)
+    BEGIN
+        SELECT PRODUCT.ProductID, ProductName, Price, ImgUrl
+        FROM PRODUCT, DRIVER_ORDER, IS_IN_ORDER, BELONGS_TO
+        WHERE PRODUCT.ProductID = IS_IN_ORDER.ProductID AND
+                DRIVER_ORDER.OrderID = IS_IN_ORDER.OrderID AND DRIVER_ORDER.OrderID = BELONGS_TO.OrderID AND BELONGS_TO.DriverID = driver AND DRIVER_ORDER.OrgID = org AND DRIVER_ORDER.Status = "In-Progress";
     END;;
 
 DROP PROCEDURE IF EXISTS getDriverOrders;
@@ -225,31 +236,42 @@ CREATE PROCEDURE getDriverOrders(driver INT, org INT)
         WHERE BELONGS_TO.DriverID = driver AND
                 BELONGS_TO.OrderID = DRIVER_ORDER.OrderID  AND IS_IN_ORDER.OrderID = BELONGS_TO.OrderID AND
                 IS_IN_ORDER.ProductID = PRODUCT.ProductID AND
-                Status != 'In-Progress';
+                Status != 'In-Progress' AND DRIVER_ORDER.OrgID = org;
+    END;;
+
+DROP FUNCTION IF EXISTS getQuantityInCart;
+
+CREATE FUNCTION getQuantityInCart (driver INT, org INT, product CHAR(12))
+RETURNS INT
+READS SQL DATA
+    BEGIN
+        DECLARE qty INT;
+
+        SELECT Quantity INTO qty
+        FROM DRIVER_ORDER, IS_IN_ORDER, BELONGS_TO
+        WHERE DRIVER_ORDER.OrderID = IS_IN_ORDER.OrderID AND DRIVER_ORDER.OrderID = BELONGS_TO.OrderID AND DRIVER_ORDER.OrgID = org AND BELONGS_TO.DriverID = driver AND DRIVER_ORDER.Status = "In-Progress" AND IS_IN_ORDER.ProductID = product;
+
+        RETURN qty;
     END;;
 
 DROP FUNCTION IF EXISTS updateQuantity;
 
-CREATE FUNCTION updateQuantity (orderID INT, product INT, newQty INT)
+CREATE FUNCTION updateQuantity (driver INT, org INT, product CHAR(12), newQty INT)
 RETURNS BOOLEAN
 MODIFIES SQL DATA
     BEGIN
-        DECLARE orderExists BOOLEAN;
+        DECLARE orderID INT;
 
-        SELECT EXISTS (
-            SELECT OrderID, ProductID
-            FROM IS_IN_ORDER
-            WHERE OrderID = orderID AND ProuctID = product
-        ) INTO orderExists;
+        SELECT DRIVER_ORDER.OrderID INTO orderID
+        FROM DRIVER_ORDER, BELONGS_TO
+        WHERE DRIVER_ORDER.OrderID = BELONGS_TO.OrderID AND DRIVER_ORDER.OrgID = org AND BELONGS_TO.DriverID = driver AND DRIVER_ORDER.Status = "In-Progress";
 
-        IF orderExists = TRUE THEN
-            UPDATE IS_IN_ORDER
-            SET
-                Quantity = newQty
-            WHERE OrderID = orderID AND ProductID = product;
-        END IF;
+        UPDATE IS_IN_ORDER
+        SET
+            Quantity = newQty
+        WHERE OrderID = orderID AND ProductID = product;
 
-        RETURN orderExists;
+        RETURN TRUE;
     END;;
 
 DROP FUNCTION IF EXISTS isInOrder;
@@ -269,9 +291,26 @@ READS SQL DATA
         RETURN inOrder;
     END;;
 
+DROP FUNCTION IF EXISTS isInCart;
+
+CREATE FUNCTION isInCart (driver INT, org INT, product CHAR(12))
+RETURNS BOOLEAN
+READS SQL DATA
+    BEGIN
+        DECLARE inCart BOOLEAN;
+
+        SELECT EXISTS (
+            SELECT ProductID
+            FROM IS_IN_ORDER, DRIVER_ORDER, BELONGS_TO
+            WHERE DRIVER_ORDER.OrderID = IS_IN_ORDER.OrderID AND DRIVER_ORDER.OrderID = BELONGS_TO.OrderID AND DRIVER_ORDER.Status = "In-Progress" AND BELONGS_TO.DriverID = driver AND DRIVER_ORDER.OrgID = org
+        ) INTO inCart;
+
+        RETURN inCart;
+    END;;
+
 DROP FUNCTION IF EXISTS addToWishlist;
 
-CREATE FUNCTION addToWishlist (driver INT, product INT)
+CREATE FUNCTION addToWishlist (driver INT, product INT, org INT)
 RETURNS BOOLEAN
 MODIFIES SQL DATA
     BEGIN
@@ -287,7 +326,7 @@ MODIFIES SQL DATA
         IF productExists = TRUE THEN
             SELECT ListID INTO list
             FROM WISHLIST
-            WHERE UserID = driver;
+            WHERE UserID = driver AND OrgID = org;
 
             INSERT INTO IS_IN_WISHLIST (ProductID, ListID) VALUES (product, list);
         END IF;
@@ -297,7 +336,7 @@ MODIFIES SQL DATA
 
 DROP FUNCTION IF EXISTS removeFromWishlist;
 
-CREATE FUNCTION removeFromWishlist (driver INT, product INT)
+CREATE FUNCTION removeFromWishlist (driver INT, product INT, org INT)
 RETURNS BOOLEAN
 MODIFIES SQL DATA
     BEGIN
@@ -313,7 +352,7 @@ MODIFIES SQL DATA
         IF productExists = TRUE THEN
             SELECT ListID INTO list
             FROM WISHLIST
-            WHERE UserID = driver;
+            WHERE UserID = driver AND OrgID = org;
 
             DELETE FROM IS_IN_WISHLIST WHERE ListID = list AND ProductID = product;
         END IF;
@@ -323,7 +362,7 @@ MODIFIES SQL DATA
 
 DROP FUNCTION IF EXISTS isInWishlist;
 
-CREATE FUNCTION isInWishlist (driver INT, product INT)
+CREATE FUNCTION isInWishlist (driver INT, product INT, org INT)
 RETURNS BOOLEAN
 READS SQL DATA
     BEGIN
@@ -341,6 +380,16 @@ READS SQL DATA
         ) INTO inWishlist;
 
         RETURN inWishlist;
+    END;;
+
+DROP PROCEDURE IF EXISTS getProductsInWishlist;
+
+CREATE PROCEDURE getProductsInWishlist(driver INT, org INT)
+    BEGIN
+        SELECT PRODUCT.ProductID, ProductName, Price, ImgUrl
+        FROM PRODUCT, WISHLIST, IS_IN_WISHLIST
+        WHERE WISHLIST.ListID = IS_IN_WISHLIST.ListID AND
+                WISHLIST.DriverID = driver AND WISHLIST.OrgID = org;
     END;;
 
 DROP FUNCTION IF EXISTS updatePrice;

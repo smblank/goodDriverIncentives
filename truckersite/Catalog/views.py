@@ -32,12 +32,33 @@ def find(list, element):
 
 def wishlist(request):
     if (request.session['isViewing']):
+        org = db.getOrgNo(request.session['tempEmail'])
         email = request.session['tempEmail']
-        org = db.getOrgNo(email)
     else:
-        email = request.session['email']
         org = request.session['orgID']
+        email = request.session['email']
+
+    id = db.getUserID(email)
+    result = db.getProductsInWishlist(id, org)
+    pointRate = db.getPointConversion(org)
+
+    class Product:
+        def __init__(self):
+            id = -1
+            name = ''
+            price = ''
+            pic = ''
     
+    products = []
+
+    for (id, name, price, img) in result:
+        tempProduct = Product()
+        tempProduct.id = id
+        tempProduct.name = name
+        tempProduct.price = int(price / pointRate)
+        tempProduct.pic = img
+        products.append(tempProduct)
+
     points = db.getDriverPoints(email, org)
 
     pic = db.getProfilePic(email)
@@ -45,6 +66,7 @@ def wishlist(request):
 
     context = {
         'points': points,
+        'items': products,
         'pic': imgPath
     }
     return render(request, 'wishlist.html', context)
@@ -92,10 +114,10 @@ def driverOrderHistory(request):
         i = find(orderIds, orderID)
         tempProduct = Product()
         tempProduct.name = productName
-        tempProduct.price = price / pointRate
+        tempProduct.price = int(price / pointRate)
         tempProduct.qty = qty
         orders[i].products.append(tempProduct)
-        orders[i].totalCost += price / pointRate * qty
+        orders[i].totalCost += int(price / pointRate) * qty
 
     pic = db.getProfilePic(email)
     imgPath = 'img/' + pic
@@ -109,12 +131,33 @@ def driverOrderHistory(request):
 
 def driverCart(request):
     if (request.session['isViewing']):
+        org = db.getOrgNo(request.session['tempEmail'])
         email = request.session['tempEmail']
-        org = db.getOrgNo(email)
     else:
-        email = request.session['email']
         org = request.session['orgID']
+        email = request.session['email']
+
+    id = db.getUserID(email)
+    result = db.getProductsInCart(id, org)
+    pointRate = db.getPointConversion(org)
+
+    class Product:
+        def __init__(self):
+            id = -1
+            name = ''
+            price = ''
+            pic = ''
     
+    products = []
+
+    for (id, name, price, img) in result:
+        tempProduct = Product()
+        tempProduct.id = id
+        tempProduct.name = name
+        tempProduct.price = int(price / pointRate)
+        tempProduct.pic = img
+        products.append(tempProduct)
+
     points = db.getDriverPoints(email, org)
 
     pic = db.getProfilePic(email)
@@ -122,6 +165,7 @@ def driverCart(request):
 
     context = {
         'points': points,
+        'items': products,
         'pic': imgPath
     }
     return render(request, 'driver_cart.html', context)
@@ -173,6 +217,7 @@ def productPage(request, id):
         email = request.session['email']
         org = request.session['orgID']
     
+    driverId = db.getUserID(email)
     points = db.getDriverPoints(email, org)
     pointRate = db.getPointConversion(org)
 
@@ -188,8 +233,15 @@ def productPage(request, id):
     product = Product()
     product.id = id
     product.name = result[0]
-    product.price = result[1] / pointRate
+    product.price = int(result[1] / pointRate)
     product.pic = result[2]
+
+    inCart = db.checkIsInCart(driverId, org, id)
+
+    if inCart:
+        qty = db.getQuantity(driverId, org, id)
+    else:
+        qty = 0
 
     pic = db.getProfilePic(email)
     imgPath = 'img/' + pic
@@ -199,7 +251,9 @@ def productPage(request, id):
         'product': product,
         'isSponsor': request.session['isSponsor'],
         'isAdmin': request.session['isAdmin'],
-        'pic': imgPath
+        'pic': imgPath,
+        'inCart': inCart,
+        'qty': qty
     }
 
     return render(request, 'product.html', context)
@@ -261,7 +315,7 @@ def product_list(request):
         tempProduct = Product()
         tempProduct.id = id
         tempProduct.name = name
-        tempProduct.price = price / pointRate
+        tempProduct.price = int(price / pointRate)
         tempProduct.pic = img
         products.append(tempProduct)
 
@@ -317,33 +371,52 @@ def createCatalog(request):
     #call add products here to create catalog
     pass
 
-def add_to_cart(request, slug):
-    item = get_object_or_404(Product, slug=slug)
-    order_item, created = OrderedProduct.objects.get_or_create(
-        item=item,
-        user=request.user,
-        ordered=False
-    )
-    order_qs = Order.objects.filter(user=request.user, ordered=False)
-    if order_qs.exists():
-        order = order_qs[0]
-        # check if the order item is in the order
-        if order.items.filter(item__slug=item.slug).exists():
-            order_item.quantity += 1
-            order_item.save()
-            messages.info(request, "This item quantity was updated.")
-            return redirect("Catalog:driver_cart")
-        else:
-            order.items.add(order_item)
-            messages.info(request, "This item was added to your cart.")
-            return redirect("Catalog:driver_cart")
+def add_to_cart(request, id):
+    if (request.session['isViewing']):
+        email = request.session['tempEmail']
+        org = db.getOrgNo(request.session['email'])
     else:
-        ordered_date = timezone.now()
-        order = Order.objects.create(
-            user=request.user, ordered_date=ordered_date)
-        order.items.add(order_item)
-        messages.info(request, "This item was added to your cart.")
-        return redirect("Catalog:driver_cart")
+        email = request.session['email']
+        org = request.session['orgID']
+
+    driverID = db.getUserID(email)
+    inCart = db.checkIsInCart(driverID, org, id)
+
+    if inCart:
+        newQty = request.POST.get('qty')
+        db.updateQuantityInCart(driverID, org, id, newQty)
+    else:
+        db.addToCart(driverID, org, id, 1)
+
+    return product_list(request)
+    # item = get_object_or_404(Product, slug=slug)
+    # order_item, created = OrderedProduct.objects.get_or_create(
+    #     item=item,
+    #     user=request.user,
+    #     ordered=False
+    # )
+    # order_qs = Order.objects.filter(user=request.user, ordered=False)
+    # if order_qs.exists():
+    #     order = order_qs[0]
+    #     # check if the order item is in the order
+    #     if order.items.filter(item__slug=item.slug).exists():
+    #         order_item.quantity += 1
+    #         order_item.save()
+    #         messages.info(request, "This item quantity was updated.")
+    #         return redirect("Catalog:driver_cart")
+    #     else:
+    #         order.items.add(order_item)
+    #         messages.info(request, "This item was added to your cart.")
+    #         return redirect("Catalog:driver_cart")
+    # else:
+    #     ordered_date = timezone.now()
+    #     order = Order.objects.create(
+    #         user=request.user, ordered_date=ordered_date)
+    #     order.items.add(order_item)
+    #     messages.info(request, "This item was added to your cart.")
+    #     return redirect("Catalog:driver_cart")
+
+
 
 def remove_from_cart(request, slug):
     item = get_object_or_404(Product, slug=slug)

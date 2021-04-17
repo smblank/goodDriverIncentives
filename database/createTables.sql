@@ -127,7 +127,9 @@ CREATE TABLE DRIVER_ORDER
     (OrderID      INT           NOT NULL    AUTO_INCREMENT,
     OrderDate     DATE          NOT NULL,
     Status        VARCHAR(50)   NOT NULL,
-    PRIMARY KEY (OrderID));
+    OrgID         INT           NOT NULL,
+    PRIMARY KEY (OrderID),
+    FOREIGN KEY (OrgID) REFERENCES ORGANIZATION (OrgID));
 
 CREATE TABLE IS_IN_ORDER
     (OrderID        INT         NOT NULL,
@@ -146,9 +148,11 @@ CREATE TABLE BELONGS_TO
 
 CREATE TABLE WISHLIST
     (ListID       INT     NOT NULL    AUTO_INCREMENT,
-    DriverID        INT     NOT NULL,
+    DriverID      INT     NOT NULL,
+    OrgID         INT     NOT NULL,
     PRIMARY KEY (ListID),
-    FOREIGN KEY (DriverID) REFERENCES DRIVER (UserID));
+    FOREIGN KEY (DriverID) REFERENCES DRIVER (UserID),
+    FOREIGN KEY (OrgID) REFERENCES ORGANIZATION (OrgID));
 
 CREATE TABLE IS_IN_WISHLIST
     (ProductID      CHAR(12)     NOT NULL,

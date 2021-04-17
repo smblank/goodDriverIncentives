@@ -520,13 +520,13 @@ def removeFromCatalog (productID, catalogID):
     except Error as err:
         print(err)
 
-def createOrder (driverID, date):
+def createOrder (driverID, date, org):
     try:
         conn = getDB()
         cursor = getCursor(conn)
 
-        query = "SELECT createOrder(%s, %s)"
-        cursor.execute(query, (driverID, date,))
+        query = "SELECT createOrder(%s, %s, %s)"
+        cursor.execute(query, (driverID, date, org))
         result = cursor.fetchone()
 
         for orderID in result:
@@ -568,13 +568,13 @@ def completeOrder (orderID, completeDate):
         print(err)
 
 
-def addToOrder (orderID, productID, amt):
+def addToCart (driver, org, productID, amt):
     try:
         conn = getDB()
         cursor = getCursor(conn)
 
-        query = "SELECT addToOrder(%s, %s, %s)"
-        cursor.execute(query, (orderID, productID, amt,))
+        query = "SELECT addToCart(%s, %s, %s, %s)"
+        cursor.execute(query, (driver, org, productID, amt,))
 
         cursor.close()
         conn.close()
@@ -583,17 +583,50 @@ def addToOrder (orderID, productID, amt):
     except Error as err:
         print(err)
 
-def removeFromOrder (orderID, productID):
+def removeFromCart (driver, org, productID):
     try:
         conn = getDB()
         cursor = getCursor(conn)
 
-        query = "SELECT removeFromOrder(%s, %s)"
-        cursor.execute(query, (orderID, productID,))
+        query = "SELECT removeFromCart(%s, %s, %s)"
+        cursor.execute(query, (driver, org, productID,))
 
         cursor.close()
         conn.close()
         return "Product successfuly removed from catalog"
+    
+    except Error as err:
+        print(err)
+
+def checkIsInCart(driver, org, product):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT isInCart(%s, %s, %s)"
+        cursor.execute(query, (driver, org, product))
+        result = cursor.fetchone()
+
+        for inCart in result:
+            cursor.close()
+            conn.close()
+            return inCart
+        
+    except Error as err:
+        print(err)
+
+def getProductsInCart (driver, org):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL getProductsInCart(%s, %s)"
+        cursor.execute(query, (driver, org,))
+        result = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+        return result
     
     except Error as err:
         print(err)
@@ -614,13 +647,30 @@ def getDriverOrders(driver, orgNo):
     except Error as err:
         print(err)
 
-def updateQuantityInOrder (orderID, productID, newAmt):
+def getQuantityInCart (driver, org, productID):
     try:
         conn = getDB()
         cursor = getCursor(conn)
 
-        query = "SELECT updateQuantity(%s, %s, %s)"
-        cursor.execute(query, (orderID, productID, newAmt,))
+        query = "SELECT getQuantityInCart(%s, %s, %s)"
+        cursor.execute(query, (driver, org, productID,))
+        result = cursor.fetchone()
+
+        for qty in result:
+            cursor.close()
+            conn.close()
+            return qty
+    
+    except Error as err:
+        print(err)
+
+def updateQuantityInCart (driver, org, productID, newAmt):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT updateQuantity(%s, %s, %s, %s)"
+        cursor.execute(query, (driver, org, productID, newAmt,))
 
         cursor.close()
         conn.close()
@@ -646,13 +696,30 @@ def checkIsInOrder (orderID, productID):
     except Error as err:
         print(err)
 
-def addToWishlist (driverID, productID):
+def checkInInCart (driver, org, product):
     try:
         conn = getDB()
         cursor = getCursor(conn)
 
-        query = "SELECT addToWishlist(%s, %s)"
-        cursor.execute(query, (driverID, productID,))
+        query = "Select isInCart(%s, %s, %s)"
+        cursor.execute(query, (driver, org, product))
+        result = cursor.fetchone()
+
+        for inCart in result:
+            cursor.close()
+            conn.close()
+            return inCart
+    
+    except Error as err:
+        print(err)
+
+def addToWishlist (driverID, productID, orgNo):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT addToWishlist(%s, %s, %s)"
+        cursor.execute(query, (driverID, productID, orgNo))
 
         cursor.close()
         conn.close()
@@ -661,13 +728,13 @@ def addToWishlist (driverID, productID):
     except Error as err:
         print(err)
 
-def removeFromWishlist (driverID, productID):
+def removeFromWishlist (driverID, productID, orgNo):
     try:
         conn = getDB()
         cursor = getCursor(conn)
 
-        query = "SELECT removeFromWishlist(%s, %s)"
-        cursor.execute(query, (driverID, productID,))
+        query = "SELECT removeFromWishlist(%s, %s, %s)"
+        cursor.execute(query, (driverID, productID, orgNo))
 
         cursor.close()
         conn.close()
@@ -676,19 +743,35 @@ def removeFromWishlist (driverID, productID):
     except Error as err:
         print(err)
 
-def checkIsInWishlist (driverID, productID):
+def checkIsInWishlist (driverID, productID, org):
     try:
         conn = getDB()
         cursor = getCursor(conn)
 
-        query = "SELECT isInWishlist(%s, %s)"
-        cursor.execute(query, (driverID, productID,))
+        query = "SELECT isInWishlist(%s, %s, %s)"
+        cursor.execute(query, (driverID, productID, org))
         result = cursor.fetchone()
 
         for inWishlist in result:
             cursor.close()
             conn.close()
             return inWishlist
+    
+    except Error as err:
+        print(err)
+
+def getProductsInWishlist(driver, org):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL getProductsInWishlist(%s, %s)"
+        cursor.execute(query, (driver, org))
+        result = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+        return result
     
     except Error as err:
         print(err)
