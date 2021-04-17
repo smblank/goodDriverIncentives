@@ -82,6 +82,30 @@ body{
     top: 85%;
 }
 
+#removecart{
+    width: fit-content;
+    height: fit-content;
+    padding-right: 3%;
+    padding-left: 3%;
+    padding-top: .1%;
+    padding-bottom: .1%;
+    border-radius: 30px;
+    background-color: #EDA1A1;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    font-size: 130%;
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+    cursor: pointer;
+    border-style: solid;
+    border-color: black;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    text-align: center;
+    position: fixed;
+    left: 85%;
+    top: 85%;
+}
+
 #addwishlist{
     width: fit-content;
     height: fit-content;

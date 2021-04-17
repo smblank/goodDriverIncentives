@@ -124,6 +124,9 @@ urlpatterns = [
     path('checkout', catalogViews.checkout, name = 'checkout'),
     path('addProducts', catalogViews.addProducts, name = 'addProducts'),
     path('admin/', admin.site.urls),
+    path('addToCart/<str:id>/', catalogViews.add_to_cart, name = 'addToCart'),
+    # path('removeFromCart', ,name = 'removeFromCart'),
+    # path('addToWishlist', catalogViews, name = 'addToWishlist'),
 
     #Sponsor
     path('sponsor_dash/', sponsorViews.sponsorDashDisplay, name = 'sponsorDashDisplay'),
