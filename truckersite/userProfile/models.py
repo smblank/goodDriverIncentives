@@ -60,9 +60,9 @@ def getNewDriverPhone(request):
         newPhone = formatPhone(newPhone)
 
         if (request.session['isViewing']):
-            response = db.updatePhone(request.session['tempEmail'], newPhone)
+            response = db.updateDriverPhone(request.session['tempEmail'], newPhone)
         else:
-            response = db.updatePhone(request.session['email'], newPhone)
+            response = db.updateDriverPhone(request.session['email'], newPhone)
     
     else:
         response = "Sorry that is not a valid phone number (ex. 555-555-5555)"
@@ -161,23 +161,6 @@ def getNewSponsorEmail(request):
         response = db.updateEmail(newEmail, request.sesseion['tempEmail'])
     else:
         response = db.updateEmail(newEmail, request.session['email'])
-
-    return render(request, 'sponsor_profile.html')
-
-def getNewSponsorPhone(request):
-    newPhone = request.POST.get('phone')
-
-    validPhone = checkPhone(newPhone)
-
-    if validPhone == True:
-        newPhone = formatPhone(newPhone)
-        if (request.session['isViewing']):
-            response = db.updatePhone(request.session['tempEmail'], newPhone)
-        else:
-            response = db.updatePhone(request.session['email'], newPhone)
-    
-    else:
-        response = "Sorry that is not a valid phone number (ex. 555-555-5555)"
 
     return render(request, 'sponsor_profile.html')
 

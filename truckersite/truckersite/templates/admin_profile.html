@@ -62,12 +62,6 @@
                 <a class = "settingname" href = "#changepfp"> Change Profile Picture </a> <br>
                 <a class = "settingname" href = "#changeemail"> Change Email </a> <br>
                 <a class = "settingname" href = "#changepassword"> Change Password</a> <br>
-        
-                <p class = "sectionheader" style = "margin-top: 10%;"> Account Settings </p>
-                <a class = "settingname" href = "#2FA"> Two-Factor Authentication </a> <br>
-                <a class = "settingname" href = "#emailnotifications"> Email Notifications </a> <br>
-                <a class = "settingname" href = "#notifications"> Notifications </a> <br>
-                <a class = "settingname" href = "#nightmode"> Night Mode </a> <br>
             
             </div>
             {% if messages %}
@@ -91,7 +85,7 @@
                 <form method = "Post" action = "{% url 'getNewAdminEmail'%}">
                     {% csrf_token %}
                     <p class = "setting" id = "changeemail" style = "margin-top: 1.5%;"> Change Email </p>
-                    <input class = "settingtext" type = "text" id = "emailsetting" maxlength = "100" placeholder = "Email" name = "email">
+                    <input class = "settingtext" type = "text" id = "emailsetting" maxlength = "100" placeholder = {{currEmail}} name = "email">
                     <button class = "save" id = "saveemail"> <i class = "fa fa-save"></i> </button>
                 </form>
 
@@ -102,40 +96,7 @@
                     <input class = "settingtext" type = "password" id = "changepassword1" style = "margin-right: 100%;" maxlength = "100" placeholder = "Password" name = "password1">
                     <input class = "settingtext" type = "password" id = "changepassword2" style = "margin-top: 1%;" maxlength = "100" placeholder = "Confirm Password" name = "password2">
                     <button class = "save" id = "savepassword"> <i class = "fa fa-save"></i> </button>
-                </form>
-
-                <p class = "setting" id = "2fa" style = "margin-top: 1.5%;"> Account Settings </p>
-                <!-- Switch Credit: https://getbootstrap.com/docs/4.2/components/forms/ -->
-                <div class = "custom-control custom-switch">
-                    <input type = "checkbox" class = "custom-control-input" id = "2FA">
-                    <label class = "custom-control-label" for = "2FA"> Two-Factor Authentication </label>
-                </div>
-
-                <div class = "custom-control custom-switch">
-                    <input type = "checkbox" class = "custom-control-input" id = "emailnotifications">
-                    <label class = "custom-control-label" for = "emailnotifications"> Email Notifications </label>
-                </div>
-
-                <input class = "checkboxes" type = "checkbox" id = "emailnotification1" style = "left: 22%; top: 117%">
-                <label class = "checkboxlabels" for = "emailnotification1" style = "left: 25%; top: 118%"> Resolved Issues </label> <br>
-                <input class = "checkboxes" type = "checkbox" id = "emailnotification2" style = "left: 22%; top: 120%">
-                <label class = "checkboxlabels" for = "emailnotification2" style = "left: 25%; top: 121%"> Submitted Issues </label> <br>
-
-                <div class = "custom-control custom-switch">
-                    <input type = "checkbox" class = "custom-control-input" id = "websitenotifications" checked>
-                    <label class = "custom-control-label" for = "websitenotifications"> Website Notifications </label>
-                </div>
-
-                <input class = "checkboxes" type = "checkbox" id = "notification1" style = "left: 22%; top: 134%" checked>
-                <label class = "checkboxlabels" for = "notification1" style = "left: 25%; top: 135%"> Resolved Issues </label> <br>
-                <input class = "checkboxes" type = "checkbox" id = "notification1" style = "left: 22%; top: 137%" checked>
-                <label class = "checkboxlabels" for = "notification1" style = "left: 25%; top: 138%"> Submitted Issues </label> <br>
-
-                <div class = "custom-control custom-switch">
-                    <input type = "checkbox" class = "custom-control-input" id = "nightmode">
-                    <label class = "custom-control-label" for = "nightmode"> Night Mode </label> <br> <br>
-                </div>
-                
+                </form>                
             </div>
 
         </div>

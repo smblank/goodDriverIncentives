@@ -861,6 +861,15 @@ READS SQL DATA
                 WHERE OrgID = orgNo);
     END;;
 
+DROP PROCEDURE IF EXISTS getPointChangeReason;
+
+CREATE PROCEDURE getPointChangeReason (reasonID INT)
+    BEGIN
+        SELECT NumPoints, ReasonDescription
+        FROM POINT_CHANGE_REASON
+        WHERE ReasonID = reasonID;
+    END;;
+
 DROP PROCEDURE IF EXISTS getPointChangeReasons;
 
 CREATE PROCEDURE getPointChangeReasons (orgNo INT)
@@ -916,4 +925,20 @@ CREATE PROCEDURE updatePointConversion(orgNo INT, newConversion FLOAT)
                 PointConversion = newConversion
         WHERE OrgID = orgNo;
     END;;
+
+DROP FUNCTION IF EXISTS getPointConversion;
+
+CREATE FUNCTION getPointConversion(orgNo INT)
+RETURNS FLOAT
+READS SQL DATA
+    BEGIN
+        DECLARE pointRate FLOAT;
+
+        SELECT PointConversion INTO pointRate
+        FROM ORGANIZATION
+        WHERE OrgID = orgNo;
+
+        RETURN PointRate;
+    END;;
+
 DELIMITER ;

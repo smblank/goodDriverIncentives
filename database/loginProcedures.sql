@@ -40,6 +40,24 @@ READS SQL DATA
         RETURN isCorrect;
     END;;
 
+DROP FUNCTION IF EXISTS login;
+
+CREATE FUNCTION login(userEmail VARCHAR(50), userPassword VARCHAR(20))
+RETURNS BOOLEAN
+READS SQL DATA
+    BEGIN
+        DECLARE success BOOLEAN;
+        DECLARE userID INT;
+
+        SELECT getUserID(userEmail) INTO userID;
+
+        SELECT checkPassword(userEmail, userPassword) INTO success;
+
+        INSERT INTO LOGIN_ATTEMPT (AttemptDate, Suceeded, UserID)
+            VALUES (CURDATE(), success, userID);
+        
+        RETURN success;
+    END;;
 
 DROP FUNCTION IF EXISTS updatePassword;
 

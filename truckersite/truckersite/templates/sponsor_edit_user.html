@@ -73,7 +73,7 @@
                 <h4 style = "margin-left: -16%;"> Email </h4>
                 <form method = "Post" action = "{% url 'sponsorEditUser' userID %}">
                     {% csrf_token %}
-                    <input class = "fields" type = "text" id = "email" maxlength = "100" placeholder = "User's Current Email"> <br>
+                    <input class = "fields" type = "text" id = "email" maxlength = "100" placeholder = {{currEmail}}> <br>
                     <button class = "save" id = "saveemail"> <i class = "fa fa-save"></i> </button>
 
                     <h4 style = "margin-left: -13%;"> Password </h4>

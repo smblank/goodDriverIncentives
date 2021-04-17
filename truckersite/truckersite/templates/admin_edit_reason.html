@@ -63,10 +63,10 @@
                 <form method = "Post" action = "{% url 'adminEditReason' reasonID %}">
                     {% csrf_token %}
                     <h4 style = "margin-left: -16%;"> Amount of Point Change </h4>
-                    <input class = "fields" type = "text" id = "points" name = "points" maxlength = "100" placeholder = "Amount of Points"> <br>
+                    <input class = "fields" type = "text" id = "points" name = "points" maxlength = "100" placeholder = {{currPoints}}> <br>
 
                     <h4 style = "margin-left: -13%;"> Description </h4>
-                    <textarea id="description" name="description" placeholder="Reason's Current Description"></textarea> <br>
+                    <textarea id="description" name="description">{{currDesc}}</textarea> <br>
                     <button class = "save" id = "savepassword"> <i class = "fa fa-save"></i> </button>
                 </form>
             </div>

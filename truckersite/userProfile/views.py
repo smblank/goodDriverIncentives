@@ -5,8 +5,10 @@ import dbConnectionFunctions as db
 # Create your views here.
 def driverProfile(request):
     if (request.session['isViewing']):
+        email = request.session['tempEmail']
         imgPath = db.getProfilePic(request.session['tempEmail'])
     else:
+        email = request.session['email']
         imgPath = db.getProfilePic(request.session['email'])
 
     profilePic = 'img/' + imgPath
@@ -29,21 +31,28 @@ def driverProfile(request):
         newAddr.id = id
         addresses.append(newAddr)
     
+    phone = db.getDriverPhone(email)
+    
     context = {
         'pic': profilePic,
-        'addresses': addresses
+        'addresses': addresses,
+        'currEmail': email,
+        'currPhone': phone
     }
     return render(request, 'driver_profile.html', context)
 
 def sponsorProfile(request):
     if (request.session['isViewing']):
+        email = request.session['tempEmail']
         imgPath = db.getProfilePic(request.session['tempEmail'])
     else:
+        email = request.session['email']
         imgPath = db.getProfilePic(request.session['email'])
 
     profilePic = 'img/' + imgPath
     context = {
-        'pic': profilePic
+        'pic': profilePic,
+        'currEmail': email
     }
     return render(request, 'sponsor_profile.html', context)
 
@@ -51,7 +60,8 @@ def adminProfile(request):
     imgPath = db.getProfilePic(request.session['email'])
     profilePic = 'img/' + imgPath
     context = {
-        'pic': profilePic
+        'pic': profilePic,
+        'currEmail': request.session['email']
     }
     return render(request, 'admin_profile.html', context)
 

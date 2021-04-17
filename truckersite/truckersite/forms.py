@@ -17,7 +17,7 @@ def loginpg(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         
-        correctPassword = db.checkPassword(email, password)
+        correctPassword = db.login(email, password)
 
         if correctPassword == True:
             request.session['loggedin'] = True

@@ -10,6 +10,7 @@ from django.utils import timezone
 from django.core.mail import send_mail
 from django.conf import settings
 import dbConnectionFunctions as db
+import string
 
 APP_ID = 'ApurvPat-FindingS-PRD-ddc78fcfb-06024fa2'
 
@@ -59,6 +60,7 @@ def driverOrderHistory(request):
         org = request.session['orgID']
     
     result = db.getDriverOrders(driverID, org)
+    pointRate = db.getPointConversion(org)
 
     class Product:
         def __init__(self):
@@ -90,10 +92,10 @@ def driverOrderHistory(request):
         i = find(orderIds, orderID)
         tempProduct = Product()
         tempProduct.name = productName
-        tempProduct.price = price
+        tempProduct.price = price / pointRate
         tempProduct.qty = qty
         orders[i].products.append(tempProduct)
-        orders[i].totalCost += price * qty
+        orders[i].totalCost += price / pointRate * qty
 
     pic = db.getProfilePic(email)
     imgPath = 'img/' + pic
@@ -172,6 +174,7 @@ def productPage(request, id):
         org = request.session['orgID']
     
     points = db.getDriverPoints(email, org)
+    pointRate = db.getPointConversion(org)
 
     class Product:
         def __init__(self):
@@ -185,7 +188,7 @@ def productPage(request, id):
     product = Product()
     product.id = id
     product.name = result[0]
-    product.price = result[1]
+    product.price = result[1] / pointRate
     product.pic = result[2]
 
     pic = db.getProfilePic(email)
@@ -227,7 +230,7 @@ def addProducts(request):
         id_temp = item.itemid.string
         name_tmp = item.title.string
         price_tmp = float(item.currentprice.string)
-        image_tmp = item.viewitemurl.string
+        image_tmp = item.galleryurl.string
         db.createProduct(id_temp, name_tmp, price_tmp, image_tmp)
 
         db.addToCatalog(id_temp, orgNo)
@@ -243,6 +246,7 @@ def product_list(request):
         email = request.session['email']
 
     result = db.getProductsInCatalog(org)
+    pointRate = db.getPointConversion(org)
 
     class Product:
         def __init__(self):
@@ -257,7 +261,7 @@ def product_list(request):
         tempProduct = Product()
         tempProduct.id = id
         tempProduct.name = name
-        tempProduct.price = price
+        tempProduct.price = price / pointRate
         tempProduct.pic = img
         products.append(tempProduct)
 

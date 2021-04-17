@@ -3,11 +3,11 @@ DELIMITER ;;
 DROP FUNCTION IF EXISTS getDriverPoints;
 
 CREATE FUNCTION getDriverPoints(driverEmail VARCHAR(50), orgID INT)
-RETURNS INT
+RETURNS FLOAT
 READS SQL DATA
     BEGIN
         DECLARE driver INT;
-        DECLARE pointTotal INT;
+        DECLARE pointTotal FLOAT;
 
         SELECT getUserID(driverEmail) INTO driver;
 
@@ -416,8 +416,6 @@ READS SQL DATA
         RETURN productDesc;
     END;;
 
-DROP FUNCTION IF EXISTS getProductAvailability;
-
 DROP FUNCTION IF EXISTS getProductPrice;
 
 CREATE FUNCTION getProductPrice (product CHAR(12))
@@ -435,11 +433,11 @@ READS SQL DATA
 
 DROP FUNCTION IF EXISTS changePointTotal;
 
-CREATE FUNCTION changePointTotal (driverEmail VARCHAR(50), pointChange INT)
-RETURNS INT
+CREATE FUNCTION changePointTotal (driverEmail VARCHAR(50), pointChange FLOAT)
+RETURNS FLOAT
 MODIFIES SQL DATA
     BEGIN
-        DECLARE newTot INT;
+        DECLARE newTot FLOAT;
         DECLARE driver INT;
 
         SELECT getUserID(driverEmail) INTO driver;
@@ -457,11 +455,11 @@ MODIFIES SQL DATA
 
 DROP FUNCTION IF EXISTS manualPointChange;
 
-CREATE FUNCTION manualPointChange (driverEmail VARCHAR(50), sponsorEmail VARCHAR(50), reason VARCHAR(100), pointChange INT, changeDate DATE)
-RETURNS INT
+CREATE FUNCTION manualPointChange (driverEmail VARCHAR(50), sponsorEmail VARCHAR(50), reason VARCHAR(100), pointChange FLOAT, changeDate DATE)
+RETURNS FLOAT
 MODIFIES SQL DATA
     BEGIN
-        DECLARE newTot INT;
+        DECLARE newTot FLOAT;
         DECLARE driver INT;
         DECLARE sponsor INT;
         DECLARE reasonID INT;
@@ -483,14 +481,14 @@ MODIFIES SQL DATA
 
 DROP FUNCTION IF EXISTS addOrgPayment;
 
-CREATE FUNCTION addOrgPayment (ccNum INT, ccSec INT, ccDate DATE, billAddr VARCHAR(100), organization INT)
+CREATE FUNCTION addOrgPayment (name VARCHAR(50), ccNum CHAR(16), ccSec CHAR(3), ccDate DATE, billAddr VARCHAR(100), organization INT)
 RETURNS INT
 MODIFIES SQL DATA
     BEGIN
         DECLARE newPayment INT;
 
-        INSERT INTO ORG_PAYMENTS (CreditCardNum, CreditCardSec, CreditCardDate, BillingAddress, OrgID)
-            VALUES (ccNum, ccSec, ccDate, billAddr, organization);
+        INSERT INTO ORG_PAYMENTS (BillingName, CreditCardNum, CreditCardSec, CreditCardDate, BillingAddress, OrgID)
+            VALUES (name, SHA(ccNum), SHA(ccSec), ccDate, billAddr, organization);
         
         SELECT PayID INTO newPayment
         FROM ORG_PAYMENTS
@@ -501,12 +499,13 @@ MODIFIES SQL DATA
 
 DROP PROCEDURE IF EXISTS updateOrgPayment;
 
-CREATE PROCEDURE updateOrgPayment (ccNum INT, ccSec INT, ccDate DATE, billAddr VARCHAR(100), organization INT, payID INT)
+CREATE PROCEDURE updateOrgPayment (name VARCHAR(50), ccNum CHAR(16), ccSec CHAR(3), ccDate DATE, billAddr VARCHAR(100), organization INT, payID INT)
     BEGIN
         UPDATE ORG_PAYMENTS
             SET
-                CreditCardNum = ccNum,
-                CreditCardSec = ccSec,
+                BillingName = name,
+                CreditCardNum = SHA(ccNum),
+                CreditCardSec = SHA(ccSec),
                 CreditCardDate = ccDate,
                 BillingAddress = billAddr
         WHERE PayID = payID AND OrgID = organization;

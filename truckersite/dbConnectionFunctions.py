@@ -6,10 +6,10 @@ from django.core.mail import EmailMessage
 
 def getDB():
     try:
-        connection = connect(host = 'truckingdb.c9tkxb1tjvpp.us-east-1.rds.amazonaws.com', user = 'admin', password = 'accesstodb', database = 'DRIVER_DB', autocommit = True)
+        connection = connect(host = 'truckingdb.c9tkxb1tjvpp.us-east-1.rds.amazonaws.com', user = 'admin', password = 'accesstodb', database = 'DRIVER_DB', autocommit = True, charset = 'latin1', use_unicode = True)
 
         while connection is None:
-            connection = connect(host = 'truckingdb.c9tkxb1tjvpp.us-east-1.rds.amazonaws.com', user = 'admin', password = 'accesstodb', database = 'DRIVER_DB', autocommit = True)
+            connection = connect(host = 'truckingdb.c9tkxb1tjvpp.us-east-1.rds.amazonaws.com', user = 'admin', password = 'accesstodb', database = 'DRIVER_DB', autocommit = True, charset = 'latin1', use_unicode = True)
     
     except Error as err:
         print(err)
@@ -110,6 +110,23 @@ def changePassword(email, newPassword):
         cursor.close()
         conn.close()
         return updatePassword(email, newPassword)
+    except Error as err:
+        print(err)
+
+def login(email, newPassword):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT login(%s, %s)"
+        cursor.execute(query, (email, newPassword))
+        result = cursor.fetchone()
+
+        for success in result:
+            cursor.close()
+            conn.close()
+            return success
+    
     except Error as err:
         print(err)
 
@@ -298,6 +315,23 @@ def getUserEmail(id):
     except Error as err:
         print(err)
 
+def getDriverPhone(email):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT getDriverPhone(%s)"
+        cursor.execute(query, (email,))
+        result = cursor.fetchone()
+
+        for phone in result:
+            cursor.close()
+            conn.close()
+            return phone
+        
+    except Error as err:
+        print(err)
+
 def getDriverPoints(email, orgID):
     try:
         conn = getDB()
@@ -333,7 +367,7 @@ def checkPassword (email, password):
     except Error as err:
         print(err)
 
-def updatePhone(email, newPhone):
+def updateDriverPhone(email, newPhone):
     try:
         conn = getDB()
         cursor = getCursor(conn)
@@ -659,12 +693,16 @@ def checkIsInWishlist (driverID, productID):
     except Error as err:
         print(err)
 
-def createProduct (id, name, price, img):
+def createProduct (id, prodName, price, img):
     try:
         conn = getDB()
         cursor = getCursor(conn)
 
-        name = 'Test Product'
+        name = ''
+
+        for i in prodName:
+            if i in string.printable or i in string.punctuation:
+                name += i
         
         query = "SELECT createProduct(%s, %s, %s, %s)"
         cursor.execute(query, (id, name, price, img, ))
@@ -736,6 +774,24 @@ def getProductPrice (productID):
             conn.close()
             return productPrice
 
+    except Error as err:
+        print(err)
+
+def getPointChangeReason(reasonID):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL getPointChangeReason(%s)"
+        cursor.execute(query, (reasonID,))
+        result = cursor.fetchone()
+
+        print(result)
+
+        cursor.close()
+        conn.close()
+        return result
+    
     except Error as err:
         print(err)
 
@@ -834,6 +890,23 @@ def updatePointConversion(orgNo, newConversion):
         conn.close()
         return "Point conversion successfully updated"
 
+    except Error as err:
+        print(err)
+
+def getPointConversion(orgNo):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "SELECT getPointConversion(%s)"
+        cursor.execute(query, (orgNo, ))
+        result = cursor.fetchone()
+
+        for pointRate in result:
+            cursor.close()
+            conn.close()
+            return pointRate
+    
     except Error as err:
         print(err)
 
@@ -1440,14 +1513,14 @@ def loginAttemptsReport(startDate, endDate):
     except Error as err:
         print(err)
 
-def addOrgPayment (ccNum, ccSec, ccDate, billAddr, org):
+def addOrgPayment (name, ccNum, ccSec, ccDate, billAddr, org):
     try:
         conn = getDB()
         cursor = getCursor(conn)
 
-        query = "CALL addOrgPayment(%s, %s, %s, %s, %s)"
+        query = "CALL addOrgPayment(%s, %s, %s, %s, %s, %s)"
         ccDate = datetime.strptime(ccDate, '%m/%y').date()
-        cursor.execute(query, (ccNum, ccSec, ccDate, billAddr, org))
+        cursor.execute(query, (name, ccNum, ccSec, ccDate, billAddr, org))
 
         cursor.close()
         conn.close()
@@ -1461,9 +1534,9 @@ def updateOrgPayment (ccNum, ccSec, ccDate, billAddr, org, payID):
         conn = getDB()
         cursor = getCursor(conn)
 
-        query = "CALL updateOrgPayment(%s, %s, %s, %s, %s, %s)"
+        query = "CALL updateOrgPayment(%s, %s, %s, %s, %s, %s, %s)"
         ccDate = datetime.strptime(ccDate, '%m/%y').date()
-        cursor.execute(query, (ccNum, ccSec, ccDate, billAddr, org, payID))
+        cursor.execute(query, (name, ccNum, ccSec, ccDate, billAddr, org, payID))
 
         cursor.close()
         conn.close()

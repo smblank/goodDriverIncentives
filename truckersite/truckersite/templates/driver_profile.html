@@ -81,12 +81,6 @@
                 <a class="settingname" href="#changedefaultaddress"> Change Default Home Address  </a> <br>
                 <a class="settingname" href="#changephonenumber"> Change Phone Number </a> <br>
 
-                <p class="sectionheader" style="margin-top: 14%;"> Account Settings </p>
-                <a class="settingname" href="#2FA"> Two-Factor Authentication </a> <br>
-                <a class="settingname" href="#emailnotifications"> Email Notifications </a> <br>
-                <a class="settingname" href="#notifications"> Notifications </a> <br>
-                <a class="settingname" href="#nightmode"> Night Mode </a> <br>
-
             </div>
             {% if messages %}
                  <ul class="messages">
@@ -109,7 +103,7 @@
                 <form method="Post" action="{% url 'getNewDriverEmail'%}">
                     {% csrf_token %}
                     <p class="setting" id="changeemail" style="margin-top: 1.5%;"> Change Email </p>
-                    <input class="settingtext" type="text" id="emailsetting" maxlength="100" placeholder="Email" name="email">
+                    <input class="settingtext" type="text" id="emailsetting" maxlength="100" placeholder= {{currEmail}} name="email">
                     <button class="save" id="saveemail"> <i class = "fa fa-save"></i> </button>
                 </form>
 
@@ -201,51 +195,9 @@
                 <form method="Post" action="{%url 'getNewDriverPhone'%}">
                     {% csrf_token%}
                     <p class="setting" id="changephonenumber" style="margin-top: 1.5%;"> Change Phone Number </p>
-                    <input class="settingtext" type="text" id="phonesetting" maxlength="100" placeholder="Phone Number" name="phone">
+                    <input class="settingtext" type="text" id="phonesetting" maxlength="100" placeholder= {{currPhone}} name="phone">
                     <button class="save" id="savephonenumber"> <i class = "fa fa-save"></i> </button>
                 </form>
-
-                <p class="setting" id="2fa" style="margin-top: 1.5%;"> Account Settings </p>
-                <!-- Switch Credit: https://getbootstrap.com/docs/4.2/components/forms/ -->
-                <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="2FA">
-                    <label class="custom-control-label" for="2FA"> Two-Factor Authentication </label>
-                </div>
-
-                <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="emailnotifications">
-                    <label class="custom-control-label" for="emailnotifications"> Email Notifications </label>
-                </div>
-
-                <input class="checkboxes" type="checkbox" id="emailnotification1" style="left: 22%; top: 117%">
-                <label class="checkboxlabels" for="emailnotification1" style="left: 25%; top: 118%"> Shipping confirmation </label> <br>
-                <input class="checkboxes" type="checkbox" id="emailnotification2" style="left: 22%; top: 120%">
-                <label class="checkboxlabels" for="emailnotification2" style="left: 25%; top: 121%"> Delivery Confirmation </label> <br>
-                <input class="checkboxes" type="checkbox" id="emailnotification2" style="left: 22%; top: 120%">
-                <label class="checkboxlabels" for="emailnotification2" style="left: 25%; top: 121%"> Delivery Confirmation </label> <br>
-
-                <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="websitenotifications" checked>
-                    <label class="custom-control-label" for="websitenotifications"> Website Notifications </label>
-                </div>
-
-                <input class="checkboxes" type="checkbox" id="notification1" style="left: 22%; top: 134%" checked>
-                <label class="checkboxlabels" for="notification1" style="left: 25%; top: 135%"> Points Added to Account </label> <br>
-                <input class="checkboxes" type="checkbox" id="notification1" style="left: 22%; top: 137%" checked>
-                <label class="checkboxlabels" for="notification1" style="left: 25%; top: 138%"> Points Removed from Account </label> <br>
-                <input class="checkboxes" type="checkbox" id="notification1" style="left: 22%; top: 140%" checked>
-                <label class="checkboxlabels" for="notification1" style="left: 25%; top: 141%"> Shipping Confirmation </label> <br>
-                <input class="checkboxes" type="checkbox" id="notification1" style="left: 22%; top: 143%" checked>
-                <label class="checkboxlabels" for="notification1" style="left: 25%; top: 144%"> Delivery Confirmation </label> <br>
-                <input class="checkboxes" type="checkbox" id="notification1" style="left: 22%; top: 146%" checked>
-                <label class="checkboxlabels" for="notification1" style="left: 25%; top: 147%"> Issues </label> <br>
-
-                <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="nightmode">
-                    <label class="custom-control-label" for="nightmode"> Night Mode </label> <br> <br>
-                </div>
-
-            </div>
 
         </div>
     </div>

@@ -43,8 +43,9 @@ CREATE TABLE CATALOG_KEYWORDS
 
 CREATE TABLE ORG_PAYMENTS
     (PayID          INT             NOT NULL    AUTO_INCREMENT,
-    CreditCardNum   INT             NOT NULL,
-    CreditCardSec   INT             NOT NULL,
+    BillingName     VARCHAR(50)     NOT NULL,
+    CreditCardNum   BINARY(64)      NOT NULL,
+    CreditCardSec   BINARY(64)      NOT NULL,
     CreditCardDate  DATE            NOT NULL,
     BillingAddress  VARCHAR(100)    NOT NULL,
     OrgID           INT             NOT NULL,
@@ -67,7 +68,7 @@ CREATE TABLE DRIVER
 CREATE TABLE DRIVER_ORGS
     (UserID     INT     NOT NULL,
     OrgID       INT     NOT NULL,
-    Points      INT     NOT NULL,
+    Points      FLOAT   NOT NULL,
     PRIMARY KEY (UserID, OrgID),
     FOREIGN KEY (UserID) REFERENCES DRIVER (UserID),
     FOREIGN KEY (OrgID) REFERENCES ORGANIZATION (OrgID));
@@ -91,7 +92,7 @@ CREATE TABLE LOGIN_ATTEMPT
 CREATE TABLE POINT_CHANGE_REASON
     (ReasonID           INT             NOT NULL    AUTO_INCREMENT,
     ReasonDescription   VARCHAR(100)    NOT NULL,
-    NumPoints           INT             NOT NULL,
+    NumPoints           FLOAT           NOT NULL,
     OrgID               INT             NOT NULL,
     PRIMARY KEY (ReasonID),
     FOREIGN KEY (OrgID) REFERENCES ORGANIZATION (OrgID));
@@ -100,7 +101,7 @@ CREATE TABLE POINT_CHANGE
     (ChangeID       INT     NOT NULL    AUTO_INCREMENT,
     ChangeDate      DATE    NOT NULL,
     ReasonID        INT     NOT NULL,
-    TotalPoints     INT     NOT NULL,
+    TotalPoints     FLOAT   NOT NULL,
     DriverID        INT     NOT NULL,
     SponsorID       INT     NOT NULL,
     PRIMARY KEY (ChangeID),

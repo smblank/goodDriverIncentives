@@ -136,7 +136,12 @@
         <div class = "row">
             <div class = "col-md-12 text-right">
                 <!-- Linking another html document to a button source: https://www.w3schools.com/html/html_links.asp -->
-                <button id = "cancelapplication" onclick = "location.href = '{% url 'loginScreen' %}'"> Cancel </button>
+                {% if loggedIn %}
+                    <button id = "cancelapplication" onclick = "location.href = '{% url 'driverDash' %}'"> Cancel </button>
+                    
+                {% else %}
+                    <button id = "cancelapplication" onclick = "location.href = '{% url 'loginScreen' %}'"> Cancel </button>
+                {% endif %}
             </div>
         </div>
         

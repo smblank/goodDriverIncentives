@@ -64,7 +64,6 @@ urlpatterns = [
     path('getNewSponsorProfilePic', profileOps.getSponsorProfilePic, name = 'getNewSponsorProfilePic'),
     path('getNewSponsorEmail', profileOps.getNewSponsorEmail, name = 'getNewSponsorEmail'),
     path('getNewDriverPass', profileOps.getNewSponsorPassword, name = 'getNewDriverPass'),
-    path('getNewDriverPhone', profileOps.getNewSponsorPhone, name = 'getNewDriverPhone'),
     path('sponsorProfile/', profileViews.sponsorProfile, name = 'sponsorProfile'),
 
     #Admin profile forms

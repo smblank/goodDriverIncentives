@@ -243,7 +243,8 @@ def adminEditUser(request, userID):
         'userName': db.getUserName(email),
         'orgs': orgs,
         'userID': userID,
-        'pic': pic
+        'pic': pic,
+        'currEmail': email
     }
         
     return render(request, 'admin_edit_user.html', context)
@@ -268,7 +269,8 @@ def sponsorEditUser(request, userID):
         'isDriver': isDriver,
         'userName': db.getUserName(email),
         'userID': userID,
-        'pic': pic
+        'pic': pic,
+        'currEmail': email
     }
 
     return render(request, 'sponsor_edit_user.html', context)
@@ -280,8 +282,16 @@ def sponsorEditReason(request, reasonID):
         imgPath = db.getProfilePic(request.session['email'])
     pic = 'img/' + imgPath
 
+    result = db.getPointChangeReason(reasonID)
+
+    for (points, desc) in result:
+        currPoints = points
+        currDesc = desc
+
     context = {
-        'reasonID': reasonID
+        'reasonID': reasonID,
+        'currPoints': currPoints,
+        'currDesc': currDesc
     }
 
     return render(request, 'sponsor_edit_reason.html', context)
@@ -290,8 +300,16 @@ def adminEditReason(request, reasonID):
     imgPath = db.getProfilePic(request.session['email'])
     pic = 'img/' + imgPath
 
+    result = db.getPointChangeReason(reasonID)
+
+    points = result[0]
+    desc = result[1]
+
     context = {
-        'reasonID': reasonID
+        'reasonID': reasonID,
+        'currPoints': points,
+        'currDesc': desc,
+        'pic': pic
     }
     
     return render(request, 'admin_edit_reason.html', context)

@@ -5,7 +5,18 @@ import dbConnectionFunctions as db
 
 #add reguser to settings
 def application(request):
-    return render(request, 'apply.html')
+    if 'loggedIn' in request.session:
+        context = {
+            'loggedIn': request.session['loggedin']
+        }
+    
+    else:
+        context = {
+            'loggedIn': False
+        }
+    
+    return render(request, 'apply.html', context)
+    
 
 def userreggin(request):
     if request.method=='POST':
