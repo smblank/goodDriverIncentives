@@ -60,3 +60,15 @@ def getorgs(request):
         'orgs': orgs
     }
     return render(request, 'apply.html', context)
+
+def page_not_found_view(request, exception=None):
+    return render(request, '404.html')
+
+def error_view(request):
+    return render(request, '500.html')
+
+def permission_denied_view(request, exception=None):
+    return render(request, '403.html')
+
+def bad_request_view(request, exception=None):
+    return render(request, '400.html')
