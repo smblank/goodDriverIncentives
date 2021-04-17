@@ -43,7 +43,10 @@ def userreggin(request):
             applicant_name = request.POST.get('Name') + ' ' + request.POST.get('lname')
             applicant_phone = request.POST.get('PhoneNo')
             applicant_email = request.POST.get('Email')
-            applicant_address = request.POST.get('Address') + ' ' + request.POST.get('address2') + ', ' + request.POST.get('city') + ', ' + request.POST.get('state') + ' ' + request.POST.get('zipcode')
+            if request.POST.get('address2'):
+                applicant_address = request.POST.get('Address') + ' ' + request.POST.get('address2') + ', ' + request.POST.get('city') + ', ' + request.POST.get('state') + ' ' + request.POST.get('zipcode')
+            else:
+                applicant_address = request.POST.get('Address') + ', ' + request.POST.get('city') + ', ' + request.POST.get('state') + ' ' + request.POST.get('zipcode')
             applicant_org = request.POST.get('sponsor')
 
             db.createApplicant(today, applicant_name, applicant_email, applicant_phone, applicant_address, applicant_org)
