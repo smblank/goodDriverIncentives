@@ -99,7 +99,10 @@ def getSponsorReport(request):
         tempChange = PointChangeAtributes()
         tempChange.date = changeDate
         tempChange.pointChange = numPoints
-        tempChange.sponsor = db.getUserName(db.getUserEmail(sponsorID))
+        if reasonDesc == 'Completed Order':
+            tempChange.sponsor = '--'
+        else:
+            tempChange.sponsor = db.getUserName(db.getUserEmail(sponsorID))
         tempChange.reason = reasonDesc
         pointChanges[i].append(tempChange)
 

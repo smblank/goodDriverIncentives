@@ -584,13 +584,13 @@ def cancelOrder (orderID):
     except Error as err:
         print(err)
 
-def completeOrder (orderID, completeDate):
+def completeOrder (driver, org, totCost):
     try:
         conn = getDB()
         cursor = getCursor(conn)
-
-        query = "SELECT completeOrder(%s, %s)"
-        cursor.execute(query, (orderID, completeDate))
+        
+        query = "SELECT completeOrder(%s, %s, %s)"
+        cursor.execute(query, (driver, org, totCost, ))
 
         cursor.close()
         conn.close()

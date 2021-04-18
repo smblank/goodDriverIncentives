@@ -320,7 +320,7 @@ def complete_order(request):
     orders = []
     totalcost = 0
 
-    date = datetime.date.today()
+    # date = datetime.date.today()
     for (id, name, price, img) in prod_in_cart:
         tempProduct = Product()
         tempProduct.id = id
@@ -340,14 +340,16 @@ def complete_order(request):
         elif totalcost <= original_points:
             # complete order
 
-            conn = db.getDB()
-            cursor = db.getCursor(conn)
+            # conn = db.getDB()
+            # cursor = db.getCursor(conn)
 
-            spend_points_query = 'UPDATE DRIVER_ORGS SET Points = Points - %s WHERE UserID=%s AND OrgID=%s'
-            cursor.execute(spend_points_query, (totalcost, db.getUserID(email), org,))
+            # spend_points_query = 'UPDATE DRIVER_ORGS SET Points = Points - %s WHERE UserID=%s AND OrgID=%s'
+            # cursor.execute(spend_points_query, (totalcost, db.getUserID(email), org,))
 
-            cursor.close()
-            conn.close()
+            # cursor.close()
+            # conn.close()
+
+            db.completeOrder(driver_id, org, totalcost)
 
             after_points = db.getDriverPoints(email, org)
 

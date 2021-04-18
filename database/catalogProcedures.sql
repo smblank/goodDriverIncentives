@@ -163,17 +163,27 @@ MODIFIES SQL DATA
 
 DROP FUNCTION IF EXISTS completeOrder;
 
-CREATE FUNCTION completeOrder(completeDate DATE, orderID INT)
+CREATE FUNCTION completeOrder(driver INT, org INT, totCost FLOAT)
 RETURNS INT
 MODIFIES SQL DATA
     BEGIN
+        DECLARE orderId INT;
+
+        SELECT DRIVER_ORDER.OrderID INTO orderID
+        FROM DRIVER_ORDER, BELONGS_TO
+        WHERE DRIVER_ORDER.OrderID = BELONGS_TO.OrderID AND DRIVER_ORDER.OrgID = org AND BELONGS_TO.DriverID = driver AND DRIVER_ORDER.Status = "In-Progress";
+
         UPDATE DRIVER_ORDER
             SET
-                OrderDate = completeDate,
+                OrderDate = CURDATE(),
                 Status = 'Delivered'
             WHERE OrderID = orderID;
 
-            RETURN 0;
+        CALL buyOrder(driver, org, -totCost, CURDATE());
+
+        SELECT createOrder(driver, CURDATE(), org) INTO orderID;
+
+        RETURN 0;
     END;;
 
 DROP FUNCTION IF EXISTS addToCart;
@@ -191,9 +201,9 @@ MODIFIES SQL DATA
         IF (orderID = -1) THEN
             SELECT createOrder (driver, CURDATE(), org) INTO orderID;
 
-            SELECT DRIVER_ORDER.OrderID INTO orderID
-            FROM DRIVER_ORDER, BELONGS_TO
-            WHERE DRIVER_ORDER.OrderID = BELONGS_TO.OrderID AND DRIVER_ORDER.OrgID = org AND BELONGS_TO.DriverID = driver AND DRIVER_ORDER.Status = "In-Progress";
+            -- SELECT DRIVER_ORDER.OrderID INTO orderID
+            -- FROM DRIVER_ORDER, BELONGS_TO
+            -- WHERE DRIVER_ORDER.OrderID = BELONGS_TO.OrderID AND DRIVER_ORDER.OrgID = org AND BELONGS_TO.DriverID = driver AND DRIVER_ORDER.Status = "In-Progress";
         END IF;
 
         INSERT INTO IS_IN_ORDER (OrderID, ProductID, Quantity) VALUES (orderID, product, qty);
@@ -235,10 +245,9 @@ CREATE PROCEDURE getDriverOrders(driver INT, org INT)
     BEGIN
         SELECT DRIVER_ORDER.OrderID, OrderDate, ProductName, Quantity, Price, Status
         FROM DRIVER_ORDER, IS_IN_ORDER, BELONGS_TO, PRODUCT
-        WHERE BELONGS_TO.DriverID = driver AND
+        WHERE BELONGS_TO.DriverID = driver AND DRIVER_ORDER.OrgID = org AND
                 BELONGS_TO.OrderID = DRIVER_ORDER.OrderID  AND IS_IN_ORDER.OrderID = BELONGS_TO.OrderID AND
-                IS_IN_ORDER.ProductID = PRODUCT.ProductID AND
-                Status != 'In-Progress' AND DRIVER_ORDER.OrgID = org;
+                IS_IN_ORDER.ProductID = PRODUCT.ProductID;
     END;;
 
 DROP PROCEDURE IF EXISTS getSponsorOrders;
@@ -520,6 +529,33 @@ MODIFIES SQL DATA
         VALUES (changeDate, reasonID, pointChange, newTot, driver, sponsor);
 
         RETURN newTot;
+    END;;
+
+DROP PROCEDURE IF EXISTS buyOrder;
+
+CREATE PROCEDURE buyOrder (driver INT, org INT, changeAmt FLOAT, chgDate DATE)
+    BEGIN
+        DECLARE reason INT;
+        DECLARE newTot FLOAT;
+
+        UPDATE DRIVER_ORGS
+            SET
+                Points = Points + changeAmt
+            WHERE UserID = driver AND OrgID = org;
+
+        INSERT INTO POINT_CHANGE_REASON (ReasonDescription, NumPoints, OrgID)
+            VALUES ("Completed Order", changeAmt, org);
+
+        SELECT ReasonID INTO reason
+        FROM POINT_CHANGE_REASON
+        WHERE ReasonID = @@Identity;
+
+        SELECT Points INTO newTot
+        FROM DRIVER_ORGS
+        WHERE UserID = driver AND OrgID = org;
+
+        INSERT INTO POINT_CHANGE (ChangeDate, ReasonID, TotalPoints, DriverID, SponsorID)
+            VALUES (chgDate, reason, newTot, driver, 2);
     END;;
 
 DROP FUNCTION IF EXISTS addOrgPayment;
