@@ -610,7 +610,7 @@ READS SQL DATA
 
         SELECT Address INTO defaultAddress
         FROM DRIVER_ADDRESSES
-        WHERE UserID = user AND DefaultAddr = True;
+        WHERE DriverID = user AND DefaultAddr = True;
 
         RETURN defaultAddress;
     END;;
