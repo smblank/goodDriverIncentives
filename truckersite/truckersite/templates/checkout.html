@@ -59,7 +59,7 @@
         <div class="row">
             <div class="col-md-3">
                 <div id="sidebar">
-                    <a id="back" href="driver_catalog.html"> <i class="fa fa-arrow-left"></i> Catalog </a>
+                   <a id="back" href="{% url 'driverCatalog' %}"> <i class="fa fa-arrow-left"></i> Catalog </a>
                     <p id="pointstitle"> My Points: </p>
                     <p id="points"> {{points}} </p>
                 </div>
@@ -71,36 +71,34 @@
                 <section class="text-center mb-4">
                     {% block content %}
                     <h2> Here is your order </h2>
-                    {% for order in orders %}
                     <div class="view overlay">
 
                     </div>
                     <h4> Order Date:
                     <h4 class="font-weight-bold blue-text">
-                    <strong>{{o.date}}</strong>
+                    <strong>{{date}}</strong>
                     </h4>
                     </h4>
-                    {%for product in order.products%}
+                    {%for item in items%}
                     <h4> Product Name:
                     <h4 class="font-weight-bold blue-text">
-                    <strong>{{product.name}}</strong>
+                    <strong>{{item.name}}</strong>
                     </h4>
                     </h4>
                     <h4> Product Qty:
                     <h4 class="font-weight-bold blue-text">
-                    <strong>{{product.qty}}</strong>
+                    <strong>{{item.qty}}</strong>
                     </h4>
                     </h4>
 
                     <h4> Price:
                     <h4 class="font-weight-bold blue-text">
-                        <strong>{{product.price}} points</strong>
+                        <strong>{{item.price}} points</strong>
                     </h4>
                     </h4>
                     </br>
                     {% endfor %}
-                    {% endfor %}
-                    <h4> Total Points = {{order.totalcost}}
+                    <h4> Total Points = {{totalcost}}
                     </h4>
                     {% endblock content %}
             </div>

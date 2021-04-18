@@ -11,6 +11,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 import dbConnectionFunctions as db
 import string
+import datetime
 
 APP_ID = 'ApurvPat-FindingS-PRD-ddc78fcfb-06024fa2'
 
@@ -199,51 +200,39 @@ def checkout(request):
 
     
     pointRate = db.getPointConversion(org)
-    prod_in_cart = db.getDriverOrders(driver_id,org)
+    prod_in_cart = db.getProductsInCart(driver_id,org)
 
     class Product:
         def __init__(self):
-            name = ''
-            price = 0
-            qty = 0
-
-    class Order:
-        def __init__(self):
             id = -1
-            date = '00/00/0000'
-            self.totalCost = 0
-            self.products = []
-            status = ''
-
-    orderIds = []
+            name = ''
+            price = ''
+            pic = ''
+            qty = 0
+    
     orders = []
-
-    for (orderID, date, productName, qty, price, status) in prod_in_cart:
-        if (not exists(orderIds, orderID)):
-            tempOrder = Order()
-            tempOrder.id = orderID
-            tempOrder.date = date
-            tempOrder.status = status
-            orders.append(tempOrder)
-
-            orderIds.append(orderID)
-
-        i = find(orderIds, orderID)
+    totalcost= 0;
+    date = datetime.date.today()
+    for (id, name, price, img) in result:
         tempProduct = Product()
-        tempProduct.name = productName
+        tempProduct.id = id
+        tempProduct.name = name
         tempProduct.price = int(price / pointRate)
-        tempProduct.qty = qty
-        orders[i].products.append(tempProduct)
-        orders[i].totalCost += int(price / pointRate) * qty
+        totalcost += int(price / pointRate)
+        tempProduct.pic = img
+        tempProduct.qty = db.getQuantityInCart(driver_id, org, tempProduct.id)
+        orders.append(tempProduct)
 
     pic = db.getProfilePic(email)
     imgPath = 'img/' + pic
 
     context = {
+        'date':date,
+        'totalcost':totalcost,
         'points': points,
         'default': defaultAddr,
         'addresses': addresses,
-        'orders': orders,
+        'items': orders,
         'pic': imgPath
     }
     return render(request, 'checkout.html', context)
