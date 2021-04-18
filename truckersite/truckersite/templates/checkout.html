@@ -75,20 +75,33 @@
                     <div class="view overlay">
 
                     </div>
+                    <h4> Order Date:
                     <h4 class="font-weight-bold blue-text">
                     <strong>{{o.date}}</strong>
                     </h4>
+                    </h4>
+                    <h4> Product Name:
                     <h4 class="font-weight-bold blue-text">
                     <strong>{{o.name}}</strong>
                     </h4>
+                    </h4>
+
+                    <h4> Product Qty:
                     <h4 class="font-weight-bold blue-text">
                     <strong>{{o.qty}}</strong>
                     </h4>
+                    </h4>
+
+                    <h4> Price:
                     <h4 class="font-weight-bold blue-text">
                         <strong>{{o.price}} points</strong>
                     </h4>
+                    </h4>
                     </br>
-                    {% endfor %} {% endblock content %}
+                    {% endfor %}
+                    <h4> Total Points = 
+                    </h4>
+                    {% endblock content %}
             </div>
         </div>
 
