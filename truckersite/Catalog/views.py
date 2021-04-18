@@ -199,7 +199,7 @@ def checkout(request):
 
     
     pointRate = db.getPointConversion(org)
-    prod_in_cart = db.getDriverOrders(id,org)
+    prod_in_cart = db.getDriverOrders(driver_id,org)
 
     class Product:
         def __init__(self):
@@ -218,7 +218,7 @@ def checkout(request):
     orderIds = []
     orders = []
 
-    for (orderID, date, productName, qty, price, status) in result:
+    for (orderID, date, productName, qty, price, status) in prod_in_cart:
         if (not exists(orderIds, orderID)):
             tempOrder = Order()
             tempOrder.id = orderID
