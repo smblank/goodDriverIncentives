@@ -554,6 +554,9 @@ def add_to_cart(request, id):
         newQty = request.POST.get('qty')
         db.updateQuantityInCart(driverID, org, id, newQty)
     else:
+        print(driverID)
+        print(org)
+        print(id)
         db.addToCart(driverID, org, id, 1)
 
     return product_list(request)
