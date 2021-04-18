@@ -130,8 +130,9 @@ urlpatterns = [
     path('addProducts', catalogViews.addProducts, name = 'addProducts'),
     path('admin/', admin.site.urls),
     path('addToCart/<str:id>/', catalogViews.add_to_cart, name = 'addToCart'),
-    # path('removeFromCart', ,name = 'removeFromCart'),
-    # path('addToWishlist', catalogViews, name = 'addToWishlist'),
+    path('removeFromCart/<str:id>/', catalogViews.remove_from_cart, name = 'removeFromCart'),
+    path('addToWishlist/<str:id>/', catalogViews.addToWishlist, name = 'addToWishlist'),
+    path('removeFromWishlist/<str:id>/', catalogViews.removeFromWishlist, name = 'removeFromWishlist'),
 
     #Sponsor
     path('sponsor_dash/', sponsorViews.sponsorDashDisplay, name = 'sponsorDashDisplay'),

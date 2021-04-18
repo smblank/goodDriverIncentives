@@ -63,8 +63,26 @@
             </div>
 
             <div class="col-md-9" style="height: 900px;">
+            <section class="text-center mb-4">
                 <h2 id="pagename"> My Cart </h2>
-                <!-- Put Items Here -->
+                    {% block content %}
+                    {% for item in items %}
+                    <div class="view overlay">
+                        <img img src={{item.pic}} width="255" height="255" alt="">
+                        <a href="{% url 'productPage' item.id %}">
+                            <div class="mask rgba-white-slight"></div>
+                        </a>
+                    </div>
+                    <a href="{% url 'productPage' item.id %}">
+                        <h4 class="font-weight-bold blue-text">
+                            <strong>{{item.name}}</strong>
+                        </h4>
+                    </a>
+                    <h4 class="font-weight-bold blue-text">
+                        <strong>{{item.price}} points</strong>
+                    </h4>
+                    </br>
+                    {% endfor %} {% endblock content %}
 
                 <button id="checkout" onclick="location.href = '{% url 'checkout' %}'"> Checkout </button>
             </div>

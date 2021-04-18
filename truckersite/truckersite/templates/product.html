@@ -116,8 +116,24 @@
                                 </h4>
 
                                 {% if not isAdmin and not isSponsor %}
-                                <button id="addcart"> Add to Cart </button>
-                                <button id="addwishlist"> Add to Wishlist </button> {% endif %}
+                                    {% if not inCart %}
+                                        <a href = "{% url 'addToCart' product.id %}"><button id="addcart"> Add to Cart </button></a>
+                                    {% else %}
+                                        <form method = "Post" action = "{% url 'addToCart' product.id %}">
+                                            {% csrf_token %}
+                                            <input class = "fields" type = "text" id = "qty" name = "qty" maxlength = "100" placeholder = {{qty}}> <br>
+                                            <button class = "save" id = "saveemail"> <i class = "fa fa-save"></i> </button>
+                                        </form>
+                                        <a href = "{% url 'removeFromCart' product.id %}"><button id="removecart"> Remove from Cart </button></a>
+                                    {% endif %}
+
+                                    {% if not inWishlist %}
+                                        <a href = "{% url 'addToWishlist' product.id %}"><button id="addwishlist"> Add to Wishlist </button> </a>
+
+                                    {% else %}
+                                        <a href = "{% url 'removeFromWishlist' product.id %}"><button id="addwishlist"> Remove from Wishlist </button> </a>
+                                    {% endif %}
+                                {% endif %}
                             </div>
                         </div>
                     </div>

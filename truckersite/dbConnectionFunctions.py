@@ -345,7 +345,7 @@ def getDriverPoints(email, orgID):
         for points in result:
             cursor.close()
             conn.close()
-            return points
+            return int(points)
     
     except Error as err:
         print(err)
@@ -719,7 +719,8 @@ def addToWishlist (driverID, productID, orgNo):
         cursor = getCursor(conn)
 
         query = "SELECT addToWishlist(%s, %s, %s)"
-        cursor.execute(query, (driverID, productID, orgNo))
+        cursor.execute(query, (driverID, productID, orgNo, ))
+        print(cursor.fetchone())
 
         cursor.close()
         conn.close()
@@ -734,7 +735,7 @@ def removeFromWishlist (driverID, productID, orgNo):
         cursor = getCursor(conn)
 
         query = "SELECT removeFromWishlist(%s, %s, %s)"
-        cursor.execute(query, (driverID, productID, orgNo))
+        cursor.execute(query, (driverID, productID, orgNo, ))
 
         cursor.close()
         conn.close()
@@ -766,7 +767,7 @@ def getProductsInWishlist(driver, org):
         cursor = getCursor(conn)
 
         query = "CALL getProductsInWishlist(%s, %s)"
-        cursor.execute(query, (driver, org))
+        cursor.execute(query, (driver, org, ))
         result = cursor.fetchall()
 
         cursor.close()

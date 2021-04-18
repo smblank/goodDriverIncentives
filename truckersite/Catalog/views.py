@@ -261,9 +261,10 @@ def productPage(request, id):
     product.pic = result[2]
 
     inCart = db.checkIsInCart(driverId, org, id)
+    inWishlist = db.checkIsInWishlist(driverId, id, org)
 
     if inCart:
-        qty = db.getQuantity(driverId, org, id)
+        qty = db.getQuantityInCart(driverId, org, id)
     else:
         qty = 0
 
@@ -277,7 +278,8 @@ def productPage(request, id):
         'isAdmin': request.session['isAdmin'],
         'pic': imgPath,
         'inCart': inCart,
-        'qty': qty
+        'qty': qty,
+        'inWishlist': inWishlist
     }
 
     return render(request, 'product.html', context)
@@ -442,31 +444,71 @@ def add_to_cart(request, id):
 
 
 
-def remove_from_cart(request, slug):
-    item = get_object_or_404(Product, slug=slug)
-    order_qs = Order.objects.filter(
-        user=request.user,
-        ordered=False
-    )
-    if order_qs.exists():
-        order = order_qs[0]
-        # check if the order item is in the order
-        if order.items.filter(item__slug=item.slug).exists():
-            order_item = OrderedProduct.objects.filter(
-                item=item,
-                user=request.user,
-                ordered=False
-            )[0]
-            order.items.remove(order_item)
-            order_item.delete()
-            messages.info(request, "This item was removed from your cart.")
-            return redirect("Catalog:driver_cart")
-        else:
-            messages.info(request, "This item was not in your cart")
-            return redirect("Catalog:driver_cart", slug=slug)
+def remove_from_cart(request, id):
+    if (request.session['isViewing']):
+        email = request.session['tempEmail']
+        org = db.getOrgNo(email)
     else:
-        messages.info(request, "You do not have an active order")
-        return redirect("Catalog:driver_cart", slug=slug)
+        email = request.session['email']
+        org = request.session['orgID']
+    
+    driverID = db.getUserID(email)
+
+    db.removeFromCart(driverID, org, id)
+
+    return product_list(request)
+    # item = get_object_or_404(Product, slug=slug)
+    # order_qs = Order.objects.filter(
+    #     user=request.user,
+    #     ordered=False
+    # )
+    # if order_qs.exists():
+    #     order = order_qs[0]
+    #     # check if the order item is in the order
+    #     if order.items.filter(item__slug=item.slug).exists():
+    #         order_item = OrderedProduct.objects.filter(
+    #             item=item,
+    #             user=request.user,
+    #             ordered=False
+    #         )[0]
+    #         order.items.remove(order_item)
+    #         order_item.delete()
+    #         messages.info(request, "This item was removed from your cart.")
+    #         return redirect("Catalog:driver_cart")
+    #     else:
+    #         messages.info(request, "This item was not in your cart")
+    #         return redirect("Catalog:driver_cart", slug=slug)
+    # else:
+    #     messages.info(request, "You do not have an active order")
+    #     return redirect("Catalog:driver_cart", slug=slug)
+
+def addToWishlist(request, id):
+    if (request.session['isViewing']):
+        email = request.session['tempEmail']
+        org = db.getOrgNo(email)
+    else:
+        email = request.session['email']
+        org = request.session['orgID']
+    
+    driverID = db.getUserID(email)
+
+    db.addToWishlist(driverID, id, org)
+
+    return product_list(request)
+
+def removeFromWishlist(request, id):
+    if (request.session['isViewing']):
+        email = request.session['tempEmail']
+        org = db.getOrgNo(email)
+    else:
+        email = request.session['email']
+        org = request.session['orgID']
+    
+    driverID = db.getUserID(email)
+
+    db.removeFromWishlist(driverID, id, org)
+
+    return product_list(request)
 
 def checkoutPage(request):
     firstName = request.GET.get('firstName')
