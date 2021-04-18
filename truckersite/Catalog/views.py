@@ -179,6 +179,8 @@ def checkout(request):
         org = request.session['orgID']
     
     points = db.getDriverPoints(email, org)
+    driver_id = db.getUserID(email)
+    driver_order = db.getDriverOrders(driver_id, org)
     
     defaultAddr = db.getDefaultAddress(email)
 
@@ -201,10 +203,32 @@ def checkout(request):
     pic = db.getProfilePic(email)
     imgPath = 'img/' + pic
 
+    class Order:
+        def __init__(self):
+            id = -1
+            date = ''
+            name = ''
+            qty = ''
+            price = 0.0
+
+    order = []
+    pointRate = db.getPointConversion(org)
+
+    for(id, o_date, name, qty, price) in driver_order:
+        tempOrder = Order()
+        tempOrder.id = id
+        tempOrder.date = o_date
+        tempOrder.name = name
+        tempOrder.qty = qty
+        tempOrder.price = int(price / pointRate)
+        order.append(tempOrder)
+        
+
     context = {
         'points': points,
         'default': defaultAddr,
         'addresses': addresses,
+        'order': order,
         'pic': imgPath
     }
     return render(request, 'checkout.html', context)

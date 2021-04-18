@@ -68,6 +68,27 @@
             <div class="col-md-9 text-right">
                 <a id="cart" href="driver_cart.html"> <i class="fa fa-shopping-cart"></i> </a>
                 <!-- Put Items Here -->
+                <section class="text-center mb-4">
+                    {% block content %}
+                    <h2> Here is your order </h2>
+                    {% for o in order %}
+                    <div class="view overlay">
+
+                    </div>
+                    <h4 class="font-weight-bold blue-text">
+                    <strong>{{o.date}}</strong>
+                    </h4>
+                    <h4 class="font-weight-bold blue-text">
+                    <strong>{{o.name}}</strong>
+                    </h4>
+                    <h4 class="font-weight-bold blue-text">
+                    <strong>{{o.qty}}</strong>
+                    </h4>
+                    <h4 class="font-weight-bold blue-text">
+                        <strong>{{o.price}} points</strong>
+                    </h4>
+                    </br>
+                    {% endfor %} {% endblock content %}
             </div>
         </div>
 
