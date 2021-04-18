@@ -179,11 +179,8 @@ def checkout(request):
         org = request.session['orgID']
     
     points = db.getDriverPoints(email, org)
-    driver_id = db.getUserID(email)
-    driver_order = db.getDriverOrders(driver_id, org)
-    
+    driver_id = db.getUserID(email)    
     defaultAddr = db.getDefaultAddress(email)
-
     result = db.getDriverAddresses(email)
 
     class Addr:
@@ -200,38 +197,62 @@ def checkout(request):
             tempAddr.addr = address
             addresses.append(tempAddr)
 
-    pic = db.getProfilePic(email)
-    imgPath = 'img/' + pic
+    
+    pointRate = db.getPointConversion(org)
+    prod_in_cart = db.getDriverOrders(id,org)
+
+    class Product:
+        def __init__(self):
+            name = ''
+            price = 0
+            qty = 0
 
     class Order:
         def __init__(self):
             id = -1
-            date = ''
-            name = ''
-            qty = ''
-            price = 0.0
+            date = '00/00/0000'
+            self.totalCost = 0
+            self.products = []
+            status = ''
 
-    order = []
-    pointRate = db.getPointConversion(org)
+    orderIds = []
+    orders = []
 
-    for(id, o_date, name, qty, price) in driver_order:
-        tempOrder = Order()
-        tempOrder.id = id
-        tempOrder.date = o_date
-        tempOrder.name = name
-        tempOrder.qty = qty
-        tempOrder.price = int(price / pointRate)
-        order.append(tempOrder)
-        
+    for (orderID, date, productName, qty, price, status) in result:
+        if (not exists(orderIds, orderID)):
+            tempOrder = Order()
+            tempOrder.id = orderID
+            tempOrder.date = date
+            tempOrder.status = status
+            orders.append(tempOrder)
+
+            orderIds.append(orderID)
+
+        i = find(orderIds, orderID)
+        tempProduct = Product()
+        tempProduct.name = productName
+        tempProduct.price = int(price / pointRate)
+        tempProduct.qty = qty
+        orders[i].products.append(tempProduct)
+        orders[i].totalCost += int(price / pointRate) * qty
+
+    pic = db.getProfilePic(email)
+    imgPath = 'img/' + pic
 
     context = {
         'points': points,
         'default': defaultAddr,
         'addresses': addresses,
-        'order': order,
+        'orders': orders,
         'pic': imgPath
     }
     return render(request, 'checkout.html', context)
+
+def complete_order():
+    pass
+
+def cancel_order():
+    pass
 
 def productPage(request, id):
     if (request.session['isViewing']):
@@ -393,10 +414,6 @@ def sponsor_catalog(request):
     }
     return render(request, "sponsor_catalog.html", context)
 
-def createCatalog(request):
-    #call add products here to create catalog
-    pass
-
 def add_to_cart(request, id):
     if (request.session['isViewing']):
         email = request.session['tempEmail']
@@ -509,56 +526,3 @@ def removeFromWishlist(request, id):
     db.removeFromWishlist(driverID, id, org)
 
     return product_list(request)
-
-def checkoutPage(request):
-    firstName = request.GET.get('firstName')
-    lastName = request.GET.get('lastName')
-    email = request.GET.get('email')
-    address = request.GET.get('address')
-    address2 = request.GET.get('address2')
-    country = request.GET.get('country')
-    state = request.GET.get('state')
-    zipCode = request.GET.get('zipCode')
-    sum = 0
-    itemStr ='Thank you for your purchase, ' + firstName + '\n\n'
-    itemStr = itemStr + firstName + ' ' + lastName + '\n'
-    itemStr = itemStr + address + '\n'
-    if address2 != '':
-        itemStr = itemStr + address2 + '\n'
-    itemStr = itemStr + state + ', ' + country + '\n'
-    itemStr = itemStr + zipCode + '\n' + '\n'
-    items = Order.objects.filter(user=request.user, ordered=False)
-    for item in items[0].items.all():
-        sum += item.item.price*item.quantity
-        itemStr += item.item.title + '\t'
-        itemStr += str(item.item.price)
-        itemStr += '\n'
-    
-    itemStr = itemStr + "\nTotal Cost: " + str(sum)
-
-    order = Order.objects.filter(user=request.user, ordered=False)[0]
-    order.ordered = True
-    order.save()
-    for item in order.items.all():
-        print(item.item.title)
-        item.ordered = True
-        item.save()
-    return redirect("catalog:catalog")
-
-def cancelOrder(request, pk):
-    sum = 0
-    order = Order.objects.filter(user=request.user, pk=pk, ordered=True)[0]
-    itemStr ='Hi, ' + request.user.username + '\n\n' + 'You cancelled your order #' + str(pk) + '.\nPlease find the details of your refund below.\n\n'
-    for item in order.items.all():
-        itemStr+= item.item.title + '\t' + str(item.quantity) + '\n'
-        sum += item.item.price*item.quantity
-
-
-    itemStr += '\nTotal Refund: ' + str(sum)
-
-    subj = 'Order #' + str(pk) + ' Cancellation'
-
-    order.delete()
-    message = 'Order ' + str(pk + ' successfully cancelled')
-    messages.info(request, message)
-    return redirect("catalog:pastOrders")

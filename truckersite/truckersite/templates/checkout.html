@@ -71,7 +71,7 @@
                 <section class="text-center mb-4">
                     {% block content %}
                     <h2> Here is your order </h2>
-                    {% for o in order %}
+                    {% for order in orders %}
                     <div class="view overlay">
 
                     </div>
@@ -80,26 +80,27 @@
                     <strong>{{o.date}}</strong>
                     </h4>
                     </h4>
+                    {%for product in order.products%}
                     <h4> Product Name:
                     <h4 class="font-weight-bold blue-text">
-                    <strong>{{o.name}}</strong>
+                    <strong>{{product.name}}</strong>
                     </h4>
                     </h4>
-
                     <h4> Product Qty:
                     <h4 class="font-weight-bold blue-text">
-                    <strong>{{o.qty}}</strong>
+                    <strong>{{product.qty}}</strong>
                     </h4>
                     </h4>
 
                     <h4> Price:
                     <h4 class="font-weight-bold blue-text">
-                        <strong>{{o.price}} points</strong>
+                        <strong>{{product.price}} points</strong>
                     </h4>
                     </h4>
                     </br>
                     {% endfor %}
-                    <h4> Total Points = 
+                    {% endfor %}
+                    <h4> Total Points = {{order.totalcost}}
                     </h4>
                     {% endblock content %}
             </div>
