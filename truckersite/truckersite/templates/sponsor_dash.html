@@ -70,7 +70,7 @@
             <div class="col-md-3" style="min-height: 682px;"></div>
 
             <div class="col-md-6" style="min-height: 682px;">
-                <div class="dashinfo">
+                <div class="dashinfo" style = "margin-left: 25%;">
                     <div>Pending Applications:</div>
                     {% for driver in driver_application_list %}
                     <div><a href="/application/{{ driver.applicant_id}}">{{ driver.name }}</a></div>
