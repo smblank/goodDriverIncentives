@@ -171,6 +171,10 @@
                 </form>
 
                 <p class = "setting" id = "creditcard" style = "margin-top: 1.5%;"> Credit Card </p>
+                <p>Current Card Info</p>
+                <p>{{ccName}}</p>
+                <p>{{ccNum}}</p>
+                <p>{{ccDate}}</p>
                 <form method="Post" action="{% url 'updatePaymentInfo' %}">
                     {% csrf_token %}
                     <input type="text" class="settingtext" id="name" name="ccName" placeholder="Name on Card"> <br>
@@ -179,6 +183,7 @@
                     <input type="text" class="settingtext" id="exp" placeholder="Expiration Date (mm/yy)" name="ccDate" maxlength="5">
 
                     <p class="setting" id="bilingaddress" style="margin-top: 1.5%;"> Billing Address </p>
+                    <p>Current Billing Address: {{billAddr}}</p>
                     <input type="text" class="settingtext" id="addressline1" name="addr1" placeholder="Address Line 1"> <br>
                     <input type="text" class="settingtext" id="addressline2" name="addr2" placeholder="Address Line 2"> <br>
                     <input type="text" class="settingtext" id="city" name="city" placeholder="City"> <br>

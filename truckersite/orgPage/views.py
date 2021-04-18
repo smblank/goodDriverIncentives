@@ -83,13 +83,33 @@ def organizationPage(request):
         tempWord.word = word
         keywords.append(tempWord)
 
+    pointRate = db.getPointConversion(orgNo)
+
+    result = db.getOrgPayment(orgNo)
+
+    if not (result is None):
+        ccName = result[0]
+        ccNum = '************' + result[1]
+        ccDate = result[2]
+        billAddr = result[3]
+    else:
+        ccName = ''
+        ccNum = ''
+        ccDate = ''
+        billAddr = ''
+
     context = {
         'reasons': reasons,
         'sponsors': sponsors,
         'drivers': drivers,
         'logo': logo,
         'keywords': keywords,
-        'pic': pic
+        'pic': pic,
+        'pointRate': pointRate,
+        'ccName': ccName,
+        'ccNum': ccNum,
+        'ccDate': ccDate,
+        'billAddr': billAddr
     }
 
     return render(request, 'sponsor_organization.html', context)
@@ -188,6 +208,21 @@ def adminOrgs(request):
         imgPath = db.getProfilePic(request.session['email'])
         pic = 'img/' + imgPath
 
+        pointRate = db.getPointConversion(orgNo)
+
+        result = db.getOrgPayment(orgNo)
+
+        if not (result is None):
+            ccName = result[0]
+            ccNum = '************' + result[1]
+            ccDate = result[2]
+            billAddr = result[3]
+        else:
+            ccName = ''
+            ccNum = ''
+            ccDate = ''
+            billAddr = ''
+
         context = {
             'reasons': reasons,
             'sponsors': sponsors,
@@ -195,7 +230,12 @@ def adminOrgs(request):
             'orgs': orgs,
             'logo': logo,
             'items': products,
-            'pic': pic
+            'pic': pic,
+            'pointRate': pointRate,
+            'ccName': ccName,
+            'ccNum': ccNum,
+            'ccDate': ccDate,
+            'billAddr': billAddr
         }
     
     else:

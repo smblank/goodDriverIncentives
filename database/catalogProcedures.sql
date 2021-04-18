@@ -524,14 +524,14 @@ MODIFIES SQL DATA
 
 DROP FUNCTION IF EXISTS addOrgPayment;
 
-CREATE FUNCTION addOrgPayment (name VARCHAR(50), ccNum CHAR(16), ccSec CHAR(3), ccDate DATE, billAddr VARCHAR(100), organization INT)
+CREATE FUNCTION addOrgPayment (name VARCHAR(50), ccNum CHAR(16), digits CHAR(4), ccSec CHAR(3), ccDate DATE, billAddr VARCHAR(100), organization INT)
 RETURNS INT
 MODIFIES SQL DATA
     BEGIN
         DECLARE newPayment INT;
 
-        INSERT INTO ORG_PAYMENTS (BillingName, CreditCardNum, CreditCardSec, CreditCardDate, BillingAddress, OrgID)
-            VALUES (name, SHA(ccNum), SHA(ccSec), ccDate, billAddr, organization);
+        INSERT INTO ORG_PAYMENTS (BillingName, CreditCardNum, LastDigits, CreditCardSec, CreditCardDate, BillingAddress, OrgID)
+            VALUES (name, SHA(ccNum), digits, SHA(ccSec), ccDate, billAddr, organization);
         
         SELECT PayID INTO newPayment
         FROM ORG_PAYMENTS
@@ -542,16 +542,26 @@ MODIFIES SQL DATA
 
 DROP PROCEDURE IF EXISTS updateOrgPayment;
 
-CREATE PROCEDURE updateOrgPayment (name VARCHAR(50), ccNum CHAR(16), ccSec CHAR(3), ccDate DATE, billAddr VARCHAR(100), organization INT, payID INT)
+CREATE PROCEDURE updateOrgPayment (name VARCHAR(50), ccNum CHAR(16), digits CHAR(4), ccSec CHAR(3), ccDate DATE, billAddr VARCHAR(100), organization INT, payID INT)
     BEGIN
         UPDATE ORG_PAYMENTS
             SET
                 BillingName = name,
                 CreditCardNum = SHA(ccNum),
+                LastDigits = digits,
                 CreditCardSec = SHA(ccSec),
                 CreditCardDate = ccDate,
                 BillingAddress = billAddr
         WHERE PayID = payID AND OrgID = organization;
+    END;;
+
+DROP PROCEDURE IF EXISTS getOrgPayment;
+
+CREATE PROCEDURE getOrgPayment(orgNo INT)
+    BEGIN
+        SELECT BillingName, LastDigits, CreditCardDate, BillingAddress
+        FROM ORG_PAYMENTS
+        WHERE OrgID = orgNo;
     END;;
 
 DROP PROCEDURE IF EXISTS getKeywords;

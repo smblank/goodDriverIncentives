@@ -96,7 +96,7 @@ urlpatterns = [
     #Edit existsing users
     path('adminEditUserPage/<int:userID>', orgViews.adminEditUser, name = 'adminEditUserPage'),
     path('adminEditUser/<int:userID>', orgOps.adminEditUser, name = 'adminEditUser'),
-    path('sponsorEditUser/<int:userID>', orgOps.sponsorEditUser, name = 'adminEditUser'),
+    path('sponsorEditUser/<int:userID>', orgOps.sponsorEditUser, name = 'sponsorEditUser'),
 
     path('adminEditReason/<int:reasonID>', orgOps.adminUpdateReason, name = 'adminEditReason'),
     path('sponsorEditReason/<int:reasonID>', orgOps.sponsorUpdateReason, name = 'sponsorEditReason'),

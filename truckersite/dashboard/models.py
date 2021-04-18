@@ -56,7 +56,7 @@ def setDriverView(request):
     num = 0
     while (db.checkEmail(tempEmail)):
         num += 1
-        tempEmail = tempUserName + num + tempEmail
+        tempEmail = tempUserName + str(num) + email
     
     request.session['tempEmail'] = tempEmail
     request.session['isViewing'] = True
@@ -73,7 +73,7 @@ def setSponsorView(request):
     num = 0
     while (db.checkEmail(tempEmail)):
         num += 1
-        tempEmail = tempUserName + num + tempEmail
+        tempEmail = tempUserName + str(num) + email
     
     request.session['tempEmail'] = tempEmail
     request.session['isViewing'] = True

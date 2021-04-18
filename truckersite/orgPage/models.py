@@ -87,7 +87,13 @@ def updatePaymentInfo(request):
     else:
         orgNo = db.getOrgNo(request.session['email'])
 
-    db.updateOrgPayment(ccName, ccNum, ccSec, ccDate, address, orgNo, 1)
+    currCard = getOrgPayment(orgNo)
+
+    if currCard is None:
+        db.addOrgPayment(ccName, ccNum, ccSec, ccDate, address, orgNo)
+    else:
+        db.updateOrgPayment(ccName, ccNum, ccSec, ccDate, address, orgNo, 1)
+    
     if (request.session['isAdmin']):
         return views.adminOrgs(request)
     else:
@@ -144,6 +150,7 @@ def editSponsor(request):
 
     if sponsorID != 'none':
         if 'remove' in request.POST:
+            print('Remove')
             if (request.session['isSponsor']):
                 currUserID = db.getUserID(request.session['email'])
                 if (sponsorID != currUserID):
@@ -161,6 +168,7 @@ def editSponsor(request):
                 return views.adminOrgs(request)
 
         elif 'edit' in request.POST:
+            print("Edit")
             if (request.session['isSponsor']):
                 return views.sponsorEditUser(request, sponsorID)
             else:

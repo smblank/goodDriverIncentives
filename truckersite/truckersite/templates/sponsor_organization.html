@@ -154,7 +154,7 @@
                     <button class="save" id="savepointchange"> <i class = "fa fa-save"></i> </button>
                 </form>
 
-                <p class="setting" id="value" style="margin-top: 1.5%;"> Point Value </p>
+                <p class="setting" id="value" style="margin-top: 1.5%;"> Point Value (Current Value: ${{pointRate}}/point)</p>
                 <form method="Post" action="{% url 'updatePointConversion' %}">
                     {% csrf_token %}
                     <input type="text" class="valuechanges" id="dollars" name="dollars" placeholder="Dollars (Ex. - 2.25)" style="font-size: 200%;">
@@ -164,6 +164,10 @@
                 </form>
 
                 <p class="setting" id="creditcard" style="margin-top: 1.5%;"> Credit Card </p>
+                <p>Current Card Info</p>
+                <p>{{ccName}}</p>
+                <p>{{ccNum}}</p>
+                <p>{{ccDate}}</p>
                 <form method="Post" action="{% url 'updatePaymentInfo' %}">
                     {% csrf_token %}
                     <input type="text" class="settingtext" id="name" name="ccName" placeholder="Name on Card"> <br>
@@ -172,6 +176,7 @@
                     <input type="text" class="settingtext" id="exp" placeholder="Expiration Date (mm/yy)" name="ccDate" maxlength="5">
 
                     <p class="setting" id="bilingaddress" style="margin-top: 1.5%;"> Billing Address </p>
+                    <p>Current Billing Address: {{billAddr}}</p>
                     <input type="text" class="settingtext" id="addressline1" name="addr1" placeholder="Address Line 1"> <br>
                     <input type="text" class="settingtext" id="addressline2" name="addr2" placeholder="Address Line 2"> <br>
                     <input type="text" class="settingtext" id="city" name="city" placeholder="City"> <br>
@@ -191,8 +196,8 @@
                         {% endfor %}
                     </select>
 
-                    <button id="remove"> Remove Sponsor </button>
-                    <button id="edit"> Edit Sponsor Info </button>
+                    <button id="remove" name = "remove"> Remove Sponsor </button>
+                    <button id="edit" name = "edit"> Edit Sponsor Info </button>
                 </form>
 
                 <p class="setting" id="addsponsor" style="margin-top: 1.5%;"> Add Sponsor Users</p>
@@ -231,7 +236,7 @@
                     </div>
                 </form>
 
-                <a href="{% url 'createCatalog' %}"><button id="create"> Create Catalog </button></a>
+                <a href="{% url 'createCatalog' %}"><button id="create"> Create Catalog </button></a><p>Note: This will take a few seconds</p>
                 <p class="setting" id="current" style="margin-top: 1.5%;"> Current Catalog Keywords</p>
                 <!-- As keywords are entered display them below the button; template below-->
                 <div>

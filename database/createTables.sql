@@ -45,6 +45,7 @@ CREATE TABLE ORG_PAYMENTS
     (PayID          INT             NOT NULL    AUTO_INCREMENT,
     BillingName     VARCHAR(50)     NOT NULL,
     CreditCardNum   BINARY(64)      NOT NULL,
+    LastDigits      CHAR(4)         NOT NULL,
     CreditCardSec   BINARY(64)      NOT NULL,
     CreditCardDate  DATE            NOT NULL,
     BillingAddress  VARCHAR(100)    NOT NULL,

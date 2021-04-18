@@ -2,6 +2,7 @@ from django.shortcuts import render
 import dbConnectionFunctions as db
 from reports import views
 from reportlab.pdfgen.canvas import Canvas
+from django.http import HttpResponse
 
 def exists(list, element):
     for elem in list:
@@ -57,63 +58,8 @@ def updateDriverList(request):
 
 
 # Create your models here.
+
 def getSponsorReport(request):
-    driver = request.POST.get('driver')
-    startDate = request.POST.get('startDate')
-    endDate = request.POST.get('endDate')
-
-    if (request.session['isViewing']):
-        orgID = db.getOrgNo(request.session['tempEmail'])
-    else:
-        orgID = db.getOrgNo(request.session['email'])
-
-    if (driver == 'all'):
-        result = db.allDriverPointChangeReport(startDate, endDate, orgID)
-    else:
-        result = db.indvDriverPointChangeReport(startDate, endDate, orgID, driver)
-
-    class PointChangeAtributes:
-        def __init__(self):
-            date = '00/00/00'
-            pointChange = 0
-            sponsor = 'none'
-            reason = 'none'
-
-    driverNames = []
-    driverPoints = []
-    pointChanges = []
-
-    drivers = []
-
-    for (driverName, pointTotal, changeDate, numPoints, sponsorID, reasonDesc) in result:
-        if (not exists(driverNames, driverName)):
-            driverNames.append(driverName)
-            driverPoints.append(pointTotal)
-            pointChanges.append([])
-
-        i = find(driverNames, driverName)
-        tempChange = PointChangeAtributes()
-        tempChange.date = changeDate
-        tempChange.pointChange = numPoints
-        tempChange.sponsor = db.getUserName(db.getUserEmail(sponsorID))
-        tempChange.reason = reasonDesc
-        pointChanges[i].append(tempChange)
-
-    drivers = zip(driverNames, driverPoints, pointChanges)
-
-    webContext = views.getSponsorContext(request)
-
-    context = {
-        'pic': webContext['pic'],
-        'orgDrivers': webContext['orgDrivers'],
-        'startDate': startDate,
-        'endDate': endDate,
-        'drivers': drivers,
-    }
-
-    return render(request, 'sponsor_generate_report.html', context)
-
-def getSponsorReportPdf(request):
     driver = request.POST.get('driver')
     startDate = request.POST.get('startDate')
     endDate = request.POST.get('endDate')
@@ -169,56 +115,56 @@ def getSponsorReportPdf(request):
         'drivers': drivers,
     }
 
-    rowNum = 800
-    orgName = db.getOrgName(orgID)
-    fileName = orgName + "PointReport.pdf"
-    canvas = Canvas(fileName)
-    #Print data range
-    canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
+    if 'download' in request.POST:
+        rowNum = 800
+        orgName = db.getOrgName(orgID)
+        fileName = orgName + "PointReport.pdf"
+        canvas = Canvas(fileName)
+        #Print data range
+        canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
 
-    for (driver, points, changes) in zip(driverNames, driverPoints, pointChanges):
-        if (rowNum <= 80):
-                canvas.showPage()
-                rowNum = 800
+        for (driver, points, changes) in zip(driverNames, driverPoints, pointChanges):
+            if (rowNum <= 80):
+                    canvas.showPage()
+                    rowNum = 800
 
-        rowNum -= 35
-        canvas.drawString(70, rowNum, "Driver: " + driver)
-        canvas.drawString(215, rowNum, "Total Points: " + str(points))
+            rowNum -= 35
+            canvas.drawString(70, rowNum, "Driver: " + driver)
+            canvas.drawString(215, rowNum, "Total Points: " + str(points))
 
-        if (rowNum <= 80):
-                canvas.showPage()
-                rowNum = 800
-        rowNum -= 20
-        canvas.drawString(70, rowNum, "Point Changes")
-
-        if (rowNum <= 80):
-                canvas.showPage()
-                rowNum = 800
-        rowNum -= 30
-        canvas.drawString(70, rowNum, "Date")
-        canvas.drawString(150, rowNum, "Change Amount")
-        canvas.drawString(250, rowNum, "Sponsor Responsible")
-        canvas.drawString(400, rowNum, "Reasoning")
-
-        if (rowNum <= 80):
-                canvas.showPage()
-                rowNum = 800
-
-        for change in changes:
+            if (rowNum <= 80):
+                    canvas.showPage()
+                    rowNum = 800
             rowNum -= 20
-            canvas.drawString(70, rowNum, str(change.date))
-            canvas.drawString(150, rowNum, str(change.pointChange))
-            canvas.drawString(250, rowNum, "Sponsor")
-            canvas.drawString(400, rowNum, change.reason)
+            canvas.drawString(70, rowNum, "Point Changes")
 
-    canvas.save()
+            if (rowNum <= 80):
+                    canvas.showPage()
+                    rowNum = 800
+            rowNum -= 30
+            canvas.drawString(70, rowNum, "Date")
+            canvas.drawString(150, rowNum, "Change Amount")
+            canvas.drawString(250, rowNum, "Sponsor Responsible")
+            canvas.drawString(400, rowNum, "Reasoning")
 
-    print("Pumping pdf to website")
+            if (rowNum <= 80):
+                    canvas.showPage()
+                    rowNum = 800
 
-    pdf = open(fileName, 'rb')
-    response = HttpResponse(pdf.read(), content_type="application/pdf")
-    response['Content-Disposition'] = 'attachment; filename="' + fileName
-    return response
+            for change in changes:
+                rowNum -= 20
+                canvas.drawString(70, rowNum, str(change.date))
+                canvas.drawString(150, rowNum, str(change.pointChange))
+                canvas.drawString(250, rowNum, change.sponsor)
+                canvas.drawString(400, rowNum, change.reason)
+
+        canvas.save()
+
+        pdf = open(fileName, 'rb')
+        response = HttpResponse(pdf.read(), content_type="application/pdf")
+        response['Content-Disposition'] = 'attachment; filename="' + fileName
+        return response
+    return render(request, 'sponsor_generate_report.html', context)
 
 def getAuditLog(request):
     reportType = request.POST.get('logType')
@@ -249,7 +195,8 @@ def getAuditLog(request):
 
         rowNum = 800
         if 'download' in request.POST:
-            canvas = Canvas("applicantsAuditLog.pdf")
+            fileName = 'applicantsAuditLog.pdf'
+            canvas = Canvas(fileName)
             #Print data range
             canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
 
@@ -282,6 +229,10 @@ def getAuditLog(request):
                     canvas.drawString(475, rowNum, applicant.reason)
 
             canvas.save()
+            pdf = open(fileName, 'rb')
+            response = HttpResponse(pdf.read(), content_type="application/pdf")
+            response['Content-Disposition'] = 'attachment; filename="' + fileName
+            return response
 
         context = {
             'startDate': startDate,
@@ -326,7 +277,8 @@ def getAuditLog(request):
 
         rowNum = 800
         if 'download' in request.POST:
-            canvas = Canvas("pointChangeAuditLog.pdf")
+            fileName = 'pointChangeAuditLog.pdf'
+            canvas = Canvas(fileName)
             #Print data range
             canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
 
@@ -366,6 +318,11 @@ def getAuditLog(request):
 
             canvas.save()
 
+            pdf = open(fileName, 'rb')
+            response = HttpResponse(pdf.read(), content_type="application/pdf")
+            response['Content-Disposition'] = 'attachment; filename="' + fileName
+            return response
+
         context = {
             'startDate': startDate,
             'endDate': endDate,
@@ -404,7 +361,8 @@ def getAuditLog(request):
 
         rowNum = 800
         if 'download' in request.POST:
-            canvas = Canvas("passwordChangeAuditLog.pdf")
+            fileName = 'passwordChangeAuditLog.pdf'
+            canvas = Canvas(fileName)
             #Print data range
             canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
 
@@ -433,6 +391,11 @@ def getAuditLog(request):
                     canvas.drawString(150, rowNum, change.changeType)
 
             canvas.save()
+
+            pdf = open(fileName, 'rb')
+            response = HttpResponse(pdf.read(), content_type="application/pdf")
+            response['Content-Disposition'] = 'attachment; filename="' + fileName
+            return response
 
         context = {
             'startDate': startDate,
@@ -472,7 +435,8 @@ def getAuditLog(request):
 
         rowNum = 800
         if 'download' in request.POST:
-            canvas = Canvas("loginAttemptsAuditLog.pdf")
+            fileName = 'loginAttemptsAuditLog.pdf'
+            canvas = Canvas(fileName)
             #Print data range
             canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
 
@@ -491,11 +455,11 @@ def getAuditLog(request):
                 canvas.drawString(70, rowNum, "Date")
                 canvas.drawString(150, rowNum, "Status")
 
-                if (rowNum <= 80):
-                        canvas.showPage()
-                        rowNum = 800
 
                 for attempt in attempts:
+                    if (rowNum <= 80):
+                        canvas.showPage()
+                        rowNum = 800
                     rowNum -= 20
                     canvas.drawString(70, rowNum, str(attempt.date))
                     if attempt.succeeded:
@@ -504,6 +468,11 @@ def getAuditLog(request):
                         canvas.drawString(150, rowNum, "Failure")
 
             canvas.save()
+
+            pdf = open(fileName, 'rb')
+            response = HttpResponse(pdf.read(), content_type="application/pdf")
+            response['Content-Disposition'] = 'attachment; filename="' + fileName
+            return response
 
         context = {
             'startDate': startDate,
@@ -537,15 +506,15 @@ def getInvoice(request):
         def __init__(self):
             id = -1
             name = ''
-            orders = []
-            totalCost = 0
+            self.orders = []
+            self.totalCost = 0
             driverFee = 0
 
     class Org:
         def __init__(self):
             name = ''
-            drivers = []
-            totalSales = 0
+            self.drivers = []
+            self.totalSales = 0
             totalFee = 0
 
     driverIDs = []
@@ -589,10 +558,11 @@ def getInvoice(request):
     rowNum = 800
     if 'download' in request.POST:
         if orgID == "all":
-            canvas = Canvas("allSponsorInvoices.pdf")
+            fileName = 'allSponsorInvoices.pdf'
         else:
             orgName = db.getOrgName(orgID)
-            canvas = Canvas(orgName + "Invoice.pdf")
+            fileName = orgName + 'Invoice.pdf'
+        canvas = Canvas(fileName)
 
         #Print data range
         canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
@@ -603,7 +573,7 @@ def getInvoice(request):
                     rowNum = 800
 
             rowNum -= 35
-            canvas.drawString(70, rowNum, "Sponsor: " + org)
+            canvas.drawString(70, rowNum, "Sponsor: " + org.name)
 
             for driver in org.drivers:
                 if (rowNum <= 80):
@@ -638,21 +608,26 @@ def getInvoice(request):
                     canvas.showPage()
                     rowNum = 800
             rowNum -= 20
-            casvas.drawString(500, rowNum, "Total Fee for Driver: " + str(driver.driverFee))
+            canvas.drawString(300, rowNum, "Total Fee for Driver: " + str(driver.driverFee))
 
-        if (rowNum <= 80):
-            canvas.showPage()
-            rowNum = 800
-        rowNum -= 35
-        canvas.drawString(300, rowNum, "Total Sales: " + str(org.totalSales))
+            if (rowNum <= 80):
+                canvas.showPage()
+                rowNum = 800
+            rowNum -= 35
+            canvas.drawString(300, rowNum, "Total Sales: " + str(org.totalSales))
 
-        if (rowNum <= 80):
-            canvas.showPage()
-            rowNum = 800
-        rowNum -= 20
-        canvas.drawString(300, rowNum, "Total Amount Owed: " + str(org.totalFee))
+            if (rowNum <= 80):
+                canvas.showPage()
+                rowNum = 800
+            rowNum -= 20
+            canvas.drawString(300, rowNum, "Total Amount Owed: " + str(org.totalFee))
 
         canvas.save()
+
+        pdf = open(fileName, 'rb')
+        response = HttpResponse(pdf.read(), content_type="application/pdf")
+        response['Content-Disposition'] = 'attachment; filename="' + fileName
+        return response
 
     context = {
         'startDate': startDate,
@@ -700,6 +675,7 @@ def getDriverSales(request):
                 id = -1
                 name = ''
                 orders = []
+                self.totalCost = 0
 
         class Driver:
             orgs = []
@@ -707,6 +683,7 @@ def getDriverSales(request):
                 id = -1
                 name = ''
                 orgs = []
+                self.totalCost = 0
 
         drivers = []
         orgIDs = []
@@ -749,18 +726,19 @@ def getDriverSales(request):
             drivers[i].orgs[j].orders[k].products.append(tempProduct)
             drivers[i].orgs[j].orders[k].totalCost += price * qty
 
-            orgs[i].drivers[j].totalCost += price * qty
+            drivers[i].orgs[j].totalCost += price * qty
 
-            orgs[i].totalCost += price * qty
+            drivers[i].totalCost += price * qty
 
         rowNum = 800
         if 'download' in request.POST:
             if driverID == "all":
-                canvas = Canvas("allDriverSales.pdf")
+                fileName = 'allDriverSales.pdf'
             else:
                 email = db.getUserEmail(driverID)
                 name = db.getUserName(email)
-                canvas = Canvas(name + "Sales.pdf")
+                fileName = name + 'Sales.pdf'
+            canvas = Canvas(fileName)
 
             #Print data range
             canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
@@ -786,8 +764,8 @@ def getDriverSales(request):
                     rowNum -= 30
                     canvas.drawString(70, rowNum, "Date")
                     canvas.drawString(150, rowNum, "Product")
-                    canvas.drawString(250, rowNum, "Quantity")
-                    canvas.drawString(300, rowNum, "Cost")
+                    canvas.drawString(450, rowNum, "Quantity")
+                    canvas.drawString(500, rowNum, "Cost")
 
                     if (rowNum <= 80):
                         canvas.showPage()
@@ -797,22 +775,35 @@ def getDriverSales(request):
                         rowNum -= 20
                         canvas.drawString(70, rowNum, str(order.date))
 
-                        if (rowNum <= 80):
-                            canvas.showPage()
-                            rowNum = 800
                         for product in order.products:
+                            if (rowNum <= 80):
+                                canvas.showPage()
+                                rowNum = 800
                             rowNum -= 20
-                            canvas.drawString(150, rowNum, product.name)
-                            canvas.drawString(250, rowNum, str(product.qty))
-                            canvas.drawString(300, rowNum, str(product.price))
+
+                            printString = ''
+                            for x in product.name:
+                                printString += x
+                                if len(printString) > 45:
+                                    break
+
+                            printString += '...'
+                            canvas.drawString(150, rowNum, printString)
+                            canvas.drawString(450, rowNum, str(product.qty))
+                            canvas.drawString(500, rowNum, str(product.price))
                     
                         if (rowNum <= 80):
                                 canvas.showPage()
                                 rowNum = 800
                         rowNum -= 20
-                        canvas.drawString(300, rowNum, "Total Cost: " + str(order.totalCost))
+                        canvas.drawString(450, rowNum, "Total Cost: " + str(order.totalCost))
 
             canvas.save()
+
+            pdf = open(fileName, 'rb')
+            response = HttpResponse(pdf.read(), content_type="application/pdf")
+            response['Content-Disposition'] = 'attachment; filename="' + fileName
+            return response
 
     else:
         details = False
@@ -834,6 +825,7 @@ def getDriverSales(request):
                 id = -1
                 name = ''
                 orders = []
+                self.totalCost = 0
 
         class Driver:
             orgs = []
@@ -841,6 +833,7 @@ def getDriverSales(request):
                 id = -1
                 name = ''
                 orgs = []
+                self.totalCost = 0
 
         drivers = []
         orgIDs = []
@@ -878,18 +871,19 @@ def getDriverSales(request):
             k = find(orderIDs, orderID)
             drivers[i].orgs[j].orders[k].totalCost += price * qty
 
-            orgs[i].drivers[j].totalCost += price * qty
+            drivers[i].orgs[j].totalCost += price * qty
 
-            orgs[i].totalCost += price * qty
+            drivers[i].totalCost += price * qty
 
         rowNum = 800
         if 'download' in request.POST:
             if driverID == "all":
-                canvas = Canvas("allDriverSales.pdf")
+                fileName = 'allDriverSales.pdf'
             else:
                 email = db.getUserEmail(driverID)
                 name = db.getUserName(email)
-                canvas = Canvas(name + "Sales.pdf")
+                fileName = name + 'Sales.pdf'
+            canvas = Canvas(fileName)
 
             #Print data range
             canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
@@ -926,6 +920,11 @@ def getDriverSales(request):
                         canvas.drawString(150, rowNum, str(order.totalCost))
 
             canvas.save()
+
+            pdf = open(fileName, 'rb')
+            response = HttpResponse(pdf.read(), content_type="application/pdf")
+            response['Content-Disposition'] = 'attachment; filename="' + fileName
+            return response
 
     webContext = views.getDriverSalesContext(request)
 
@@ -1045,10 +1044,11 @@ def getSponsorSales(request):
         rowNum = 800
         if 'download' in request.POST:
             if driverID == "all":
-                canvas = Canvas("allSponsorSales.pdf")
+                fileName = 'allSponsorSales.pdf'
             else:
                 name = db.getOrgName(orgID)
-                canvas = Canvas(name + "Sales.pdf")
+                fileName = name + 'Sales.pdf'
+            canvas = Canvas(fileName)
 
             #Print data range
             canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
@@ -1059,7 +1059,7 @@ def getSponsorSales(request):
                     rowNum = 800
 
                 rowNum -= 35
-                canvas.drawString(70, rowNum, "Sponsor: " + sponsor.name)
+                canvas.drawString(70, rowNum, "Sponsor: " + org.name)
 
                 for driver in org.drivers:
                     if (rowNum <= 80):
@@ -1074,8 +1074,8 @@ def getSponsorSales(request):
                     rowNum -= 30
                     canvas.drawString(70, rowNum, "Date")
                     canvas.drawString(150, rowNum, "Product")
-                    canvas.drawString(250, rowNum, "Quantity")
-                    canvas.drawString(300, rowNum, "Cost")
+                    canvas.drawString(450, rowNum, "Quantity")
+                    canvas.drawString(500, rowNum, "Cost")
 
                     if (rowNum <= 80):
                         canvas.showPage()
@@ -1085,32 +1085,45 @@ def getSponsorSales(request):
                         rowNum -= 20
                         canvas.drawString(70, rowNum, str(order.date))
 
-                        if (rowNum <= 80):
-                            canvas.showPage()
-                            rowNum = 800
                         for product in order.products:
+                            if (rowNum <= 80):
+                                canvas.showPage()
+                                rowNum = 800
                             rowNum -= 20
-                            canvas.drawString(150, rowNum, product.name)
-                            canvas.drawString(250, rowNum, str(product.qty))
-                            canvas.drawString(300, rowNum, str(product.price))
+
+                            printString = ''
+                            for x in product.name:
+                                printString += x
+                                if len(printString) > 45:
+                                    break
+
+                            printString += '...'
+                            canvas.drawString(150, rowNum, printString)
+                            canvas.drawString(450, rowNum, str(product.qty))
+                            canvas.drawString(500, rowNum, str(product.price))
                     
                         if (rowNum <= 80):
                                 canvas.showPage()
                                 rowNum = 800
                         rowNum -= 20
-                        canvas.drawString(300, rowNum, "Total Cost: " + str(order.totalCost))
+                        canvas.drawString(500, rowNum, "Total Cost: " + str(order.totalCost))
 
                     if (rowNum <= 80):
                             canvas.showPage()
                             rowNum = 800
                     rowNum -= 30
-                    canvas.drawString(70, rowNum, "Total Sales by Driver: " + driver.totalCost)
+                    canvas.drawString(70, rowNum, "Total Sales by Driver: " + str(driver.totalCost))
             if (rowNum <= 80):
                     canvas.showPage()
                     rowNum = 800
             rowNum -= 30
-            canvas.drawString(70, rowNum, "Total Sales from Sponsor: " + org.totalCost)
+            canvas.drawString(70, rowNum, "Total Sales from Sponsor: " + str(org.totalCost))
             canvas.save()
+
+            pdf = open(fileName, 'rb')
+            response = HttpResponse(pdf.read(), content_type="application/pdf")
+            response['Content-Disposition'] = 'attachment; filename="' + fileName
+            return response
 
     else:
         details = False
@@ -1132,15 +1145,6 @@ def getSponsorSales(request):
                 driver = ""
                 totalCost = 0
 
-        class Driver:
-            orders = []
-            totalCost = 0
-            def __init__(self):
-                id = -1
-                name = ''
-                orders = []
-                totalCost = 0
-
         class Org:
             drivers = []
             totalCost = 0
@@ -1148,56 +1152,45 @@ def getSponsorSales(request):
                 id = -1
                 name = ''
                 drivers = []
+                self.orders = []
                 totalCost = 0
 
         orgIDs = []
         orderIDs = []
-        driverIDs = []
 
         orgs = []
 
-        for (orgID, orgName, orderID, orderDate, driverID, driverName, qty, price) in result:
-            if (not exists(orgIDs, orgID)):
-                orgIDs.append(orgID)
+        for (org, orgName, orderID, orderDate, qty, price) in result:
+            if (not exists(orgIDs, org)):
+                orgIDs.append(org)
 
                 tempOrg = Org()
-                tempOrg.id = orgID
+                tempOrg.id = org
                 tempOrg.name = orgName
                 orgs.append(tempOrg)
 
             i = find(orgIDs, orgID)
-            if (not exists(driverIDs, driverID)):
-                driverIDs.append(driverID)
-
-                tempDriver = Driver()
-                tempDriver.id = driverID
-                tempDriver.name = driverName
-                orgs[i].drivers.append(tempDriver)
-
-            j = find(driverIDs, driverID)
             if (not exists(orderIDs, orderID)):
                 orderIDs.append(orderID)
 
                 tempOrder = DriverOrder()
                 tempOrder.id = orderID
-                tempOrder.driver = driverName
                 tempOrder.date = orderDate
-                orgs[i].drivers[j].orders.append(tempOrder)
+                orgs[i].orders.append(tempOrder)
 
-            k = find(orderIDs, orderID)
-            orgs[i].drivers[j].orders[k].totalCost += price * qty
-
-            orgs[i].drivers[j].totalCost += price * qty
+            j = find(orderIDs, orderID)
+            orgs[i].orders[j].totalCost += price * qty
 
             orgs[i].totalCost += price * qty
 
         rowNum = 800
         if 'download' in request.POST:
-            if driverID == "all":
-                canvas = Canvas("allSponsorSales.pdf")
+            if driver == "all":
+                fileName = 'allSponsorSales.pdf'
             else:
                 name = db.getOrgName(orgID)
-                canvas = Canvas(name + "Sales.pdf")
+                fileName = name + 'Sales.pdf'
+            canvas = Canvas(fileName)
 
             #Print data range
             canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
@@ -1208,44 +1201,37 @@ def getSponsorSales(request):
                     rowNum = 800
 
                 rowNum -= 35
-                canvas.drawString(70, rowNum, "Sponsor: " + sponsor.name)
+                canvas.drawString(70, rowNum, "Sponsor: " + org.name)
 
-                for driver in org.drivers:
-                    if (rowNum <= 80):
-                        canvas.showPage()
-                        rowNum = 800
-                    rowNum -= 20
-                    canvas.drawString(70, rowNum, "Sales by: " + driver.name)
-
-                    if (rowNum <= 80):
-                        canvas.showPage()
-                        rowNum = 800
-                    rowNum -= 30
-                    canvas.drawString(70, rowNum, "Date")
-                    canvas.drawString(150, rowNum, "Product")
-                    canvas.drawString(250, rowNum, "Quantity")
-                    canvas.drawString(300, rowNum, "Cost")
-
-                    if (rowNum <= 80):
-                        canvas.showPage()
-                        rowNum = 800
-
-                    for order in driver.orders:
-                        rowNum -= 20
-                        canvas.drawString(70, rowNum, str(order.date))
-                        canvas.drawString(150, rowNum, str(order.totalCost))
-
-                    if (rowNum <= 80):
-                            canvas.showPage()
-                            rowNum = 800
-                    rowNum -= 30
-                    canvas.drawString(70, rowNum, "Total Sales by Driver: " + driver.totalCost)
-            if (rowNum <= 80):
+                if (rowNum <= 80):
                     canvas.showPage()
                     rowNum = 800
-            rowNum -= 30
-            canvas.drawString(70, rowNum, "Total Sales from Sponsor: " + org.totalCost)
+                rowNum -= 30
+                canvas.drawString(70, rowNum, "Date")
+                canvas.drawString(150, rowNum, "Product")
+                canvas.drawString(250, rowNum, "Quantity")
+                canvas.drawString(300, rowNum, "Cost")
+
+                if (rowNum <= 80):
+                    canvas.showPage()
+                    rowNum = 800
+
+                for order in org.orders:
+                    rowNum -= 20
+                    canvas.drawString(70, rowNum, str(order.date))
+                    canvas.drawString(150, rowNum, str(order.totalCost))
+
+                if (rowNum <= 80):
+                        canvas.showPage()
+                        rowNum = 800
+                rowNum -= 30
+                canvas.drawString(70, rowNum, "Total Sales from Sponsor: " + str(org.totalCost))
             canvas.save()
+
+            pdf = open(fileName, 'rb')
+            response = HttpResponse(pdf.read(), content_type="application/pdf")
+            response['Content-Disposition'] = 'attachment; filename="' + fileName
+            return response
 
     webContext = views.getSponsorSalesContext(request)
 

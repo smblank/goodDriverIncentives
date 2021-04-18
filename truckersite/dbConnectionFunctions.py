@@ -1650,9 +1650,11 @@ def addOrgPayment (name, ccNum, ccSec, ccDate, billAddr, org):
         conn = getDB()
         cursor = getCursor(conn)
 
-        query = "CALL addOrgPayment(%s, %s, %s, %s, %s, %s)"
+        digits = ccNum[12] + ccNum[13] + ccNum[14] + ccNum[15]
+
+        query = "CALL addOrgPayment(%s, %s, %s, %s, %s, %s, %s)"
         ccDate = datetime.strptime(ccDate, '%m/%y').date()
-        cursor.execute(query, (name, ccNum, ccSec, ccDate, billAddr, org))
+        cursor.execute(query, (name, ccNum, digits, ccSec, ccDate, billAddr, org))
 
         cursor.close()
         conn.close()
@@ -1666,13 +1668,31 @@ def updateOrgPayment (name, ccNum, ccSec, ccDate, billAddr, org, payID):
         conn = getDB()
         cursor = getCursor(conn)
 
-        query = "CALL updateOrgPayment(%s, %s, %s, %s, %s, %s, %s)"
+        digits = ccNum[12] + ccNum[13] + ccNum[14] + ccNum[15]
+
+        query = "CALL updateOrgPayment(%s, %s, %s, %s, %s, %s, %s, %s)"
         ccDate = datetime.strptime(ccDate, '%m/%y').date()
-        cursor.execute(query, (name, ccNum, ccSec, ccDate, billAddr, org, payID))
+        cursor.execute(query, (name, ccNum, digits, ccSec, ccDate, billAddr, org, payID))
 
         cursor.close()
         conn.close()
         return "Payment successfully updated"
+
+    except Error as err:
+        print(err)
+
+def getOrgPayment(org):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL getOrgPayment(%s)"
+        cursor.execute(query, (org, ))
+        result = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+        return result
 
     except Error as err:
         print(err)
