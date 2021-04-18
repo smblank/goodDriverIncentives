@@ -1764,7 +1764,7 @@ def removeTempDriver(tempID):
         conn = getDB()
         cursor = getCursor(conn)
 
-        query = "CALL createTempDriver(%s)"
+        query = "CALL removeTempDriver(%s)"
         cursor.execute(query, (tempID, ))
 
         cursor.close()
@@ -1796,7 +1796,7 @@ def removeTempSponsor(tempID):
         conn = getDB()
         cursor = getCursor(conn)
 
-        query = "CALL createTempSponsor(%s)"
+        query = "CALL removeTempSponsor(%s)"
         cursor.execute(query, (tempID, ))
 
         cursor.close()
