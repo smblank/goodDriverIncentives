@@ -33,6 +33,35 @@ def getCursor(connection):
     else:
         return cursor
 
+def getDBReplica():
+    try:
+        connection = connect(host = 'truckingdbreplica.c9tkxb1tjvpp.us-east-1.rds.amazonaws.com', user = 'admin', password = 'accesstodb', database = 'DRIVER_DB', autocommit = True, charset = 'latin1', use_unicode = True)
+
+        while connection is None:
+            connection = connect(host = 'truckingdbreplica.c9tkxb1tjvpp.us-east-1.rds.amazonaws.com', user = 'admin', password = 'accesstodb', database = 'DRIVER_DB', autocommit = True, charset = 'latin1', use_unicode = True)
+
+    except Error as err:
+        print(err)
+
+    else:
+        return connection
+
+def getCursorReplica(connection):
+    try:
+        while connection is None:
+            connection = connect(host = 'truckingdbreplica.c9tkxb1tjvpp.us-east-1.rds.amazonaws.com', user = 'admin', password = 'accesstodb', database = 'DRIVER_DB', autocommit = True, charset = 'latin1', use_unicode = True)
+
+        cursor = connection.cursor(buffered = True)
+
+        while cursor is None:
+            cursor = connection.cursor(buffered = True)
+
+    except Error as err:
+        print(err)
+
+    else:
+        return cursor
+
 def checkEmail(email):
     try:
         conn = getDB()
