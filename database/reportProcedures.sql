@@ -36,7 +36,7 @@ CREATE PROCEDURE indvSponsorSaleRep(startDate DATE, endDate DATE, detailed BOOLE
                 SELECT ORGANIZATION.OrgID, ORGANIZATION.Name, DRIVER_ORDER.OrderID, OrderDate, USER.UserID, USER.Name, ProductName, Quantity, Price
                 FROM ORGANIZATION, PRODUCT, USER, DRIVER, DRIVER_ORDER, IS_IN_ORDER, BELONGS_TO
                 WHERE OrderDate >= startDate AND OrderDate <= endDate AND 
-                    orgID = org AND DRIVER_ORDER.OrgID = org AND
+                    ORGANIZATION.OrgID = org AND DRIVER_ORDER.OrgID = org AND
                     USER.UserID = DRIVER.UserID AND
                     BELONGS_TO.DriverID = DRIVER.UserID AND
                     BELONGS_TO.OrderID = IS_IN_ORDER.OrderID AND BELONGS_TO.OrderID = DRIVER_ORDER.OrderID AND
@@ -45,7 +45,7 @@ CREATE PROCEDURE indvSponsorSaleRep(startDate DATE, endDate DATE, detailed BOOLE
                 SELECT ORGANIZATION.OrgID, ORGANIZATION.Name, DRIVER_ORDER.OrderID, OrderDate, USER.UserID, USER.Name, ProductName, Quantity, Price
                 FROM ORGANIZATION, PRODUCT, USER, DRIVER, DRIVER_ORDER, IS_IN_ORDER, BELONGS_TO
                 WHERE OrderDate >= startDate AND OrderDate <= endDate AND 
-                    orgID = org AND DRIVER.UserID = driver AND
+                    ORGANIZATION.OrgID = org AND DRIVER.UserID = driver AND
                     USER.UserID = DRIVER.UserID AND DRIVER_ORDER.OrgID = org AND
                     BELONGS_TO.DriverID = DRIVER.UserID AND
                     BELONGS_TO.OrderID = IS_IN_ORDER.OrderID AND BELONGS_TO.OrderID = DRIVER_ORDER.OrderID AND
@@ -56,7 +56,7 @@ CREATE PROCEDURE indvSponsorSaleRep(startDate DATE, endDate DATE, detailed BOOLE
                 SELECT ORGANIZATION.OrgID, ORGANIZATION.Name, DRIVER_ORDER.OrderID, OrderDate, Quantity, Price
                 FROM ORGANIZATION, PRODUCT, USER, DRIVER, DRIVER_ORDER, IS_IN_ORDER, BELONGS_TO
                 WHERE OrderDate >= startDate AND OrderDate <= endDate AND 
-                    orgID = org AND DRIVER_ORDER.OrgID = org AND
+                    ORGANIZATION.OrgID = DRIVER_ORDER.OrgID AND DRIVER_ORDER.OrgID = org AND
                     USER.UserID = DRIVER.UserID AND
                     BELONGS_TO.DriverID = DRIVER.UserID AND
                     BELONGS_TO.OrderID = IS_IN_ORDER.OrderID AND BELONGS_TO.OrderID = DRIVER_ORDER.OrderID AND
@@ -65,7 +65,7 @@ CREATE PROCEDURE indvSponsorSaleRep(startDate DATE, endDate DATE, detailed BOOLE
                 SELECT ORGANIZATION.OrgID, ORGANIZATION.Name, DRIVER_ORDER.OrderID, OrderDate, Quantity, Price
                 FROM ORGANIZATION, PRODUCT, USER, DRIVER, DRIVER_ORDER, IS_IN_ORDER, BELONGS_TO
                 WHERE OrderDate >= startDate AND OrderDate <= endDate AND 
-                    orgID = org AND DRIVER.UserID = driver AND
+                    ORGANIZATION.OrgID = DRIVER_ORDER.OrgID AND DRIVER.UserID = driver AND
                     USER.UserID = DRIVER.UserID AND DRIVER_ORDER.OrgID = org AND
                     BELONGS_TO.DriverID = DRIVER.UserID AND
                     BELONGS_TO.OrderID = IS_IN_ORDER.OrderID AND BELONGS_TO.OrderID = DRIVER_ORDER.OrderID AND
@@ -141,7 +141,7 @@ DROP PROCEDURE IF EXISTS indvSponsorInvoice;
 
 CREATE PROCEDURE indvSponsorInvoice(startDate DATE, endDate DATE, org INT)
     BEGIN
-        SELECT ORGANIZATION.Name, OrderDate, USER.Name, Price, Quantity
+        SELECT ORGANIZATION.Name, OrderDate, USER.UserID, USER.Name, Price, Quantity
         FROM ORGANIZATION, PRODUCT, USER, DRIVER, DRIVER_ORGS, DRIVER_ORDER, IS_IN_ORDER, BELONGS_TO
         WHERE OrderDate >= startDate AND OrderDate <= endDate AND
             ORGANIZATION.OrgID = org AND DRIVER_ORGS.OrgID = org AND
@@ -156,7 +156,7 @@ DROP PROCEDURE IF EXISTS allSponsorInvoice;
 
 CREATE PROCEDURE allSponsorInvoice(startDate DATE, endDate DATE)
     BEGIN
-        SELECT ORGANIZATION.Name, OrderDate, USER.Name, Price, Quantity
+        SELECT ORGANIZATION.Name, OrderDate, USER.UserID, USER.Name, Price, Quantity
         FROM ORGANIZATION, PRODUCT, USER, DRIVER, DRIVER_ORGS, DRIVER_ORDER, IS_IN_ORDER, BELONGS_TO
         WHERE OrderDate >= startDate AND OrderDate <= endDate AND
             USER.UserID = DRIVER.UserID AND DRIVER_ORGS.UserID = DRIVER.UserID AND DRIVER_ORGS.OrgID = ORGANIZATION.OrgID AND

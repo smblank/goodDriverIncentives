@@ -87,7 +87,7 @@ def updatePaymentInfo(request):
     else:
         orgNo = db.getOrgNo(request.session['email'])
 
-    db.updateOrgPayment(int(ccNum), int(ccSec), ccDate, address, orgNo, 1)
+    db.updateOrgPayment(ccName, ccNum, ccSec, ccDate, address, orgNo, 1)
     if (request.session['isAdmin']):
         return views.adminOrgs(request)
     else:

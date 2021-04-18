@@ -2,7 +2,7 @@ DELIMITER ;;
 
 DROP FUNCTION IF EXISTS getDriverPoints;
 
-CREATE FUNCTION getDriverPoints(driverEmail VARCHAR(50), orgID INT)
+CREATE FUNCTION getDriverPoints(driverEmail VARCHAR(50), org INT)
 RETURNS FLOAT
 READS SQL DATA
     BEGIN
@@ -13,7 +13,7 @@ READS SQL DATA
 
         SELECT Points INTO pointTotal
         FROM DRIVER_ORGS
-        WHERE UserID = driver AND OrgID = orgID;
+        WHERE UserID = driver AND OrgID = org;
 
         RETURN pointTotal;
     END;;
@@ -179,19 +179,21 @@ MODIFIES SQL DATA
 DROP FUNCTION IF EXISTS addToCart;
 
 CREATE FUNCTION addToCart (driver INT, org INT, product CHAR(12), qty INT)
-RETURNS BOOLEAN
+RETURNS INT
 MODIFIES SQL DATA
     BEGIN
         DECLARE orderID BOOLEAN;
 
-        SET orderID = -1;
-
         SELECT DRIVER_ORDER.OrderID INTO orderID
-        FROM DRIVER_ORDER, IS_IN_ORDER, BELONGS_TO
-        WHERE DRIVER_ORDER.OrderID = IS_IN_ORDER.OrderID AND DRIVER_ORDER.     OrderID = BELONGS_TO.OrderID AND DRIVER_ORDER.OrgID = org AND BELONGS_TO.DriverID = driver AND DRIVER_ORDER.Status = "In-Progress";
+        FROM DRIVER_ORDER, BELONGS_TO
+        WHERE DRIVER_ORDER.OrderID = BELONGS_TO.OrderID AND DRIVER_ORDER.OrgID = org AND BELONGS_TO.DriverID = driver AND DRIVER_ORDER.Status = "In-Progress";
 
         IF (orderID = -1) THEN
             SELECT createOrder (driver, CURDATE(), org) INTO orderID;
+
+            SELECT DRIVER_ORDER.OrderID INTO orderID
+            FROM DRIVER_ORDER, BELONGS_TO
+            WHERE DRIVER_ORDER.OrderID = BELONGS_TO.OrderID AND DRIVER_ORDER.OrgID = org AND BELONGS_TO.DriverID = driver AND DRIVER_ORDER.Status = "In-Progress";
         END IF;
 
         INSERT INTO IS_IN_ORDER (OrderID, ProductID, Quantity) VALUES (orderID, product, qty);
@@ -209,7 +211,7 @@ MODIFIES SQL DATA
 
         SELECT DRIVER_ORDER.OrderID INTO orderID
         FROM DRIVER_ORDER, IS_IN_ORDER, BELONGS_TO
-        WHERE DRIVER_ORDER.OrderID = IS_IN_ORDER.OrderID AND DRIVER_ORDER.     OrderID = BELONGS_TO.OrderID AND DRIVER_ORDER.OrgID = org AND BELONGS_TO.DriverID = driver AND DRIVER_ORDER.Status = "In-Progress";
+        WHERE DRIVER_ORDER.OrderID = IS_IN_ORDER.OrderID AND DRIVER_ORDER.     OrderID = BELONGS_TO.OrderID AND DRIVER_ORDER.OrgID = org AND BELONGS_TO.DriverID = driver AND DRIVER_ORDER.Status = "In-Progress" AND IS_IN_ORDER.ProductID = product;
 
         DELETE FROM IS_IN_ORDER 
             WHERE OrderID = orderID AND ProductID = product;
@@ -311,7 +313,7 @@ READS SQL DATA
         SELECT EXISTS (
             SELECT ProductID
             FROM IS_IN_ORDER, DRIVER_ORDER, BELONGS_TO
-            WHERE DRIVER_ORDER.OrderID = IS_IN_ORDER.OrderID AND DRIVER_ORDER.OrderID = BELONGS_TO.OrderID AND DRIVER_ORDER.Status = "In-Progress" AND BELONGS_TO.DriverID = driver AND DRIVER_ORDER.OrgID = org
+            WHERE DRIVER_ORDER.OrderID = IS_IN_ORDER.OrderID AND DRIVER_ORDER.OrderID = BELONGS_TO.OrderID AND DRIVER_ORDER.Status = "In-Progress" AND BELONGS_TO.DriverID = driver AND DRIVER_ORDER.OrgID = org AND IS_IN_ORDER.ProductID = product
         ) INTO inCart;
 
         RETURN inCart;

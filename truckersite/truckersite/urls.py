@@ -105,7 +105,6 @@ urlpatterns = [
     #Sponsor report generation
     path('sponsorReportGeneration/', reportViews.sponsorGenerateReport, name = 'sponsorReportGeneration'),
     path('getSponsorReport', reportOps.getSponsorReport, name = 'getSponsorReport'),
-    path('getSponsorReportPdf', reportOps.getSponsorReportPdf, name = 'getSponsorReportPdf'),
 
     #Admin report generation
     path('adminReportGeneration/', reportViews.adminGenerateReport, name = 'adminReportGeneration'),

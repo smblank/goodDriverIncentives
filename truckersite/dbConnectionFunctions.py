@@ -1661,7 +1661,7 @@ def addOrgPayment (name, ccNum, ccSec, ccDate, billAddr, org):
     except Error as err:
         print(err)
 
-def updateOrgPayment (ccNum, ccSec, ccDate, billAddr, org, payID):
+def updateOrgPayment (name, ccNum, ccSec, ccDate, billAddr, org, payID):
     try:
         conn = getDB()
         cursor = getCursor(conn)
