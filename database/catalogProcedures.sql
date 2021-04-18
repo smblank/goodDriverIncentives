@@ -239,6 +239,15 @@ CREATE PROCEDURE getDriverOrders(driver INT, org INT)
                 Status != 'In-Progress' AND DRIVER_ORDER.OrgID = org;
     END;;
 
+DROP PROCEDURE IF EXISTS getSponsorOrders;
+
+CREATE PROCEDURE getSponsorOrders(org INT)
+    BEGIN
+        SELECT DRIVER_ORDER.OrderID, OrderDate, ProductName, Quantity, Price
+        FROM DRIVER_ORDER, IS_IN_ORDER, BELONGS_TO, PRODUCT
+        WHERE DRIVER_ORDER.OrderID = IS_IN_ORDER.OrderID AND DRIVER_ORDER.OrderID = BELONGS_TO.OrderID AND IS_IN_ORDER.ProductID = PRODUCT.ProductID AND DRIVER_ORDER.OrgID = org AND Status != "In-Progress";
+    END;;
+
 DROP FUNCTION IF EXISTS getQuantityInCart;
 
 CREATE FUNCTION getQuantityInCart (driver INT, org INT, product CHAR(12))

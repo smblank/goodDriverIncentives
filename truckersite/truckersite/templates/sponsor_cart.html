@@ -58,17 +58,31 @@
         <div class="row">
             <div class="col-md-3">
                 <div id="sidebar">
-                    <a id="back" href="{% url 'driverCatalog' %}"> <i class="fa fa-arrow-left"></i> Catalog </a>
-                    <p id="pointstitle"> My Points: </p>
-                    <p id="points"> {{points}} </p>
+                    <a id="back" href="{% url 'sponsorCatalog' %}"> <i class="fa fa-arrow-left"></i> Catalog </a>
                 </div>
             </div>
 
             <div class="col-md-9" style="height: 900px;">
-                <h2 id="pagename"> My Cart </h2>
-                <!-- Put Items Here -->
+                <h2 id="pagename"> Driver Orders </h2>
+                {% for order in orders %}
+                    <h4>Date: {{order.date}}</h4>
+                    <table>
+                        <tr>
+                            <td>Product</td>
+                            <td>Quantity</td>
+                            <td>Price</td>
+                        </tr>
 
-                <button id="checkout" onclick="location.href = '{% url 'checkout' %}'"> Checkout </button>
+                        {% for product in order.products %}
+                            <tr>{{product.name}}</tr>
+                            <tr>{{product.qty}}</tr>
+                            <tr>{{product.price}}</tr>
+                        {% endfor %}
+
+                        <td colspan = "3" align = "right">Total Cost: {{order.totalCost}}</td>
+                    </table>
+                {% endfor %}
+                <button id="checkout"> Checkout </button>
             </div>
         </div>
 
