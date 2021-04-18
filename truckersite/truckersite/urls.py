@@ -124,6 +124,7 @@ urlpatterns = [
     path('wishlist/', catalogViews.wishlist, name = 'wishlist'),
     path('driverOrderHistory/', catalogViews.driverOrderHistory, name = 'driverOrderHistory'),
     path('sponsorCatalog', catalogViews.sponsor_catalog, name = 'sponsorCatalog'),
+    path('sponsorCart', catalogViews.sponsorCart, name = 'sponsorCart'),
     path('productPage/<str:id>/', catalogViews.productPage, name = 'productPage'),
     path('driverCart', catalogViews.driverCart, name = 'driverCart'),
     path('checkout', catalogViews.checkout, name = 'checkout'),

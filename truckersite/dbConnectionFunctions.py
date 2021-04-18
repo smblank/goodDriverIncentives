@@ -649,6 +649,22 @@ def getDriverOrders(driver, orgNo):
     
     except Error as err:
         print(err)
+    
+def getSponsorOrders(orgNo):
+    try:
+        conn = getDB()
+        cursor = getCursor(conn)
+
+        query = "CALL getSponsorOrders(%s)"
+        cursor.execute(query, (orgNo, ))
+        result = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+        return result
+    
+    except Error as err:
+        print(err)
 
 def getQuantityInCart (driver, org, productID):
     try:

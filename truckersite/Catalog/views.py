@@ -171,6 +171,62 @@ def driverCart(request):
     }
     return render(request, 'driver_cart.html', context)
 
+def sponsorCart(request):
+    if (request.session['isViewing']):
+        email = request.session['tempEmail']
+        driverID = db.getUserID(request.session['tempEmail'])
+        org = db.getOrgNo(request.session['tempEmail'])
+    else:
+        email = request.session['email']
+        driverID = db.getUserID(request.session['email'])
+        org = request.session['orgID']
+    
+    result = db.getSponsorOrders(driverID)
+
+    class Product:
+        def __init__(self):
+            name = ''
+            price = 0
+            qty = 0
+
+    class Order:
+        def __init__(self):
+            id = -1
+            date = '00/00/0000'
+            self.totalCost = 0
+            self.products = []
+            status = ''
+
+    orderIds = []
+    orders = []
+
+    for (orderID, date, productName, qty, price) in result:
+        if (not exists(orderIds, orderID)):
+            tempOrder = Order()
+            tempOrder.id = orderID
+            tempOrder.date = date
+            tempOrder.status = status
+            orders.append(tempOrder)
+
+            orderIds.append(orderID)
+
+        i = find(orderIds, orderID)
+        tempProduct = Product()
+        tempProduct.name = productName
+        tempProduct.price = price
+        tempProduct.qty = qty
+        orders[i].products.append(tempProduct)
+        orders[i].totalCost += price * qty
+
+    pic = db.getProfilePic(email)
+    imgPath = 'img/' + pic
+
+    context = {
+        'pic': pic,
+        'orders': orders
+    }
+    return render(request, 'sponsor_cart.html', context)
+
 def checkout(request):
     if (request.session['isViewing']):
         email = request.session['tempEmail']
@@ -225,6 +281,8 @@ def checkout(request):
 
     pic = db.getProfilePic(email)
     imgPath = 'img/' + pic
+
+    print(orders)
 
     context = {
         'date':date,
