@@ -1651,7 +1651,7 @@ def updateOrgPayment (ccNum, ccSec, ccDate, billAddr, org, payID):
 def emailNewDriver(driverEmail, password):
     driverName = getUserName(driverEmail)
 
-    result.getDriverOrgs(driverEmail)
+    result = getDriverOrgs(driverEmail)
     count = 0
 
     for _ in result:

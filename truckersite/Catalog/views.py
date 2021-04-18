@@ -303,7 +303,7 @@ def complete_order(request):
         email = request.session['email']
         org = request.session['orgID']
     
-    points = db.getDriverPoints(email, org)
+    original_points = db.getDriverPoints(email, org)
     driver_id = db.getUserID(email)
     
     pointRate = db.getPointConversion(org)
@@ -331,16 +331,46 @@ def complete_order(request):
         totalcost += int(tempProduct.price) * int(tempProduct.qty)
         orders.append(tempProduct)
 
-    print(totalcost)
-
     # check driver has enough points
+    if original_points is not None:
+        if totalcost <= original_points:
+            # complete order
 
-    # complete order
+            conn = db.getDB()
+            cursor = db.getCursor(conn)
 
-    # check order has gone through
-    
-    # need to render a confirmation page based on if the order goes through or not -Kyle
-    return redirect('/driverDash')
+            spend_points_query = 'UPDATE DRIVER_ORGS SET Points = Points - %s WHERE UserID=%s AND OrgID=%s'
+            cursor.execute(spend_points_query, (totalcost, db.getUserID(email), org,))
+
+            cursor.close()
+            conn.close()
+
+            after_points = db.getDriverPoints(email, org)
+
+            if after_points + totalcost == original_points:
+                order_sucess = True
+                order_message = 'Order Completed'
+            else:
+                order_sucess = False
+                order_message = 'Order Failed, server error'
+                after_points = db.getDriverPoints(email, org)
+            # check order has gone through
+
+        else:
+            order_sucess = False
+            order_message = 'Order Failed, you do not have enough points.'
+            after_points = db.getDriverPoints(email, org)
+    else:
+        order_sucess = False
+        order_message = 'Order Failed, points error'
+        after_points = db.getDriverPoints(email, org)
+
+    context = {
+        'points': after_points,
+        'order_message': order_message,
+        'order_sucess': order_sucess
+    }
+    return render(request, 'order_confirmation.html', context)
 
 def cancel_order(request):
     response = redirect('/')
