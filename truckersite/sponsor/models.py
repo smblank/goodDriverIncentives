@@ -5,7 +5,15 @@ from sponsor import views as spon
 
 # Create your models here.
 def setDriverView(request):
-    tempEmail = 'temp@email.com'
+    tempUserName = 'temp'
+    email = '@email.com'
+    tempEmail = tempUserName + email
+
+    num = 0
+    while (db.checkEmail(tempEmail)):
+        num += 1
+        tempEmail = tempUserName + str(num) + email
+
     orgNo = db.getOrgNo(request.session['email'])
     request.session['tempEmail'] = tempEmail
     request.session['isViewing'] = True

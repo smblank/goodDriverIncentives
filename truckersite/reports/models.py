@@ -104,7 +104,7 @@ def getSponsorReport(request):
     webContext = views.getSponsorContext(request)
 
     context = {
-        'profilePic': webContext['profilePic'],
+        'pic': webContext['pic'],
         'orgDrivers': webContext['orgDrivers'],
         'startDate': startDate,
         'endDate': endDate,
@@ -162,7 +162,7 @@ def getSponsorReportPdf(request):
     webContext = views.getSponsorContext(request)
 
     context = {
-        'profilePic': webContext['profilePic'],
+        'pic': webContext['pic'],
         'orgDrivers': webContext['orgDrivers'],
         'startDate': startDate,
         'endDate': endDate,
@@ -658,7 +658,7 @@ def getInvoice(request):
         'startDate': startDate,
         'endDate': endDate,
         'orgs': orgs,
-        'profilePic': webContext['profilePic'],
+        'pic': webContext['pic'],
         'listOrgs': webContext['listOrgs'],
         'totalFee': totalFee
     }
@@ -934,7 +934,7 @@ def getDriverSales(request):
         'endDate': endDate,
         'driverSales': drivers,
         'detailed': details,
-        'profilePic': webContext['profilePic'],
+        'pic': webContext['pic'],
         'drivers': webContext['drivers']
     }
 

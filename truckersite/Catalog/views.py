@@ -213,13 +213,28 @@ def productPage(request, id):
     if (request.session['isViewing']):
         email = request.session['tempEmail']
         org = db.getOrgNo(email)
+        userType = db.getUserType(email)
+        
+        if userType == 'Driver':
+            isAdmin = False
+            isSponsor = False
+        elif userType == 'Sponsor':
+            isAdmin = False
+            isSponsor = True
+        else:
+            isAdmin = True
+            isSponsor = False
     else:
         email = request.session['email']
-        org = request.session['orgID']
-    
-    driverId = db.getUserID(email)
-    points = db.getDriverPoints(email, org)
+        isAdmin = request.session['isAdmin']
+        isSponsor = request.session['isSponsor']
+        if request.session['isSponsor']:
+            org = db.getOrgNo(email)
+        else:
+            org = request.session['orgID']
+
     pointRate = db.getPointConversion(org)
+    result = db.getProduct(id)
 
     class Product:
         def __init__(self):
@@ -228,35 +243,45 @@ def productPage(request, id):
             price = 0
             pic = ''
 
-    result = db.getProduct(id)
-
     product = Product()
     product.id = id
     product.name = result[0]
     product.price = int(result[1] / pointRate)
     product.pic = result[2]
+    
+    if not isAdmin and not isSponsor:
+        driverId = db.getUserID(email)
+        points = db.getDriverPoints(email, org)
+        inCart = db.checkIsInCart(driverId, org, id)
+        inWishlist = db.checkIsInWishlist(driverId, id, org)
 
-    inCart = db.checkIsInCart(driverId, org, id)
-    inWishlist = db.checkIsInWishlist(driverId, id, org)
-
-    if inCart:
-        qty = db.getQuantityInCart(driverId, org, id)
-    else:
-        qty = 0
+        if inCart:
+            qty = db.getQuantityInCart(driverId, org, id)
+        else:
+            qty = 0
 
     pic = db.getProfilePic(email)
     imgPath = 'img/' + pic
 
-    context = {
-        'points': points,
-        'product': product,
-        'isSponsor': request.session['isSponsor'],
-        'isAdmin': request.session['isAdmin'],
-        'pic': imgPath,
-        'inCart': inCart,
-        'qty': qty,
-        'inWishlist': inWishlist
-    }
+    if isAdmin or isSponsor:
+        context = {
+            'product': product,
+            'isSponsor': isSponsor,
+            'isAdmin': isAdmin,
+            'pic': imgPath
+        }
+    
+    else:
+        context = {
+            'points': points,
+            'product': product,
+            'isSponsor': isSponsor,
+            'isAdmin': isAdmin,
+            'pic': imgPath,
+            'inCart': inCart,
+            'qty': qty,
+            'inWishlist': inWishlist
+        }
 
     return render(request, 'product.html', context)
 

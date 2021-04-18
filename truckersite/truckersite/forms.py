@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 import dbConnectionFunctions as db
 from userProfile import views
 from dashboard import views as dashViews
+from sponsor import views as sponViews
 
 def login(request):
     return render(request, 'index.html')
@@ -35,6 +36,21 @@ def loginpg(request):
             return render(request, 'index.html')
 
 def logoutpg(request):
+    if request.session['isViewing']:
+        if request.session['isSponsor']:
+            db.removeTempDriver(request.session['tempId'])
+            del request.session['tempEmail']
+            del request.session['tempId']
+        else:
+            userType = db.getUserType(request.session['tempId'])
+
+            if userType == 'Driver':
+                db.removeTempDriver(request.session['tempId'])
+            else:
+                db.removeTempSponsor(request.session['tempId'])
+            
+            del request.session['tempEmail']
+            del request.session['tempId']
 
     del request.session['loggedin']
     del request.session['id']

@@ -49,7 +49,15 @@ def removeOrg (request):
     return views.adminDash(request)
 
 def setDriverView(request):
-    tempEmail = 'temp@email.com'
+    tempUserName = 'temp'
+    email = '@email.com'
+    tempEmail = tempUserName + email
+
+    num = 0
+    while (db.checkEmail(tempEmail)):
+        num += 1
+        tempEmail = tempUserName + num + tempEmail
+    
     request.session['tempEmail'] = tempEmail
     request.session['isViewing'] = True
 
@@ -58,7 +66,15 @@ def setDriverView(request):
     return views.driverDash(request)
 
 def setSponsorView(request):
-    tempEmail = 'temp@email.com'
+    tempUserName = 'temp'
+    email = '@email.com'
+    tempEmail = tempUserName + email
+
+    num = 0
+    while (db.checkEmail(tempEmail)):
+        num += 1
+        tempEmail = tempUserName + num + tempEmail
+    
     request.session['tempEmail'] = tempEmail
     request.session['isViewing'] = True
 

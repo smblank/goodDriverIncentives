@@ -19,6 +19,9 @@ def getDB():
 
 def getCursor(connection):
     try:
+        while connection is None:
+            connection = connect(host = 'truckingdb.c9tkxb1tjvpp.us-east-1.rds.amazonaws.com', user = 'admin', password = 'accesstodb', database = 'DRIVER_DB', autocommit = True, charset = 'latin1', use_unicode = True)
+            
         cursor = connection.cursor(buffered = True)
 
         while cursor is None:
@@ -338,7 +341,7 @@ def getDriverPoints(email, orgID):
         cursor = getCursor(conn)
 
         query = "SELECT getDriverPoints(%s, %s)"
-        cursor.execute(query, (email, orgID))
+        cursor.execute(query, (email, orgID, ))
         result = cursor.fetchone()
 
 
@@ -1073,7 +1076,7 @@ def getOrgName (orgID):
         conn = getDB()
         cursor = getCursor(conn)
 
-        query = "SELECT getOrgName(%s)"
+        query = "CALL getOrgName(%s)"
         cursor.execute(query, (orgID,))
         result = cursor.fetchone()
 
