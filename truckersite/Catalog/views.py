@@ -267,9 +267,9 @@ def checkout(request):
             qty = 0
     
     orders = []
-    totalcost= 0;
+    totalcost = 0
     date = datetime.date.today()
-    for (id, name, price, img) in result:
+    for (id, name, price, img) in prod_in_cart:
         tempProduct = Product()
         tempProduct.id = id
         tempProduct.name = name
@@ -295,8 +295,46 @@ def checkout(request):
     }
     return render(request, 'checkout.html', context)
 
-def complete_order():
-    pass
+def complete_order(request):
+    if (request.session['isViewing']):
+        email = request.session['tempEmail']
+        org = db.getOrgNo(email)
+    else:
+        email = request.session['email']
+        org = request.session['orgID']
+    
+    points = db.getDriverPoints(email, org)
+    driver_id = db.getUserID(email)
+    
+    pointRate = db.getPointConversion(org)
+    prod_in_cart = db.getProductsInCart(driver_id,org)
+
+    class Product:
+        def __init__(self):
+            id = -1
+            name = ''
+            price = ''
+            pic = ''
+            qty = 0
+    
+    orders = []
+    totalcost = 0
+
+    date = datetime.date.today()
+    for (id, name, price, img) in prod_in_cart:
+        tempProduct = Product()
+        tempProduct.id = id
+        tempProduct.name = name
+        tempProduct.price = int(price / pointRate)
+        tempProduct.pic = img
+        tempProduct.qty = db.getQuantityInCart(driver_id, org, tempProduct.id)
+        totalcost += int(tempProduct.price) * int(tempProduct.qty)
+        orders.append(tempProduct)
+
+    print(totalcost)
+
+    # need to render a confirmation page based on if the order goes through or not -Kyle
+    return redirect('/driverDash')
 
 def cancel_order():
     pass

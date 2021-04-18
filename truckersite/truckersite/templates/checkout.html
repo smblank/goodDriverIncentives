@@ -59,7 +59,7 @@
         <div class="row">
             <div class="col-md-3">
                 <div id="sidebar">
-                   <a id="back" href="{% url 'driverCatalog' %}"> <i class="fa fa-arrow-left"></i> Catalog </a>
+                    <a id="back" href="{% url 'driverCatalog' %}"> <i class="fa fa-arrow-left"></i> Catalog </a>
                     <p id="pointstitle"> My Points: </p>
                     <p id="points"> {{points}} </p>
                 </div>
@@ -75,26 +75,26 @@
 
                     </div>
                     <h4> Order Date:
-                    <h4 class="font-weight-bold blue-text">
-                    <strong>{{date}}</strong>
-                    </h4>
+                        <h4 class="font-weight-bold blue-text">
+                            <strong>{{date}}</strong>
+                        </h4>
                     </h4>
                     {%for item in items%}
                     <h4> Product Name:
-                    <h4 class="font-weight-bold blue-text">
-                    <strong>{{item.name}}</strong>
-                    </h4>
+                        <h4 class="font-weight-bold blue-text">
+                            <strong>{{item.name}}</strong>
+                        </h4>
                     </h4>
                     <h4> Product Qty:
-                    <h4 class="font-weight-bold blue-text">
-                    <strong>{{item.qty}}</strong>
-                    </h4>
+                        <h4 class="font-weight-bold blue-text">
+                            <strong>{{item.qty}}</strong>
+                        </h4>
                     </h4>
 
                     <h4> Price:
-                    <h4 class="font-weight-bold blue-text">
-                        <strong>{{item.price}} points</strong>
-                    </h4>
+                        <h4 class="font-weight-bold blue-text">
+                            <strong>{{item.price}} points</strong>
+                        </h4>
                     </h4>
                     </br>
                     {% endfor %}
@@ -122,7 +122,10 @@
         <div class="row fixed-bottom text-right">
             <div class="col-md-12">
                 {% if not isSponsor or not isAdmin %}
-                <button id="confirm"> Confirm </button> {% endif %}
+                <a href="/complete_order">
+                    <button id="confirm"> Confirm </button>
+                </a>
+                {% endif %}
                 <button id="cancel"> Cancel </button>
             </div>
         </div>

@@ -303,7 +303,7 @@ def sponsorChangePoints(request, driver_id):
         cursor.close()
         conn.close()
 
-        profilePic = db.getProfilePic(email)
+        profilePic = db.getProfilePic(driver_email)
         imgPath = 'img/' + profilePic
 
         context = {'driver_name': driver_name,

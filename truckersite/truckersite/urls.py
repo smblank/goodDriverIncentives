@@ -134,6 +134,7 @@ urlpatterns = [
     path('removeFromCart/<str:id>/', catalogViews.remove_from_cart, name = 'removeFromCart'),
     path('addToWishlist/<str:id>/', catalogViews.addToWishlist, name = 'addToWishlist'),
     path('removeFromWishlist/<str:id>/', catalogViews.removeFromWishlist, name = 'removeFromWishlist'),
+    path('complete_order/', catalogViews.complete_order, name = 'complete_order'),
 
     #Sponsor
     path('sponsor_dash/', sponsorViews.sponsorDashDisplay, name = 'sponsorDashDisplay'),
