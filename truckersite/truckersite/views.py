@@ -21,9 +21,10 @@ def application(request):
         tempOrg.name = name
         orgs.append(tempOrg)
     
-    if 'loggedIn' in request.session:
+    if 'loggedin' in request.session:
         context = {
-            'loggedIn': request.session['loggedin']
+            'loggedIn': request.session['loggedin'],
+            'orgs': orgs
         }
     else:
         context = {

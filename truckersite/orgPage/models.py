@@ -151,7 +151,13 @@ def editSponsor(request):
 
                 return views.organizationPage(request)
             else:
-                db.removeSponsor(sponsorID, 1)
+                result = db.getSponsors(request.session['adminOrgChoice'])
+
+                for (id, name, email) in result:
+                    if id != sponsorID:
+                        break
+                
+                db.removeSponsor(sponsorID, id)
                 return views.adminOrgs(request)
 
         elif 'edit' in request.POST:

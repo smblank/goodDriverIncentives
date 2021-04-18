@@ -17,13 +17,13 @@ READS SQL DATA
 
 DROP FUNCTION IF EXISTS createWishlist;
 
-CREATE FUNCTION createWishlist (user INT)
+CREATE FUNCTION createWishlist (user INT, org INT)
 RETURNS INT
 MODIFIES SQL DATA
     BEGIN
         DECLARE newID INT;
 
-        INSERT INTO WISHLIST (DriverID) VALUES (user);
+        INSERT INTO WISHLIST (DriverID, OrgID) VALUES (user, org);
 
         SELECT ListID INTO newID
         FROM WISHLIST
@@ -184,7 +184,7 @@ MODIFIES SQL DATA
                 VALUES (newID, addr, TRUE);
             INSERT INTO DRIVER_ORGS (UserID, OrgID, Points)
                 VALUES (newID, organization, 0);
-            SELECT createWishlist(newID) INTO wishID;
+            SELECT createWishlist(newID, organization) INTO wishID;
         END IF;
 
         RETURN newID;
@@ -210,7 +210,7 @@ MODIFIES SQL DATA
 
 DROP PROCEDURE IF EXISTS removeTempDriver;
 
-CREATE PROCEDURE removeTempDriver (driverID INT)
+CREATE PROCEDURE removeTempDriver (driver INT)
     BEGIN
         DECLARE list INT;
         DECLARE orderID INT;
@@ -233,10 +233,10 @@ CREATE PROCEDURE removeTempDriver (driverID INT)
             WHERE DriverID = driver;
 
         DELETE FROM IS_IN_ORDER
-            WHERE OrderID = orderID;
+            WHERE OrderID = driver;
 
         DELETE FROM DRIVER_ORDER
-            WHERE OrderID = orderID;
+            WHERE OrderID = driver;
 
         DELETE FROM POINT_CHANGE
             WHERE DriverID = driver;
@@ -610,7 +610,7 @@ READS SQL DATA
 
         SELECT Address INTO defaultAddress
         FROM DRIVER_ADDRESSES
-        WHERE UserID = user AND DefaultAddr = True;
+        WHERE DriverID = user AND DefaultAddr = True;
 
         RETURN defaultAddress;
     END;;
@@ -679,7 +679,7 @@ MODIFIES SQL DATA
 
         IF userType = "Driver" THEN
             SELECT OrgID INTO orgNo
-            FROM DRIVER
+            FROM DRIVER_ORGS
             WHERE UserID = user;
 
         ELSEIF userType = "Sponsor" THEN
@@ -691,19 +691,14 @@ MODIFIES SQL DATA
         RETURN orgNo;
     END;;
 
-DROP FUNCTION IF EXISTS getOrgName;
+DROP PROCEDURE IF EXISTS getOrgName;
 
-CREATE FUNCTION getOrgName (orgID INT)
-RETURNS VARCHAR(50)
+CREATE PROCEDURE getOrgName (orgID INT)
 READS SQL DATA
     BEGIN
-        DECLARE orgName VARCHAR(50);
-
-        SELECT Name INTO orgName
+        SELECT Name
         FROM ORGANIZATION
         WHERE OrgID = orgID;
-
-        RETURN orgName;
     END;;
 
 DROP FUNCTION IF EXISTS getOrgLogo;
