@@ -144,7 +144,7 @@ MODIFIES SQL DATA
         FROM DRIVER_ORDER
         WHERE OrderID = @@Identity;
 
-        INSERT INTO BELONGS_TO (UserID, OrderID) VALUES (driver, newID);
+        INSERT INTO BELONGS_TO (DriverID, OrderID) VALUES (driver, newID);
 
         RETURN newID;
     END;;
@@ -214,7 +214,7 @@ MODIFIES SQL DATA
         DELETE FROM IS_IN_ORDER 
             WHERE OrderID = orderID AND ProductID = product;
 
-        RETURN orderExists;
+        RETURN TRUE;
     END;;
 
 DROP PROCEDURE IF EXISTS getProductsInCart;
@@ -310,59 +310,42 @@ READS SQL DATA
 
 DROP FUNCTION IF EXISTS addToWishlist;
 
-CREATE FUNCTION addToWishlist (driver INT, product INT, org INT)
-RETURNS BOOLEAN
+CREATE FUNCTION addToWishlist (driver INT, product CHAR(12), org INT)
+RETURNS INT
 MODIFIES SQL DATA
     BEGIN
-        DECLARE productExists BOOLEAN;
         DECLARE list INT;
 
-        SELECT EXISTS (
-            SELECT ProductID
-            FROM PRODUCT
-            WHERE ProductID = product
-        ) INTO productExists;
+        SELECT ListID INTO list
+        FROM WISHLIST
+        WHERE DriverID = driver AND OrgID = org;
 
-        IF productExists = TRUE THEN
-            SELECT ListID INTO list
-            FROM WISHLIST
-            WHERE UserID = driver AND OrgID = org;
+        INSERT INTO IS_IN_WISHLIST (ProductID, ListID) VALUES (product, list);
 
-            INSERT INTO IS_IN_WISHLIST (ProductID, ListID) VALUES (product, list);
-        END IF;
-
-        RETURN productExists;
+        RETURN TRUE;
     END;;
 
 DROP FUNCTION IF EXISTS removeFromWishlist;
 
-CREATE FUNCTION removeFromWishlist (driver INT, product INT, org INT)
+CREATE FUNCTION removeFromWishlist (driver INT, product CHAR(12), org INT)
 RETURNS BOOLEAN
 MODIFIES SQL DATA
     BEGIN
-        DECLARE productExists BOOLEAN;
         DECLARE list INT;
 
-        SELECT EXISTS (
-            SELECT ProductID
-            FROM PRODUCT
-            WHERE ProductID = product
-        ) INTO productExists;
+        SELECT ListID INTO list
+        FROM WISHLIST
+        WHERE DriverID = driver AND OrgID = org;
 
-        IF productExists = TRUE THEN
-            SELECT ListID INTO list
-            FROM WISHLIST
-            WHERE UserID = driver AND OrgID = org;
+        DELETE FROM IS_IN_WISHLIST 
+            WHERE ListID = list AND ProductID = product;
 
-            DELETE FROM IS_IN_WISHLIST WHERE ListID = list AND ProductID = product;
-        END IF;
-
-        RETURN productExists;
+        RETURN TRUE;
     END;;
 
 DROP FUNCTION IF EXISTS isInWishlist;
 
-CREATE FUNCTION isInWishlist (driver INT, product INT, org INT)
+CREATE FUNCTION isInWishlist (driver INT, product CHAR(12), org INT)
 RETURNS BOOLEAN
 READS SQL DATA
     BEGIN
@@ -371,10 +354,10 @@ READS SQL DATA
 
         SELECT ListID INTO list
         FROM WISHLIST
-        WHERE UserID = driver;
+        WHERE DriverID = driver and OrgID = org;
 
         SELECT EXISTS(
-            SELECT ListID, ProductID
+            SELECT ProductID
             FROM IS_IN_WISHLIST
             WHERE ListID = list AND ProductID = product
         ) INTO inWishlist;
@@ -389,7 +372,7 @@ CREATE PROCEDURE getProductsInWishlist(driver INT, org INT)
         SELECT PRODUCT.ProductID, ProductName, Price, ImgUrl
         FROM PRODUCT, WISHLIST, IS_IN_WISHLIST
         WHERE WISHLIST.ListID = IS_IN_WISHLIST.ListID AND
-                WISHLIST.DriverID = driver AND WISHLIST.OrgID = org;
+                WISHLIST.DriverID = driver AND WISHLIST.OrgID = org AND IS_IN_WISHLIST.ProductID = PRODUCT.ProductID;
     END;;
 
 DROP FUNCTION IF EXISTS updatePrice;
