@@ -274,9 +274,9 @@ def checkout(request):
         tempProduct.id = id
         tempProduct.name = name
         tempProduct.price = int(price / pointRate)
-        totalcost += int(price / pointRate)
         tempProduct.pic = img
         tempProduct.qty = db.getQuantityInCart(driver_id, org, tempProduct.id)
+        totalcost += int(tempProduct.price) * int(tempProduct.qty)
         orders.append(tempProduct)
 
     pic = db.getProfilePic(email)
@@ -333,11 +333,26 @@ def complete_order(request):
 
     print(totalcost)
 
+    # check driver has enough points
+
+    # complete order
+
+    # check order has gone through
+    
     # need to render a confirmation page based on if the order goes through or not -Kyle
     return redirect('/driverDash')
 
-def cancel_order():
-    pass
+def cancel_order(request):
+    response = redirect('/')
+
+    if request.session['role'] == 'Admin':
+        response = redirect('/adminDash')
+    elif request.session['role'] == 'Driver':
+        response = redirect('/driverCatalog')
+    elif request.session['role'] == 'Sponsor':
+        response = redirect('/sponsorCatalog')
+
+    return response
 
 def productPage(request, id):
     if (request.session['isViewing']):
