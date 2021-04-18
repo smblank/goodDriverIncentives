@@ -333,7 +333,11 @@ def complete_order(request):
 
     # check driver has enough points
     if original_points is not None:
-        if totalcost <= original_points:
+        if totalcost == 0:
+            order_sucess = False
+            order_message = 'Order Failed, you do not have anything in the cart.'
+            after_points = db.getDriverPoints(email, org)
+        elif totalcost <= original_points:
             # complete order
 
             conn = db.getDB()
@@ -365,10 +369,14 @@ def complete_order(request):
         order_message = 'Order Failed, points error'
         after_points = db.getDriverPoints(email, org)
 
+    pic = db.getProfilePic(email)
+    imgPath = 'img/' + pic
+
     context = {
         'points': after_points,
         'order_message': order_message,
-        'order_sucess': order_sucess
+        'order_sucess': order_sucess,
+        'pic': imgPath
     }
     return render(request, 'order_confirmation.html', context)
 
