@@ -119,11 +119,14 @@
                                     {% if not inCart %}
                                         <a href = "{% url 'addToCart' product.id %}"><button id="addcart"> Add to Cart </button></a>
                                     {% else %}
-                                        <form method = "Post" action = "{% url 'addToCart' product.id %}">
-                                            {% csrf_token %}
-                                            <input class = "fields" type = "text" id = "qty" name = "qty" maxlength = "100" placeholder = {{qty}}> <br>
-                                            <button class = "save" id = "saveemail"> <i class = "fa fa-save"></i> </button>
-                                        </form>
+                                        <div>
+                                            <form method = "Post" action = "{% url 'addToCart' product.id %}">
+                                                {% csrf_token %}
+                                                <h5>Change Quantity</h5>
+                                                <input class = "fields" type = "text" id = "qty" name = "qty" maxlength = "100" placeholder = {{qty}}> <br>
+                                                <button class = "save" id = "saveemail"> <i class = "fa fa-save"></i> </button>
+                                            </form>
+                                        </div>
                                         <a href = "{% url 'removeFromCart' product.id %}"><button id="removecart"> Remove from Cart </button></a>
                                     {% endif %}
 

@@ -79,7 +79,13 @@ body{
     margin-bottom: 1%;
     text-align: center;
     position: fixed;
-    left: 85%;
+    left: 83%;
+    top: 85%;
+}
+
+.form {
+    float: bottom;
+    left: 83%;
     top: 85%;
 }
 
@@ -103,7 +109,7 @@ body{
     margin-bottom: 1%;
     text-align: center;
     position: fixed;
-    left: 80%;
+    left: 83%;
     top: 85%;
 }
 
@@ -126,7 +132,7 @@ body{
     margin-top: 1%;
     margin-bottom: 1%;
     position: fixed;
-    left: 80%;
+    left: 83%;
     top: 90%;
 }
 

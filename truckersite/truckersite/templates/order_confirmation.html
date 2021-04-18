@@ -15,14 +15,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
-    <title> My Dashboard </title>
+    <title> Order Confirmation </title>
 
     <!-- Links the .css file -->
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/driver_dash.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/driver_cart.css' %}">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-
-
 </head>
 
 <body>
@@ -35,55 +33,48 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="menubutton" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Menu </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{% url 'orgPage' %}"> Organization Page </a>
-                        <a class="dropdown-item" href="/sponsor_view_drivers"> Driver List </a>
-                        <a class="dropdown-item" href="/sponsor_application_list">Application List</a>
-                        <a class="dropdown-item" href="{%url 'sponsorCatalog' %}"> Catalog </a>
-                        <!-- <a class="dropdown-item" href="sponsor_notifications.html"> Notifications </a> -->
-                        <a class="dropdown-item" href="{% url 'sponsorReportGeneration'%}"> Generate Report </a>
-                        <!-- <a class="dropdown-item" href="sponsor_submit_issue.html"> Submit an Issue </a>
-                        <a class="dropdown-item" href="sponsor_view_issues.html"> Issues </a> -->
+                        <a class="dropdown-item" href="{% url 'driverCatalog'%}"> Catalog </a>
+                        <a class="dropdown-item" href="{% url 'wishlist'%}"> Wishlist </a>
+                        <a class="dropdown-item" href="/driver_point_history"> Point History </a>
+                        <a class="dropdown-item" href="{% url 'driverOrderHistory'%}"> Order History </a>
+                        <!-- <a class = "dropdown-item" href = "driver_notifications.html"> Notifications </a>
+                        <a class = "dropdown-item" href = "driver_submit_issue.html"> Submit an Issue </a> -->
                         <a class="dropdown-item" href="{% url 'logout' %}"> Logout </a>
                     </div>
                 </li>
 
                 <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'sponsorDashDisplay' %}" id="title"> Good Driver Incentive Program </a>
+                    <a class="nav-link" href="{% url 'driverDash' %}" id="title"> Good Driver Incentive Program </a>
                 </li>
 
-                <a class="navbar-brand" href="{% url 'sponsorProfile'%}">
+                <a class="navbar-brand" href="{% url 'driverProfile'%}">
                     <img src="{% static pic %}" width="30" height="30">
                 </a>
             </ul>
         </nav>
 
-        <div class="row text-center">
-            <div class="col-md-12">
-                <h2 id="pagename" style="margin-bottom: 3%; margin-left: 0%;"> My Dashboard </h2>
-                {% if isSponsor %}
-                <button id="driverview" class="pull-right" onclick="location.href = '{% url 'sponSetDriverView' %}'"> Driver View </button> {% elif isAdmin %}
-                <button id="adminview" class="pull-right" onclick="location.href = '{% url 'revertSponsorView' %}'"> Admin View </button> {% endif %}
-            </div>
-        </div>
-
         <div class="row">
-            <div class="col-md-3" style="min-height: 682px;"></div>
-
-            <div class="col-md-6" style="min-height: 682px;">
-                <div class="dashinfo" style = "width: 98%;">
-                    <div>Pending Applications:</div>
-                    {% for driver in driver_application_list %}
-                    <div><a href="/application/{{ driver.applicant_id}}">{{ driver.name }}</a></div>
-                    {% endfor %}
+            <div class="col-md-3">
+                <div id="sidebar">
+                    <a id="back" href="{% url 'driverCatalog' %}"> <i class="fa fa-arrow-left"></i> Catalog </a>
+                    <p id="pointstitle"> My Points: </p>
+                    <p id="points"> {{points}} </p>
                 </div>
             </div>
 
-            <div class="col-md-3" style="min-height: 682px;"></div>
+            <div class="col-md-9" style="height: 900px;">
+                <section class="text-center mb-4">
+                    <h2> Order Confirmation </h2>
+                    {% if order_sucess %}
+                    <h3>{{ order_message }}</h3>
+                    {% else %}
+                    <h3 style="color: red;">{{ order_message }}</h3>
+                    {% endif %}
 
+            </div>
         </div>
 
     </div>
-
 
 </body>
 

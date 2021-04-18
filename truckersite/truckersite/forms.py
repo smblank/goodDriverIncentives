@@ -84,6 +84,9 @@ def moveout(request):
         if request.session.get('role') == 'Admin':
             request.session['isSponsor'] = False
             request.session['isAdmin'] = True
+
+            result = db.getOrgs()
+            request.session['adminOrgChoice'] = result[0][0]
             return dashViews.adminDash(request)
     else:
         print('not logged in...displaying login')
