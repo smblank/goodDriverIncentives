@@ -1,6 +1,9 @@
 # Kyle's Virtual Enviroment
 django-env/
 
+# Kyle's password file
+password.txt
+
 # Created by https://www.toptal.com/developers/gitignore/api/vscode,windows,python,django,linux
 # Edit at https://www.toptal.com/developers/gitignore?templates=vscode,windows,python,django,linux
 

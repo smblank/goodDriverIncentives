@@ -194,7 +194,7 @@ def checkout(request):
     addresses = []
 
     for (id, address) in result:
-        if address == defaultAddr:
+        if address != defaultAddr:
             tempAddr = Addr()
             tempAddr.id = id
             tempAddr.addr = address
