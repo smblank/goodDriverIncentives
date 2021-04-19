@@ -121,7 +121,7 @@ def getSponsorReport(request):
     if 'download' in request.POST:
         rowNum = 800
         orgName = db.getOrgName(orgID)
-        fileName = 'reportPDFs/' + orgName + "PointReport.pdf"
+        fileName = orgName + "PointReport.pdf"
         canvas = Canvas(fileName)
         #Print data range
         canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
@@ -198,7 +198,7 @@ def getAuditLog(request):
 
         rowNum = 800
         if 'download' in request.POST:
-            fileName = 'reportPDFs/' + 'applicantsAuditLog.pdf'
+            fileName = 'applicantsAuditLog.pdf'
             canvas = Canvas(fileName)
             #Print data range
             canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
@@ -280,7 +280,7 @@ def getAuditLog(request):
 
         rowNum = 800
         if 'download' in request.POST:
-            fileName = 'reportPDFs/' + 'pointChangeAuditLog.pdf'
+            fileName = 'pointChangeAuditLog.pdf'
             canvas = Canvas(fileName)
             #Print data range
             canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
@@ -364,7 +364,7 @@ def getAuditLog(request):
 
         rowNum = 800
         if 'download' in request.POST:
-            fileName = 'reportPDFs/' + 'passwordChangeAuditLog.pdf'
+            fileName = 'passwordChangeAuditLog.pdf'
             canvas = Canvas(fileName)
             #Print data range
             canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
@@ -438,7 +438,7 @@ def getAuditLog(request):
 
         rowNum = 800
         if 'download' in request.POST:
-            fileName = 'reportPDFs/' + 'loginAttemptsAuditLog.pdf'
+            fileName = 'loginAttemptsAuditLog.pdf'
             canvas = Canvas(fileName)
             #Print data range
             canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
@@ -561,10 +561,10 @@ def getInvoice(request):
     rowNum = 800
     if 'download' in request.POST:
         if orgID == "all":
-            fileName = 'reportPDFs/' + 'allSponsorInvoices.pdf'
+            fileName = 'allSponsorInvoices.pdf'
         else:
             orgName = db.getOrgName(orgID)
-            fileName = 'reportPDFs/' + orgName + 'Invoice.pdf'
+            fileName = orgName + 'Invoice.pdf'
         canvas = Canvas(fileName)
 
         #Print data range
@@ -736,11 +736,11 @@ def getDriverSales(request):
         rowNum = 800
         if 'download' in request.POST:
             if driverID == "all":
-                fileName = 'reportPDFs/' + 'allDriverSales.pdf'
+                fileName = 'allDriverSales.pdf'
             else:
                 email = db.getUserEmail(driverID)
                 name = db.getUserName(email)
-                fileName = 'reportPDFs/' + name + 'Sales.pdf'
+                fileName = name + 'Sales.pdf'
             canvas = Canvas(fileName)
 
             #Print data range
@@ -881,11 +881,11 @@ def getDriverSales(request):
         rowNum = 800
         if 'download' in request.POST:
             if driverID == "all":
-                fileName = 'reportPDFs/' + 'allDriverSales.pdf'
+                fileName = 'allDriverSales.pdf'
             else:
                 email = db.getUserEmail(driverID)
                 name = db.getUserName(email)
-                fileName = 'reportPDFs/' + name + 'Sales.pdf'
+                fileName = name + 'Sales.pdf'
             canvas = Canvas(fileName)
 
             #Print data range
@@ -1047,10 +1047,10 @@ def getSponsorSales(request):
         rowNum = 800
         if 'download' in request.POST:
             if driverID == "all":
-                fileName = 'reportPDFs/' + 'allSponsorSales.pdf'
+                fileName = 'allSponsorSales.pdf'
             else:
                 name = db.getOrgName(orgID)
-                fileName = 'reportPDFs/' + name + 'Sales.pdf'
+                fileName = name + 'Sales.pdf'
             canvas = Canvas(fileName)
 
             #Print data range
@@ -1189,10 +1189,10 @@ def getSponsorSales(request):
         rowNum = 800
         if 'download' in request.POST:
             if driver == "all":
-                fileName = 'reportPDFs/' + 'allSponsorSales.pdf'
+                fileName = 'allSponsorSales.pdf'
             else:
                 name = db.getOrgName(orgID)
-                fileName = 'reportPDFs/' + name + 'Sales.pdf'
+                fileName = name + 'Sales.pdf'
             canvas = Canvas(fileName)
 
             #Print data range
