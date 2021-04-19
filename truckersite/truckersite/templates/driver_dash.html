@@ -93,7 +93,20 @@
 
         <div class="row" style="height: 645px;">
             <div class="col-md-6">
-                <div class="dashinfo" style="margin-left: 50%;"> Recent Orders: </div>
+                <div class="dashinfo" style="margin-left: 50%;"> Recent Orders: 
+                    <table>
+                        <tr>
+                            <td>Date</td>
+                            <td>Total Cost</td>
+                        </tr>
+                        {% for order in orders %}
+                            <tr>
+                                <td>{{order.date}}</td>
+                                <td align = "right">{{order.totalCost}}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
             </div>
 
             <div class="col-md-6">

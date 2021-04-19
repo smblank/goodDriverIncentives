@@ -506,6 +506,7 @@ MODIFIES SQL DATA
     BEGIN
         DECLARE newAddressId INT;
         DECLARE user INT;
+        DECLARE defaultExists BOOLEAN;
 
         SELECT getUserID(userEmail) INTO user;
         
@@ -514,6 +515,19 @@ MODIFIES SQL DATA
         SELECT AddressID INTO newAddressId
         FROM DRIVER_ADDRESSES
         WHERE AddressID = @@Identity;
+
+        SELECT EXISTS (
+            SELECT AddressID
+            FROM DRIVER_ADDRESSES
+            WHERE DefaultAddr = TRUE
+        ) INTO defaultExists;
+
+        IF (!defaultExists) THEN
+            UPDATE DRIVER_ADDRESSES
+                SET
+                    DefaultAddr = TRUE
+                WHERE AddressID = newAddressId;
+        END IF;
 
         RETURN newAddressId;
     END;;
