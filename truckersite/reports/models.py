@@ -3,6 +3,7 @@ import dbConnectionFunctions as db
 from reports import views
 from reportlab.pdfgen.canvas import Canvas
 from django.http import HttpResponse
+import os
 
 def exists(list, element):
     for elem in list:
@@ -122,7 +123,7 @@ def getSponsorReport(request):
         rowNum = 800
         orgName = db.getOrgName(orgID)
         fileName = orgName + "PointReport.pdf"
-        canvas = Canvas(fileName)
+        canvas = Canvas('static/reports/' + fileName)
         #Print data range
         canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
 
@@ -199,7 +200,7 @@ def getAuditLog(request):
         rowNum = 800
         if 'download' in request.POST:
             fileName = 'applicantsAuditLog.pdf'
-            canvas = Canvas(fileName)
+            canvas = Canvas('static/reports/' + fileName)
             #Print data range
             canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
 
@@ -281,7 +282,7 @@ def getAuditLog(request):
         rowNum = 800
         if 'download' in request.POST:
             fileName = 'pointChangeAuditLog.pdf'
-            canvas = Canvas(fileName)
+            canvas = Canvas('static/reports/' + fileName)
             #Print data range
             canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
 
@@ -365,7 +366,7 @@ def getAuditLog(request):
         rowNum = 800
         if 'download' in request.POST:
             fileName = 'passwordChangeAuditLog.pdf'
-            canvas = Canvas(fileName)
+            canvas = Canvas('static/reports/' + fileName)
             #Print data range
             canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
 
@@ -439,7 +440,7 @@ def getAuditLog(request):
         rowNum = 800
         if 'download' in request.POST:
             fileName = 'loginAttemptsAuditLog.pdf'
-            canvas = Canvas(fileName)
+            canvas = Canvas('static/reports/' + fileName)
             #Print data range
             canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
 
@@ -565,7 +566,7 @@ def getInvoice(request):
         else:
             orgName = db.getOrgName(orgID)
             fileName = orgName + 'Invoice.pdf'
-        canvas = Canvas(fileName)
+        canvas = Canvas('static/reports/' + fileName)
 
         #Print data range
         canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
@@ -741,7 +742,7 @@ def getDriverSales(request):
                 email = db.getUserEmail(driverID)
                 name = db.getUserName(email)
                 fileName = name + 'Sales.pdf'
-            canvas = Canvas(fileName)
+            canvas = Canvas('static/reports/' + fileName)
 
             #Print data range
             canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
@@ -886,7 +887,7 @@ def getDriverSales(request):
                 email = db.getUserEmail(driverID)
                 name = db.getUserName(email)
                 fileName = name + 'Sales.pdf'
-            canvas = Canvas(fileName)
+            canvas = Canvas('static/reports/' + fileName)
 
             #Print data range
             canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
@@ -1051,7 +1052,7 @@ def getSponsorSales(request):
             else:
                 name = db.getOrgName(orgID)
                 fileName = name + 'Sales.pdf'
-            canvas = Canvas(fileName)
+            canvas = Canvas('static/reports/' + fileName)
 
             #Print data range
             canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
@@ -1193,7 +1194,7 @@ def getSponsorSales(request):
             else:
                 name = db.getOrgName(orgID)
                 fileName = name + 'Sales.pdf'
-            canvas = Canvas(fileName)
+            canvas = Canvas('static/reports/' + fileName)
 
             #Print data range
             canvas.drawString(70, rowNum, "Date Range: " + startDate + " - " + endDate)
