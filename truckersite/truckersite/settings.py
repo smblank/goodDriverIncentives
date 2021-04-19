@@ -30,7 +30,7 @@ SECRET_KEY = '66hduf$ux1u7f&2i22$mf9q1ot#g35s11%cip26b*$)1@-*5l*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-develop_flag = True
+develop_flag = False
 
 if develop_flag:
     DEBUG = True
