@@ -1,5 +1,12 @@
 UI Mockup: https://xd.adobe.com/view/e32c7756-bbf1-4820-82c6-b6ae2b289537-b67f/
 
+Frontend Design: Paige Clemons
+Catalog API: Apurv Patel
+Django Setup & Backend Design: Joshua Lacy
+Backend Design: Kyle Racel
+Database Design: Sarah Blankenship
+
+
 # Introduction 
 TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
 
